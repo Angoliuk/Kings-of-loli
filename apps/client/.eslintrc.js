@@ -23,5 +23,13 @@ module.exports = {
     'react/prop-types': 'off',
     '@typescript-eslint/consistent-type-definitions': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-misused-promises': [
+      2,
+      {
+        checksVoidReturn: {
+          attributes: false,
+        },
+      },
+    ],
   },
 };

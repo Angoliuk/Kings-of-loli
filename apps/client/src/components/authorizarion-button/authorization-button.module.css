@@ -1,0 +1,23 @@
+/* stylelint-disable keyframes-name-pattern */
+.authorizationButton {
+  width: 165px;
+  height: 165px;
+
+  background: #301f30;
+  background-size: 100% 100%;
+  border: none;
+
+  transition: all 2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.buttonSvgText {
+  position: relative;
+  bottom: 120px;
+  font-size: 2rem;
+  color: #fbf7b0;
+}
+
+.authorizationButton:hover {
+  transform: scale(1.13);
+  transition: all 2s cubic-bezier(0.19, 1, 0.22, 1);
+}

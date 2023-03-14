@@ -1,0 +1,23 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: space-evenly;
+
+  box-sizing: border-box;
+  width: 100%;
+  height: 40%;
+  padding-right: 20px;
+
+  text-align: center;
+
+  background: #301f30;
+  border-radius: 20px;
+  box-shadow: 0 0 10px 1px rgb(0 0 0 / 50%);
+}
+
+.gameName {
+  justify-content: center;
+  width: 100%;
+  color: #fbf7b0;
+}
