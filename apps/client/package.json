@@ -10,6 +10,7 @@
     "lint": "pnpm lint:js"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.9.11",
     "@tanstack/react-query": "^4.26.1",
     "@tanstack/react-query-devtools": "^4.26.1",
     "@trpc/client": "^10.14.1",
@@ -26,13 +27,12 @@
     "zustand": "^4.3.6"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*",
-    "eslint-config-base": "workspace:*",
     "@types/node": "^18.15.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
     "eslint": "^8.35.0",
+    "eslint-config-base": "workspace:*",
     "stylelint": "^15.2.0",
     "stylelint-config-clean-order": "^5.0.0",
     "stylelint-config-standard": "^30.0.1",
@@ -40,6 +40,7 @@
     "stylelint-csstree-validator": "^2.1.0",
     "stylelint-declaration-block-no-ignored-properties": "^2.7.0",
     "ts-css-modules-vite-plugin": "^1.0.20",
+    "tsconfig": "workspace:*",
     "typescript": "^4.9.4",
     "vite": "^4.1.4"
   }
