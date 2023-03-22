@@ -1,0 +1,29 @@
+@import url('../../../resources/css/colors.module.css');
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 200px;
+  align-items: center;
+  justify-content: space-around;
+
+  width: 100%;
+  height: 100%;
+
+  background: var(--platinum-gray);
+}
+
+.playButton {
+  width: 150px;
+  height: 70px;
+  padding: 10px;
+
+  font-size: 2rem;
+
+  background: var(--light-green);
+  border: none;
+}
+
+.projectName {
+  font-size: 3rem;
+}
