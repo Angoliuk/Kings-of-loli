@@ -1,0 +1,10 @@
+.navButtons {
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  transition: all 0.12s;
+}
+
+.navButtons:hover {
+  transform: scale(1.1);
+}
