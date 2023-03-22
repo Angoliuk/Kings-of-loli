@@ -1,0 +1,21 @@
+@import url('../../../resources/css/colors.module.css');
+
+.nav {
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  align-items: center;
+  justify-content: center;
+
+  width: 5%;
+  min-width: 70px;
+  height: 100%;
+  padding-right: 20px;
+  padding-left: 20px;
+
+  background: var(--gray);
+  background-image: url('../../../resources/img/background-left-menu.svg');
+  background-size: 100% 100%;
+}
