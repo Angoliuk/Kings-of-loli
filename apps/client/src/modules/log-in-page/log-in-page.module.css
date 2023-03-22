@@ -1,0 +1,37 @@
+@import url('../../../resources/css/colors.module.css');
+
+@font-face {
+  font-family: Chomsky;
+  font-weight: normal;
+  font-style: normal;
+  src: local('Chomsky'), url('../../fonts//Chomsky.otf') format('truetype');
+}
+
+.logIn {
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 40px;
+
+  font-family: Chomsky, serif;
+  font-size: 1.5rem;
+
+  background: var(--dark-purple);
+  border: 5px solid transparent;
+  border-image: linear-gradient(to bottom right, #676586, #b002c3, #9295a8);
+  border-image-slice: 1;
+}
+
+.logInButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: space-evenly;
+
+  width: 100%;
+  height: 20%;
+}
