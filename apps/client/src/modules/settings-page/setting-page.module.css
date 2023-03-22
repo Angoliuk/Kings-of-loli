@@ -1,0 +1,55 @@
+@import url('../../../resources/css/colors.module.css');
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 400px;
+  align-items: center;
+  justify-content: space-around;
+
+  width: 100%;
+  height: 100%;
+
+  background: var(--silver-gray);
+}
+
+.playButton {
+  width: 150px;
+  height: 70px;
+  padding: 10px;
+
+  font-size: 2rem;
+
+  background: var(--light-green);
+  border: none;
+}
+
+.projectName {
+  font-size: 3rem;
+  text-align: center;
+}
+
+.menuBar {
+  gap: 400px;
+  width: 60%;
+  height: 40em;
+  background: var(--gray);
+}
+
+.prop {
+  display: flex;
+  justify-content: space-between;
+  width: 30em;
+  margin: 20px auto;
+}
+
+.volumeLine {
+  height: 15px;
+  margin-left: 10px;
+}
+
+.circle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+}
