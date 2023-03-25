@@ -18,7 +18,7 @@ export const AppRoute: FC = () => {
           <Route path={RoutesEnum.SignUp} element={<SignUp />} />
           <Route path={RoutesEnum.LogIn} element={<LogIn />} />
           <Route path={RoutesEnum.Home} element={<HomePage />} />
-          <Route path="/" element={<Navigate to={RoutesEnum.Home} />} />
+          <Route path={RoutesEnum.Base} element={<Navigate to={RoutesEnum.Home} />} />
           <Route path={RoutesEnum.Profile} element={<ProfilePage />} />
           <Route path={RoutesEnum.Stats} element={<StatsPage />} />
           <Route path={RoutesEnum.Settings} element={<SettingsPage />} />
