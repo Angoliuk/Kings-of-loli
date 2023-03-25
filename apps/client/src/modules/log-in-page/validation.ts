@@ -7,5 +7,5 @@ export const logInFormSchema = z.object({
     .string()
     .min(3, LOG_IN_FORM_CONSTANTS.S_Nickname)
     .max(20, LOG_IN_FORM_CONSTANTS.L_Nickname),
-  password: z.string().min(4, LOG_IN_FORM_CONSTANTS.S_Paswword),
+  password: z.string().min(4, LOG_IN_FORM_CONSTANTS.S_Password),
 });
