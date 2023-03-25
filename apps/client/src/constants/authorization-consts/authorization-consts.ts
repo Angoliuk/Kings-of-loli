@@ -1,4 +1,4 @@
-const SIGN_IN_FORM_CONSTANTS = {
+const SIGN_UP_FORM_CONSTANTS = {
   L_Nickname: `Your Nickname is too large`,
   S_Nickname: `Your Nickname is too small`,
   S_Paswword: `You need longer password`,
@@ -14,7 +14,7 @@ const LOG_IN_FORM_CONSTANTS = {
   Is_Error: `Incorect data`,
 } as const;
 
-enum SignInFormInputState {
+enum SignUpFormInputState {
   nickname = 'nickname',
   password = 'password',
 }
@@ -23,4 +23,4 @@ enum LogInFormInputState {
   password = 'password',
 }
 
-export { LOG_IN_FORM_CONSTANTS, LogInFormInputState, SIGN_IN_FORM_CONSTANTS, SignInFormInputState };
+export { LOG_IN_FORM_CONSTANTS, LogInFormInputState, SIGN_UP_FORM_CONSTANTS, SignUpFormInputState };

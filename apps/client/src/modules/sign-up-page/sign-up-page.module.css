@@ -1,4 +1,4 @@
-.signIn {
+.signUp {
   z-index: 10;
 
   display: flex;
@@ -16,7 +16,7 @@
   background-size: 100% 100%;
 }
 
-.signInButtons {
+.signUpButtons {
   display: flex;
   justify-content: space-evenly;
 

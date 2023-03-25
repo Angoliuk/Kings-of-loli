@@ -5,16 +5,16 @@ import { z } from 'zod';
 import { SubmitAuthorizationFormSvg } from '../../../resources/svg/button-svg/submit';
 import { FormErrorMessage } from '../../components/error-message-component';
 import { FormInput } from '../../components/form-input-component';
-import { SignInFormInputState } from '../../constants/authorization-consts/authorization-consts';
+import { SignUpFormInputState } from '../../constants/authorization-consts/authorization-consts';
 import { useHookForm } from '../../hooks/use-form';
 import { AuthorizationFormProperties } from '../../interfaces/authorization-form-interfaces/authorization-form-properties';
 import { trpc } from '../../trpc';
-import styles from './sign-in-form.module.css';
-import { SignInFormSchema } from './validation';
+import styles from './sign-up-form.module.css';
+import { SignUpFormSchema } from './validation';
 
-type Schema = z.infer<typeof SignInFormSchema>;
+type Schema = z.infer<typeof SignUpFormSchema>;
 
-export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
+export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   const { mutate } = trpc.auth.register.useMutation();
   const {
     register,
@@ -22,7 +22,7 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
     handleSubmit: handleFormSubmit,
     reset,
   } = useHookForm<Schema>({
-    schema: SignInFormSchema,
+    schema: SignUpFormSchema,
   });
 
   const handleSubmit: SubmitHandler<Schema> = (data) => {
@@ -45,16 +45,16 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
             register={register}
             name={'nickname'}
             className={styles.signUpFormInput}
-            placeholder={SignInFormInputState.nickname}
-            type={SignInFormInputState.nickname}
+            placeholder={SignUpFormInputState.nickname}
+            type={SignUpFormInputState.nickname}
           />
           <FormErrorMessage message={errors.nickname?.message} className={styles.errorMessage} />
           <FormInput
             register={register}
             name={'password'}
             className={styles.signUpFormInput}
-            placeholder={SignInFormInputState.password}
-            type={SignInFormInputState.password}
+            placeholder={SignUpFormInputState.password}
+            type={SignUpFormInputState.password}
           />
           <FormErrorMessage message={errors.password?.message} className={styles.errorMessage} />
           <button type="submit" disabled={!isValid} className={styles.submitButton}>
