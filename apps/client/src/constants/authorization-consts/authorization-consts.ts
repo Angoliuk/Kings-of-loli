@@ -14,22 +14,17 @@ const SIGN_IN_FORM_CONSTANTS = {
   Is_Error: `Incorect data`,
 } as const;
 
-enum SignUpFormInputState {
-  nicknameType = 'nickname',
-  nicknamePlaceholder = 'Your nickname',
-  passwordPlaceholder = 'qwerty',
-  passwordType = 'password',
+enum SignUpFormFields {
+  NICKNAME_TYPE = 'nickname',
+  NICKNAME_PLACEHOLDER = 'Your nickname',
+  PASSWORD_PLACEHOLDER = 'qwerty',
+  PASSWORD_TYPE = 'password',
 }
-enum SignInFormInputState {
-  nicknameType = 'nickname',
-  nicknamePlaceholder = 'Your nickname',
-  passwordPlaceholder = 'qwerty',
-  passwordType = 'password',
+enum SignInFormFields {
+  NICKNAME_TYPE = 'nickname',
+  NICKNAME_PLACEHOLDER = 'Your nickname',
+  PASSWORD_PLACEHOLDER = 'qwerty',
+  PASSWORD_TYPE = 'password',
 }
 
-export {
-  SIGN_IN_FORM_CONSTANTS,
-  SIGN_UP_FORM_CONSTANTS,
-  SignInFormInputState,
-  SignUpFormInputState,
-};
+export { SIGN_IN_FORM_CONSTANTS, SIGN_UP_FORM_CONSTANTS, SignInFormFields, SignUpFormFields };

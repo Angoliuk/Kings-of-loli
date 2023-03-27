@@ -4,7 +4,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { SubmitAuthorizationFormSvg } from '../../../resources/svg/button-svg/submit';
 import { FormErrorMessage } from '../../components/error-message-component';
 import { FormInput } from '../../components/form-input-component';
-import { SignUpFormInputState } from '../../constants/authorization-consts/authorization-consts';
+import { SignUpFormFields } from '../../constants/authorization-consts/authorization-consts';
 import { useHookForm } from '../../hooks/use-form';
 import { AuthorizationFormProperties } from '../../interfaces/authorization-form-interfaces/authorization-form-properties';
 import { trpc } from '../../trpc';
@@ -40,18 +40,18 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
         <form onSubmit={() => handleFormSubmit(handleSubmit)} className={styles.signUpForm}>
           <FormInput
             register={register}
-            name={SignUpFormInputState.nicknameType}
+            name={SignUpFormFields.NICKNAME_TYPE}
             className={styles.signUpFormInput}
-            placeholder={SignUpFormInputState.nicknamePlaceholder}
-            type={SignUpFormInputState.nicknameType}
+            placeholder={SignUpFormFields.NICKNAME_PLACEHOLDER}
+            type={SignUpFormFields.NICKNAME_TYPE}
           />
           <FormErrorMessage message={errors.nickname?.message} className={styles.errorMessage} />
           <FormInput
             register={register}
-            name={SignUpFormInputState.passwordType}
+            name={SignUpFormFields.PASSWORD_TYPE}
             className={styles.signUpFormInput}
-            placeholder={SignUpFormInputState.passwordPlaceholder}
-            type={SignUpFormInputState.passwordType}
+            placeholder={SignUpFormFields.PASSWORD_PLACEHOLDER}
+            type={SignUpFormFields.PASSWORD_TYPE}
           />
           <FormErrorMessage message={errors.password?.message} className={styles.errorMessage} />
           <button type="submit" disabled={!isValid} className={styles.submitButton}>
