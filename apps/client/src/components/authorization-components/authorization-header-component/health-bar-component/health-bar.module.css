@@ -1,4 +1,4 @@
-@import url('../../../../../resources/css/colors.module.css');
+@import url('../../../../css/colors.module.css');
 
 .healthBar {
   display: flex;

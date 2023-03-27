@@ -11,7 +11,7 @@
   min-height: fit-content;
   padding: 30px;
 
-  background-image: url('../../../resources/img/background.svg');
+  background-image: url('../../resources/img/background.svg');
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
