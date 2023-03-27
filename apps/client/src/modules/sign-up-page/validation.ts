@@ -9,3 +9,5 @@ export const SignUpFormSchema = z.object({
     .max(20, SIGN_UP_FORM_CONSTANTS.L_Nickname),
   password: z.string().min(4, SIGN_UP_FORM_CONSTANTS.S_Password),
 });
+
+export type SignUpSchema = z.infer<typeof SignUpFormSchema>;
