@@ -1,3 +1,3 @@
-export interface UserPossitionProperties {
+export interface UserPositionProperties {
   user: { place: number; name: string; score: number };
 }
