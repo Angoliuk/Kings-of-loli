@@ -13,7 +13,7 @@ import styles from './sign-up-page.module.css';
 
 export const SignUp: FC = () => {
   const [health, setHealth] = useState(INITIAL_USER_HEALTH);
-  const healthHandler = () =>
+  const OnDamageReceived = () =>
     setHealth((previous) =>
       previous === MINIMAL_USER_HEALTH ? INITIAL_USER_HEALTH : previous - DAMAGE_USER_HEALTH,
     );
@@ -21,7 +21,7 @@ export const SignUp: FC = () => {
     <AuthorizationWrapper>
       <div className={styles.SignUp}>
         <AuthorizationHeader health={health} />
-        <SignUpForm onSubmit={healthHandler} />
+        <SignUpForm onSubmit={OnDamageReceived} />
         <div className={styles.SignUpButtons}>
           <AuthorizationButton />
         </div>
