@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { SubmitHandler } from 'react-hook-form';
-import { z } from 'zod';
 
 import { FormErrorMessage } from '../../components/error-message-component';
 import { FormInput } from '../../components/form-input-component';
@@ -9,9 +8,7 @@ import { useHookForm } from '../../hooks/use-form';
 import { AuthorizationFormProperties } from '../../interfaces/authorization-form-interfaces/authorization-form-properties';
 import { trpc } from '../../trpc';
 import styles from './sign-in-form.module.css';
-import { signInFormSchema } from './validation';
-
-type Schema = z.infer<typeof signInFormSchema>;
+import { signInFormSchema, SignInSchema } from './validation';
 
 export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   const { mutate } = trpc.auth.login.useMutation();
@@ -20,11 +17,11 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
     formState: { errors, isValid },
     handleSubmit: handleFormSubmit,
     reset,
-  } = useHookForm<Schema>({
+  } = useHookForm<SignInSchema>({
     schema: signInFormSchema,
   });
 
-  const handleSubmit: SubmitHandler<Schema> = (data) => {
+  const handleSubmit: SubmitHandler<SignInSchema> = (data) => {
     mutate({
       name: data.nickname,
       password: data.password,
