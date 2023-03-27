@@ -15,12 +15,16 @@ const SIGN_IN_FORM_CONSTANTS = {
 } as const;
 
 enum SignUpFormInputState {
-  nickname = 'nickname',
-  password = 'password',
+  nicknameType = 'nickname',
+  nicknamePlaceholder = 'Your nickname',
+  passwordPlaceholder = 'qwerty',
+  passwordType = 'password',
 }
 enum SignInFormInputState {
-  nickname = 'nickname',
-  password = 'password',
+  nicknameType = 'nickname',
+  nicknamePlaceholder = 'Your nickname',
+  passwordPlaceholder = 'qwerty',
+  passwordType = 'password',
 }
 
 export {
