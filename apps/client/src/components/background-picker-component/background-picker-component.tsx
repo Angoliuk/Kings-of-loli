@@ -72,8 +72,7 @@ export const BackgroundPicker: FC<PropertiesImg> = ({ imgBackground }) => {
               );
             })}
           </span>
-        ) : // eslint-disable-next-line unicorn/no-null
-        null}
+        ) : undefined}
       </div>
     </>
   );
