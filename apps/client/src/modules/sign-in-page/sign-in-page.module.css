@@ -7,7 +7,7 @@
   src: local('Chomsky'), url('../../fonts//Chomsky.otf') format('truetype');
 }
 
-.logIn {
+.signIn {
   z-index: 1;
 
   display: flex;
@@ -27,7 +27,7 @@
   border-image-slice: 1;
 }
 
-.logInButtons {
+.signInButtons {
   display: flex;
   gap: 10px;
   justify-content: space-evenly;

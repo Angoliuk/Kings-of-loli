@@ -8,10 +8,10 @@ import {
   INITIAL_USER_HEALTH,
   MINIMAL_USER_HEALTH,
 } from '../../constants/health-bar-const';
-import { LogInForm } from './log-in-form';
-import styles from './log-in-page.module.css';
+import { SignInForm } from './sign-in-form';
+import styles from './sign-in-page.module.css';
 
-export const LogIn: FC = () => {
+export const SignIn: FC = () => {
   const [health, setHealth] = useState(INITIAL_USER_HEALTH);
   const healthHandler = () =>
     setHealth((previous) =>
@@ -19,10 +19,10 @@ export const LogIn: FC = () => {
     );
   return (
     <AuthorizationWrapper>
-      <div className={styles.logIn}>
+      <div className={styles.signIn}>
         <AuthorizationHeader health={health} />
-        <LogInForm onSubmit={healthHandler} />
-        <div className={styles.logInButtons}>
+        <SignInForm onSubmit={healthHandler} />
+        <div className={styles.signInButtons}>
           <AuthorizationButton />
         </div>
       </div>

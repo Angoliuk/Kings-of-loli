@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { HomePage } from '../../modules/home-page/home-page';
-import { LogIn } from '../../modules/log-in-page/log-in-page';
 import { ProfilePage } from '../../modules/profile-page/profile-page';
 import { SettingsPage } from '../../modules/settings-page/settings-page';
+import { SignIn } from '../../modules/sign-in-page/sign-in-page';
 import { SignUp } from '../../modules/sign-up-page/sign-up-page';
 import { StatsPage } from '../../modules/stats-page/stats-page';
 import styles from './app-route.module.css';
@@ -16,7 +16,7 @@ export const AppRoute: FC = () => {
       <BrowserRouter>
         <Routes>
           <Route path={RoutesEnum.SignUp} element={<SignUp />} />
-          <Route path={RoutesEnum.LogIn} element={<LogIn />} />
+          <Route path={RoutesEnum.SignIn} element={<SignIn />} />
           <Route path={RoutesEnum.Home} element={<HomePage />} />
           <Route path={RoutesEnum.Base} element={<Navigate to={RoutesEnum.Home} />} />
           <Route path={RoutesEnum.Profile} element={<ProfilePage />} />

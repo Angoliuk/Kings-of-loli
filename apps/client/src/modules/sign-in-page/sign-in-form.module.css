@@ -1,6 +1,6 @@
 @import url('../../../resources/css/colors.module.css');
 
-.logInFormBlock {
+.signInFormBlock {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -18,7 +18,7 @@
   box-shadow: 0 0 10px 1px var(--gray);
 }
 
-.logInForm {
+.signInForm {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +27,7 @@
   height: 100%;
 }
 
-.logInFormHr {
+.signInFormHr {
   width: 70%;
   height: 10px;
 
@@ -40,7 +40,7 @@
   color: var(--red);
 }
 
-.logInFormInput {
+.signInFormInput {
   width: 50%;
   height: 50%;
   padding: 8px;
@@ -56,6 +56,6 @@
   outline: none;
 }
 
-.logInFormInput::placeholder {
+.signInFormInput::placeholder {
   color: var(--dark-purple);
 }

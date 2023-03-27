@@ -5,7 +5,7 @@ import { NavButton } from './authorization-nav-button-component/authorization-na
 export const AuthorizationButton: FC = () => {
   return (
     <>
-      <NavButton link={RoutesEnum.LogIn} text="Log In" />
+      <NavButton link={RoutesEnum.SignIn} text="Sign In" />
       <NavButton link={RoutesEnum.SignUp} text="Sign Up" />
     </>
   );
