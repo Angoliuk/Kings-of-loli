@@ -1,8 +1,13 @@
+import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import styles from './authorization-nav-button-component.module.css';
 
-export const NavButton = ({ link, text }: { link: string; text: string }) => {
+interface NavButtonProperty {
+  link: string;
+  text: string;
+}
+export const NavButton: FC<NavButtonProperty> = ({ link, text }) => {
   return (
     <NavLink to={link}>
       <button className={styles.authorizationButton}>
