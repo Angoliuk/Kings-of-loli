@@ -7,9 +7,5 @@ type AuthorizationWrapperProperties = {
 };
 
 export const AuthorizationWrapper: FC<AuthorizationWrapperProperties> = ({ children }) => {
-  return (
-    <>
-      <div className={styles.background}>{children}</div>;
-    </>
-  );
+  return <div className={styles.background}>{children}</div>;
 };
