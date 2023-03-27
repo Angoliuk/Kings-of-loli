@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 
 import { AuthorizationButton } from '../../components/authorization-components/authorization-button-component';
 import { AuthorizationHeader } from '../../components/authorization-components/authorization-header-component/authorization-header-component';
-import { AuthorizationWrapper } from '../../components/authorization-page-wrapper-component';
+import { AuthorizationWrapper } from '../../components/authorization-page-wrapper-component/authorization-page-wrapper-component';
 import {
   DAMAGE_USER_HEALTH,
   INITIAL_USER_HEALTH,

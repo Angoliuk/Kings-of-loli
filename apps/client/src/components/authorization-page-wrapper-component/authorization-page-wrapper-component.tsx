@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
-import { AuthorizationBackground } from './authorization-components/authorization-background-component/authorization-background-component';
+import styles from './authorization-page-wrapper-component.module.css';
+
 type AuthorizationWrapperProperties = {
   children: React.ReactNode;
 };
@@ -8,7 +9,7 @@ type AuthorizationWrapperProperties = {
 export const AuthorizationWrapper: FC<AuthorizationWrapperProperties> = ({ children }) => {
   return (
     <>
-      <AuthorizationBackground>{children}</AuthorizationBackground>
+      <div className={styles.background}>{children}</div>;
     </>
   );
 };
