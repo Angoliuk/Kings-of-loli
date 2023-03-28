@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { FC } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
@@ -36,7 +37,7 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
           <span>log In</span>
         </h1>
         <hr className={styles.signInFormHr} />
-        <form onSubmit={() => handleFormSubmit(handleSubmit)} className={styles.signInForm}>
+        <form onSubmit={handleFormSubmit(handleSubmit)} className={styles.signInForm}>
           <FormInput
             register={register}
             name={SignInFormFields.NICKNAME_TYPE}

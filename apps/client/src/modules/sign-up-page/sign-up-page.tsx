@@ -1,22 +1,14 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 import { AuthorizationButton } from '../../components/authorization/authorization-button/authorization-button';
 import { AuthorizationHeader } from '../../components/authorization/authorization-header/authorization-header';
+import { healthBarHandler } from '../../components/authorization/authorization-header/health-bar/health-bar';
 import { AuthorizationWrapper } from '../../components/authorization/authorization-page-wrapper/authorization-page-wrapper';
-import {
-  DAMAGE_USER_HEALTH,
-  INITIAL_USER_HEALTH,
-  MINIMAL_USER_HEALTH,
-} from '../../constants/health-bar';
 import { SignUpForm } from './sign-up-form';
 import styles from './sign-up-page.module.css';
 
 export const SignUp: FC = () => {
-  const [health, setHealth] = useState(INITIAL_USER_HEALTH);
-  const OnDamageReceived = () =>
-    setHealth((previous) =>
-      previous === MINIMAL_USER_HEALTH ? INITIAL_USER_HEALTH : previous - DAMAGE_USER_HEALTH,
-    );
+  const { health, OnDamageReceived } = healthBarHandler();
   return (
     <AuthorizationWrapper>
       <div className={styles.SignUp}>
