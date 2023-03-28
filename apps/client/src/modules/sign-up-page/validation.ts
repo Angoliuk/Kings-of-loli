@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { SIGN_UP_FORM_CONSTANTS } from '../../constants/authorization-consts/authorization-consts';
+import { SIGN_UP_FORM_CONSTANTS } from '../../constants/authorization/authorization';
 
 export const SignUpFormSchema = z.object({
   nickname: z

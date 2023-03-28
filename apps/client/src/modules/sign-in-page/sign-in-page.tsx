@@ -1,13 +1,13 @@
 import { FC, useState } from 'react';
 
-import { AuthorizationButton } from '../../components/authorization-components/authorization-button-component';
-import { AuthorizationHeader } from '../../components/authorization-components/authorization-header-component/authorization-header-component';
-import { AuthorizationWrapper } from '../../components/authorization-page-wrapper-component/authorization-page-wrapper-component';
+import { AuthorizationButton } from '../../components/authorization/authorization-button/authorization-button';
+import { AuthorizationHeader } from '../../components/authorization/authorization-header/authorization-header';
+import { AuthorizationWrapper } from '../../components/authorization/authorization-page-wrapper/authorization-page-wrapper';
 import {
   DAMAGE_USER_HEALTH,
   INITIAL_USER_HEALTH,
   MINIMAL_USER_HEALTH,
-} from '../../constants/health-bar-const';
+} from '../../constants/health-bar';
 import { SignInForm } from './sign-in-form';
 import styles from './sign-in-page.module.css';
 

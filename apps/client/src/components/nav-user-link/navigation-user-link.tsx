@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import styles from './navigation-user-link-component.module.css';
+import styles from './navigation-user-link.module.css';
 interface NavUserLinkProperty {
   navLink: string;
   children: React.ReactNode;

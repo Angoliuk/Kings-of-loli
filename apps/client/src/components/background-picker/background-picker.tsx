@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 
 import { ThemePicker } from '../../../resources/svg/theme-icon-svg/theme-picker';
-import styles from './background-picker-component.module.css';
+import styles from './background-picker.module.css';
 import { imgInput } from './photo-list';
 
 interface BackgroundTextEventTarget extends EventTarget {

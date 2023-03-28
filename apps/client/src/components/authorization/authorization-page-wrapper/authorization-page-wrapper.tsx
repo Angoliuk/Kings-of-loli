@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import styles from './authorization-page-wrapper-component.module.css';
+import styles from './authorization-page-wrapper.module.css';
 
 type AuthorizationWrapperProperties = {
   children: React.ReactNode;

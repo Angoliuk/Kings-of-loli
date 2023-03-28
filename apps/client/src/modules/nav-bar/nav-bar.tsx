@@ -4,7 +4,7 @@ import { LeftBattleMenu } from '../../../resources/svg/button-svg/left-button-ba
 import { LeftLeaderboardMenu } from '../../../resources/svg/button-svg/left-button-leaderboard-menu';
 import { LeftProfileMenu } from '../../../resources/svg/button-svg/left-button-profile-menu';
 import { LeftSettingsMenu } from '../../../resources/svg/button-svg/left-button-settings-menu';
-import { NavUserLink } from '../../components/nav-user-link-component/navigation-user-link-component';
+import { NavUserLink } from '../../components/nav-user-link/navigation-user-link';
 import { RoutesEnum } from '../../routes/app-route/app-route-enums';
 import styles from './nav-bar.module.css';
 

@@ -2,11 +2,11 @@ import { FC } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import { SubmitAuthorizationFormSvg } from '../../../resources/svg/button-svg/submit';
-import { FormErrorMessage } from '../../components/error-message-component';
-import { FormInput } from '../../components/form-input-component';
-import { SignUpFormFields } from '../../constants/authorization-consts/authorization-consts';
+import { FormErrorMessage } from '../../components/error-message/error-message';
+import { FormInput } from '../../components/form-input/form-input';
+import { SignUpFormFields } from '../../constants/authorization/authorization';
 import { useHookForm } from '../../hooks/use-form';
-import { AuthorizationFormProperties } from '../../interfaces/authorization-form-interfaces/authorization-form-properties';
+import { AuthorizationFormProperties } from '../../interfaces/authorization-form/authorization-form-properties';
 import { trpc } from '../../trpc';
 import styles from './sign-up-form.module.css';
 import { SignUpFormSchema, SignUpSchema } from './validation';

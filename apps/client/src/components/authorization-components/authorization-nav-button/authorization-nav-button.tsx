@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import styles from './authorization-nav-button-component.module.css';
+import styles from './authorization-nav-button.module.css';
 
 interface NavButtonProperty {
   link: string;

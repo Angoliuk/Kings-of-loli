@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
-import { HealthBarProperties } from '../../../interfaces/authorization-form-interfaces/authorization-form-health-bar-properties';
-import styles from './authorization-header-component.module.css';
-import { HealthBar } from './health-bar-component/health-bar';
+import { HealthBarProperties } from '../../../interfaces/authorization-form/authorization-form-health-bar-properties';
+import styles from './authorization-header.module.css';
+import { HealthBar } from './health-bar/health-bar';
 
 export const AuthorizationHeader: FC<HealthBarProperties> = ({ health }) => {
   return (

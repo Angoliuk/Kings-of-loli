@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { HEALTH_BAR_COLOR_STATE } from '../../../../constants/health-bar-const';
-import { HealthBarProperties } from '../../../../interfaces/authorization-form-interfaces/authorization-form-health-bar-properties';
+import { HEALTH_BAR_COLOR_STATE } from '../../../../constants/health-bar';
+import { HealthBarProperties } from '../../../../interfaces/authorization-form/authorization-form-health-bar-properties';
 import styles from './health-bar.module.css';
 
 export const HealthBar: FC<HealthBarProperties> = ({ health }) => {

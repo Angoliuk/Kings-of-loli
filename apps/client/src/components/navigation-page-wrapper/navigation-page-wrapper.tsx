@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { NavBar } from '../modules/nav-bar/nav-bar';
+import { NavBar } from '../../modules/nav-bar/nav-bar';
 type NavigationPageWrapperProperties = {
   children: React.ReactNode;
 };

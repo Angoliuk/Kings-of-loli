@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { BackgroundPicker } from '../../components/background-picker-component/background-picker-component';
-import { NavigationPageWrapper } from '../../components/navigation-page-wrapper-component';
+import { BackgroundPicker } from '../../components/background-picker/background-picker';
+import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
 import styles from './stats-page.module.css';
 
 export const StatsPage: FC = () => {
