@@ -1,7 +1,8 @@
-import React, { FC, useId, useState } from 'react';
+import React, { FC, useState } from 'react';
 
 import { ThemePicker } from '../../../resources/svg/theme-icon-svg/theme-picker';
 import styles from './background-picker-component.module.css';
+import { imgInput } from './photo-list';
 
 interface BackgroundTextEventTarget extends EventTarget {
   name: string;
@@ -15,28 +16,8 @@ type PropertiesImg = {
   imgBackground: string;
 };
 export const BackgroundPicker: FC<PropertiesImg> = ({ imgBackground }) => {
-  const imgInput: { name: string; src: string; id: string }[] = [
-    {
-      name: 'large_1',
-      src: 'resources/img/leaderboard-background/small_1.jpg',
-      id: useId(),
-    },
-    {
-      name: 'large_2',
-      src: 'resources/img/leaderboard-background/small_2.jpg',
-      id: useId(),
-    },
-    {
-      name: 'large_3',
-      src: 'resources/img/leaderboard-background/small_3.jpg',
-      id: useId(),
-    },
-    {
-      name: 'large_4',
-      src: 'resources/img/leaderboard-background/small_4.jpg',
-      id: useId(),
-    },
-  ];
+  const photoList = imgInput();
+
   const [isActive, setActive] = useState(false);
   const [sourceImg, setImage] = useState(
     imgBackground || 'resources/img/leaderboard-background/large_1.jpg',
@@ -44,7 +25,7 @@ export const BackgroundPicker: FC<PropertiesImg> = ({ imgBackground }) => {
   const showThemeList = () => {
     setActive(!isActive);
   };
-  const handler = (event: BackgroundMouseEvent) => {
+  const changePhoto = (event: BackgroundMouseEvent) => {
     const name = event.currentTarget.name;
     const link = 'resources/img/leaderboard-background/' + name + '.jpg';
     setImage(link);
@@ -59,11 +40,11 @@ export const BackgroundPicker: FC<PropertiesImg> = ({ imgBackground }) => {
         </button>
         {isActive ? (
           <span className={styles.themeImg}>
-            {imgInput.map((img) => {
+            {photoList.map((img) => {
               return (
                 <button
                   key={img.id}
-                  onClick={handler}
+                  onClick={changePhoto}
                   name={img.name}
                   className={styles.themeButton}
                 >
