@@ -1,6 +1,11 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
-import { HEALTH_BAR_COLOR_STATE } from '../../../../constants/health-bar';
+import {
+  DAMAGE_USER_HEALTH,
+  HEALTH_BAR_COLOR_STATE,
+  INITIAL_USER_HEALTH,
+  MINIMAL_USER_HEALTH,
+} from '../../../../constants/health-bar';
 import { HealthBarProperties } from '../../../../interfaces/authorization-form/authorization-form-health-bar-properties';
 import styles from './health-bar.module.css';
 
@@ -18,4 +23,13 @@ export const HealthBar: FC<HealthBarProperties> = ({ health }) => {
       </div>
     </div>
   );
+};
+
+export const healthBarHandler = () => {
+  const [health, setHealth] = useState(INITIAL_USER_HEALTH);
+  const OnDamageReceived = () =>
+    setHealth((previous) =>
+      previous === MINIMAL_USER_HEALTH ? INITIAL_USER_HEALTH : previous - DAMAGE_USER_HEALTH,
+    );
+  return { health, OnDamageReceived };
 };
