@@ -13,17 +13,6 @@
   background: var(--silver-gray);
 }
 
-.playButton {
-  width: 150px;
-  height: 70px;
-  padding: 10px;
-
-  font-size: 2rem;
-
-  background: var(--light-green);
-  border: none;
-}
-
 .projectName {
   font-size: 3rem;
 }

@@ -32,9 +32,9 @@
   border-radius: 100%;
 }
 
-.playButton {
-  width: 150px;
-  height: 70px;
+.logoutButton {
+  width: 20%;
+  height: 10%;
   padding: 10px;
 
   font-size: 2rem;

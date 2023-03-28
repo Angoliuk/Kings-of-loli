@@ -12,7 +12,7 @@ export const ProfilePage: FC = () => {
           <div className={styles.username}>username</div>
           <div className={styles.rating}>rating</div>
         </div>
-        <button className={styles.playButton}>Logout</button>
+        <button className={styles.logoutButton}>Logout</button>
       </div>
     </NavigationPageWrapper>
   );

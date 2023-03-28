@@ -29,7 +29,7 @@
 
 .signInFormHr {
   width: 70%;
-  height: 10px;
+  height: 2%;
 
   background: var(--dark-purple);
   border: none;
@@ -50,7 +50,6 @@
   background: var(--platinum-gray);
   border: 5px solid transparent;
   border-radius: 20px;
-  border-radius: 5px;
   border-image: linear-gradient(to bottom right, #676586, #b002c3, #9295a8);
   border-image-slice: 1;
   outline: none;
