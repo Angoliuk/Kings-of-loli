@@ -1,6 +1,9 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
-import { FormErrorMessageProperties } from '../interfaces/authorization-form-interfaces/authorization-form-errors-message-interface';
+export interface FormErrorMessageProperties {
+  message: ReactNode;
+  className: string;
+}
 
 export const FormErrorMessage: FC<FormErrorMessageProperties> = ({ message, className }) => {
   return (
