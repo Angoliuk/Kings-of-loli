@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 
 interface FormErrorMessageProperties {
-  message: ReactNode;
+  message?: string;
   className: string;
 }
 
