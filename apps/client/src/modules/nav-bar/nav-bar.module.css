@@ -19,3 +19,13 @@
   background-image: url('../../../resources/img/background-left-menu.svg');
   background-size: 100% 100%;
 }
+
+.navButtons {
+  width: 100%;
+  border-radius: 100px;
+  transition: all 0.12s;
+}
+
+.navButtons:hover {
+  transform: scale(1.1);
+}

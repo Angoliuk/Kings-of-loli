@@ -4,25 +4,25 @@ import { LeftBattleMenu } from '../../../resources/svg/button-svg/left-button-ba
 import { LeftLeaderboardMenu } from '../../../resources/svg/button-svg/left-button-leaderboard-menu';
 import { LeftProfileMenu } from '../../../resources/svg/button-svg/left-button-profile-menu';
 import { LeftSettingsMenu } from '../../../resources/svg/button-svg/left-button-settings-menu';
-import { NavUserLink } from '../../components/nav-user-link/navigation-user-link';
+import { NavButton } from '../../components/nav-button/nav-button';
 import { RoutesEnum } from '../../routes/app-route/app-route-enums';
 import styles from './nav-bar.module.css';
 
 export const NavBar: FC = () => {
   return (
     <nav className={styles.nav}>
-      <NavUserLink navLink={RoutesEnum.Home}>
+      <NavButton link={RoutesEnum.Home} className={styles.navButtons}>
         <LeftBattleMenu />
-      </NavUserLink>
-      <NavUserLink navLink={RoutesEnum.Profile}>
+      </NavButton>
+      <NavButton link={RoutesEnum.Profile} className={styles.navButtons}>
         <LeftProfileMenu />
-      </NavUserLink>
-      <NavUserLink navLink={RoutesEnum.Stats}>
+      </NavButton>
+      <NavButton link={RoutesEnum.Stats} className={styles.navButtons}>
         <LeftLeaderboardMenu />
-      </NavUserLink>
-      <NavUserLink navLink={RoutesEnum.Settings}>
+      </NavButton>
+      <NavButton link={RoutesEnum.Settings} className={styles.navButtons}>
         <LeftSettingsMenu />
-      </NavUserLink>
+      </NavButton>
     </nav>
   );
 };

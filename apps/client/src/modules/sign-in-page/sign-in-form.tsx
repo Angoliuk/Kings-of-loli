@@ -34,7 +34,7 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
     <>
       <div className={styles.signInFormBlock}>
         <h1>
-          <span>log In</span>
+          <span>Sign In</span>
         </h1>
         <hr className={styles.signInFormHr} />
         <form onSubmit={handleFormSubmit(handleSubmit)} className={styles.signInForm}>
