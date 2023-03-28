@@ -36,14 +36,20 @@
   background: var(--gray);
 }
 
-.prop {
+.settings {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 50px;
+
   width: 30em;
   margin: 20px auto;
 }
 
 .volumeLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   height: 15px;
   margin-left: 10px;
 }
