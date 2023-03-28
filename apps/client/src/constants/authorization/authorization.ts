@@ -1,4 +1,4 @@
-const SIGN_UP_FORM_CONSTANTS = {
+const SIGN_UP_FORM_TRANSLATIONS = {
   LARGE_NICKNAME: `Your Nickname is too large`,
   SMALL_NICKNAME: `Your Nickname is too small`,
   SMALL_PASSWORD: `You need longer password`,
@@ -6,7 +6,7 @@ const SIGN_UP_FORM_CONSTANTS = {
   IS_ERROR: `Your nickname already use`,
 } as const;
 
-const SIGN_IN_FORM_CONSTANTS = {
+const SIGN_UP_FORM_TRANSLATIONS = {
   LARGE_NICKNAME: `Your Nickname is not that long`,
   SMALL_NICKNAME: `Your Nickname is definitely longer`,
   SMALL_PASSWORD: `Your Password is definitely longer`,
