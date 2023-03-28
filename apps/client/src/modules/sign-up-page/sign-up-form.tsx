@@ -38,24 +38,39 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
           <span>Sign Up</span>
         </h1>
         <hr className={styles.signUpFormHr} />
-        <form onSubmit={handleFormSubmit(handleSubmit)} className={styles.signUpForm}>
+        <form
+          onSubmit={handleFormSubmit(handleSubmit)}
+          className={styles.signUpForm}
+        >
           <FormInput
             register={register}
             name={SignUpFormFields.NICKNAME_TYPE}
             className={styles.signUpFormInput}
             placeholder={SignUpFormFields.NICKNAME_PLACEHOLDER}
             type={SignUpFormFields.NICKNAME_TYPE}
-          />
-          <FormErrorMessage message={errors.nickname?.message} className={styles.errorMessage} />
+          >
+            <FormErrorMessage
+              message={errors.nickname?.message}
+              className={styles.errorMessage}
+            />
+          </FormInput>
           <FormInput
             register={register}
             name={SignUpFormFields.PASSWORD_TYPE}
             className={styles.signUpFormInput}
             placeholder={SignUpFormFields.PASSWORD_PLACEHOLDER}
             type={SignUpFormFields.PASSWORD_TYPE}
-          />
-          <FormErrorMessage message={errors.password?.message} className={styles.errorMessage} />
-          <button type="submit" disabled={!isValid} className={styles.submitButton}>
+          >
+            <FormErrorMessage
+              message={errors.password?.message}
+              className={styles.errorMessage}
+            />
+          </FormInput>
+          <button
+            type="submit"
+            disabled={!isValid}
+            className={styles.submitButton}
+          >
             <SubmitAuthorizationFormSvg />
           </button>
         </form>
