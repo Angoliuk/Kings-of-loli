@@ -1,17 +1,17 @@
 const SIGN_UP_FORM_CONSTANTS = {
-  L_Nickname: `Your Nickname is too large`,
-  S_Nickname: `Your Nickname is too small`,
-  S_Password: `You need longer password`,
-  Is_Loading: `Checking your nickname`,
-  Is_Error: `Your nickname already use`,
+  LARGE_NICKNAME: `Your Nickname is too large`,
+  SMALL_NICKNAME: `Your Nickname is too small`,
+  SMALL_PASSWORD: `You need longer password`,
+  IS_LOADING: `Checking your nickname`,
+  IS_ERROR: `Your nickname already use`,
 } as const;
 
 const SIGN_IN_FORM_CONSTANTS = {
-  L_Nickname: `Your Nickname is not that long`,
-  S_Nickname: `Your Nickname is definitely longer`,
-  S_Password: `Your Password is definitely longer`,
-  Is_Loading: `Checking your data`,
-  Is_Error: `Incorect data`,
+  LARGE_NICKNAME: `Your Nickname is not that long`,
+  SMALL_NICKNAME: `Your Nickname is definitely longer`,
+  SMALL_PASSWORD: `Your Password is definitely longer`,
+  IS_LOADING: `Checking your data`,
+  IS_ERROR: `Incorect data`,
 } as const;
 
 enum SignUpFormFields {
