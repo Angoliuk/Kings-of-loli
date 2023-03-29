@@ -6,7 +6,7 @@ const SIGN_UP_FORM_TRANSLATIONS = {
   IS_ERROR: `Your nickname already use`,
 } as const;
 
-const SIGN_UP_FORM_TRANSLATIONS = {
+const SIGN_IN_FORM_TRANSLATIONS = {
   LARGE_NICKNAME: `Your Nickname is not that long`,
   SMALL_NICKNAME: `Your Nickname is definitely longer`,
   SMALL_PASSWORD: `Your Password is definitely longer`,
