@@ -5,7 +5,7 @@ import styles from './home-page.module.css';
 export const HomePage: FC = () => {
   return (
     <NavigationPageWrapper>
-      <div className={styles.container}>
+      <div className={styles.bg}>
         <h1>
           <span className={styles.projectName}>Kings of Loli</span>
         </h1>

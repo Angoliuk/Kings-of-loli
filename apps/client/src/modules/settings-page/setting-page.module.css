@@ -1,6 +1,6 @@
 @import url('../../css/colors.module.css');
 
-.container {
+.bg {
   display: flex;
   flex-direction: column;
   gap: 400px;
@@ -10,7 +10,10 @@
   width: 100%;
   height: 100%;
 
-  background: var(--silver-gray);
+  background-image: url('.././../../resources/img/bg/bg.png');
+  background-size: 100% 100%;
+
+  image-rendering: crisp-edges;
 }
 
 .playButton {
@@ -29,11 +32,18 @@
   text-align: center;
 }
 
-.menuBar {
-  gap: 400px;
-  width: 60%;
-  height: 40em;
-  background: var(--gray);
+.content {
+  display: flex;
+  flex-direction: column;
+
+  width: 70%;
+  height: 70%;
+  padding: 100px;
+
+  background-image: url('.././../../resources/img/bg/window.png');
+  background-size: 100% 100%;
+
+  image-rendering: crisp-edges;
 }
 
 .settings {
@@ -41,8 +51,14 @@
   flex-direction: column;
   gap: 50px;
 
-  width: 30em;
+  width: 30vw;
   margin: 20px auto;
+  padding: 30px;
+
+  background-image: url('../../../resources/img/bg/main-stone.png');
+  background-size: 100% 100%;
+
+  image-rendering: crisp-edges;
 }
 
 .volumeLine {

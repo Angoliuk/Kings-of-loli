@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 interface NavUserLinkProperty {
   link: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className: string;
 }
 export const NavButton: FC<NavUserLinkProperty> = ({ link, children, className }) => {

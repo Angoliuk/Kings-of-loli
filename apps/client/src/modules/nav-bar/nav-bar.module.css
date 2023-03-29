@@ -22,8 +22,28 @@
 
 .navButtons {
   width: 100%;
+  min-width: 70px;
+  height: 9%;
+  min-height: 70px;
+
+  background-size: 100% 100%;
   border-radius: 100px;
+
+  image-rendering: crisp-edges;
+
   transition: all 0.12s;
+}
+
+.profileButton {
+  background-image: url('../../../resources/img/menu/left-menu-profile-icon.png');
+}
+
+.leaderboardButton {
+  background-image: url('../../../resources/img/menu/left-menu-leaderboard-icon.png');
+}
+
+.settingsButton {
+  background-image: url('../../../resources/img/menu/left-menu-settings-icon.png');
 }
 
 .navButtons:hover {
