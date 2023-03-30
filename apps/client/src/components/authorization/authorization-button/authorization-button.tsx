@@ -6,14 +6,14 @@ import styles from './authorization-button.module.css';
 export const AuthorizationButton: FC = () => {
   return (
     <>
-      <NavButton link={RoutesEnum.SignIn} className={styles.navButtons}>
+      <NavButton link={RoutesEnum.SignIn} className={[styles.navButtons]}>
         <button className={styles.authorizationButton}>
           <h2>
             <span className={styles.buttonSvgText}>Sign In</span>
           </h2>
         </button>
       </NavButton>
-      <NavButton link={RoutesEnum.SignUp} className={styles.navButtons}>
+      <NavButton link={RoutesEnum.SignUp} className={[styles.navButtons]}>
         <button className={styles.authorizationButton}>
           <h2>
             <span className={styles.buttonSvgText}>Sign Up</span>

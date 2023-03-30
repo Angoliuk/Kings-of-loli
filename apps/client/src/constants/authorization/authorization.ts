@@ -27,4 +27,4 @@ enum SignInFormFields {
   PASSWORD_TYPE = 'password',
 }
 
-export { SIGN_IN_FORM_CONSTANTS, SIGN_UP_FORM_CONSTANTS, SignInFormFields, SignUpFormFields };
+export { SIGN_IN_FORM_TRANSLATIONS, SIGN_UP_FORM_TRANSLATIONS, SignInFormFields, SignUpFormFields };
