@@ -1,4 +1,5 @@
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
+import { ReactNode } from 'rect';
 
 interface FormInputProperties<T extends FieldValues> {
   register: UseFormRegister<T>;
@@ -6,6 +7,7 @@ interface FormInputProperties<T extends FieldValues> {
   className: string;
   placeholder: string;
   type: string;
+  children: ReactNode;
 }
 
 export const FormInput = <T extends FieldValues>({
@@ -14,6 +16,16 @@ export const FormInput = <T extends FieldValues>({
   className,
   placeholder,
   type,
+  children,
 }: FormInputProperties<T>) => {
-  return <input {...register(name)} className={className} placeholder={placeholder} type={type} />;
+  return (
+    <input
+      {...register(name)}
+      className={className}
+      placeholder={placeholder}
+      type={type}
+    >
+      {children}
+    </input>
+  );
 };

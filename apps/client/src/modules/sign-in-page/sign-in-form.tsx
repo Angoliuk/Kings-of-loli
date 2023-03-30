@@ -37,23 +37,34 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
           <span>Sign In</span>
         </h1>
         <hr className={styles.signInFormHr} />
-        <form onSubmit={handleFormSubmit(handleSubmit)} className={styles.signInForm}>
+        <form
+          onSubmit={handleFormSubmit(handleSubmit)}
+          className={styles.signInForm}
+        >
           <FormInput
             register={register}
             name={SignInFormFields.NICKNAME_TYPE}
             className={styles.signInFormInput}
             placeholder={SignInFormFields.NICKNAME_PLACEHOLDER}
             type={SignInFormFields.NICKNAME_TYPE}
-          />
-          <FormErrorMessage message={errors.nickname?.message} className={styles.errorMessage} />
+          >
+            <FormErrorMessage
+              message={errors.nickname?.message}
+              className={styles.errorMessage}
+            />
+          </FormInput>
           <FormInput
             register={register}
             name={SignInFormFields.PASSWORD_TYPE}
             className={styles.signInFormInput}
             placeholder={SignInFormFields.PASSWORD_PLACEHOLDER}
             type={SignInFormFields.PASSWORD_TYPE}
-          />
-          <FormErrorMessage message={errors.password?.message} className={styles.errorMessage} />
+          >
+            <FormErrorMessage
+              message={errors.password?.message}
+              className={styles.errorMessage}
+            />
+          </FormInput>
           <button type="submit" disabled={!isValid}>
             Submit
           </button>
