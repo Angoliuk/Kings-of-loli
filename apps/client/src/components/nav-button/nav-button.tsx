@@ -4,11 +4,11 @@ import { NavLink } from 'react-router-dom';
 interface NavUserLinkProperty {
   link: string;
   children?: React.ReactNode;
-  className: string;
+  className: string[];
 }
 export const NavButton: FC<NavUserLinkProperty> = ({ link, children, className }) => {
   return (
-    <NavLink className={className} to={link}>
+    <NavLink className={className.join(' ')} to={link}>
       {children}
     </NavLink>
   );
