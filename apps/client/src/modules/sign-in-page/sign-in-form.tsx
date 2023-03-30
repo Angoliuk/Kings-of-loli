@@ -41,7 +41,7 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
           <FormInput
             register={register}
             name={SignInFormFields.NICKNAME_TYPE}
-            className={styles.signInFormInput}
+            className={[styles.signInFormInput, styles.nicknameInput]}
             placeholder={SignInFormFields.NICKNAME_PLACEHOLDER}
             type={SignInFormFields.NICKNAME_TYPE}
           >
@@ -50,15 +50,13 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
           <FormInput
             register={register}
             name={SignInFormFields.PASSWORD_TYPE}
-            className={styles.signInFormInput}
+            className={[styles.signInFormInput, styles.passwordInput]}
             placeholder={SignInFormFields.PASSWORD_PLACEHOLDER}
             type={SignInFormFields.PASSWORD_TYPE}
           >
             <FormErrorMessage message={errors.password?.message} className={styles.errorMessage} />
           </FormInput>
-          <button type="submit" disabled={!isValid}>
-            Submit
-          </button>
+          <button type="submit" disabled={!isValid} className={styles.submit} />
         </form>
       </div>
     </>

@@ -11,10 +11,12 @@ export const SignUp: FC = () => {
   const { health, OnDamageReceived } = healthBarHandler();
   return (
     <AuthorizationWrapper>
-      <div className={styles.SignUp}>
-        <AuthorizationHeader health={health} />
-        <SignUpForm onSubmit={OnDamageReceived} />
-        <div className={styles.SignUpButtons}>
+      <div className={styles.signUp}>
+        <div className={styles.form}>
+          <AuthorizationHeader health={health} />
+          <SignUpForm onSubmit={OnDamageReceived} />
+        </div>
+        <div className={styles.signUpButtons}>
           <AuthorizationButton />
         </div>
       </div>

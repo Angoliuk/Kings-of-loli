@@ -6,16 +6,14 @@
   gap: 20px;
   align-items: center;
 
-  width: 100%;
+  width: 55%;
+  height: 60%;
 
   color: var(--light-yellow);
 
-  background: var(--dark-purple);
   border: 5px solid transparent;
   border-radius: 20px;
-  border-image: linear-gradient(to bottom right, #676586, #b002c3, #9295a8);
   border-image-slice: 1;
-  box-shadow: 0 0 10px 1px var(--gray);
 }
 
 .signInForm {
@@ -41,20 +39,51 @@
 }
 
 .signInFormInput {
-  width: 50%;
-  height: 50%;
+  width: 55%;
+  height: 10%;
   padding: 8px;
+  padding-left: 50px;
 
-  color: var(--dark-purple);
+  color: var(--silver-gray);
 
-  background: var(--platinum-gray);
-  border: 5px solid transparent;
-  border-radius: 20px;
-  border-image: linear-gradient(to bottom right, #676586, #b002c3, #9295a8);
-  border-image-slice: 1;
+  background: none;
+  border: none;
+  border-bottom: 3px solid rgb(0 0 0);
   outline: none;
 }
 
-.signInFormInput::placeholder {
-  color: var(--dark-purple);
+.passwordInput {
+  background-image: url('../../../resources/img/authorization/icons/password.png');
+  background-repeat: no-repeat;
+  background-position-y: -2px;
+  background-size: 15% 100%;
+
+  image-rendering: crisp-edges;
+}
+
+.nicknameInput {
+  background-image: url('../../../resources/img/authorization/icons/profile.png');
+  background-repeat: no-repeat;
+  background-position-y: -2px;
+  background-size: 15% 100%;
+
+  image-rendering: crisp-edges;
+}
+
+.submit {
+  width: 50%;
+  height: 25%;
+
+  background: none;
+  background-image: url('../../../resources/img/authorization/icons/submit.png');
+  background-size: 100% 100%;
+  border: none;
+
+  image-rendering: crisp-edges;
+
+  transition: all 0.12s;
+}
+
+.submit:hover {
+  transform: scale(1.1);
 }

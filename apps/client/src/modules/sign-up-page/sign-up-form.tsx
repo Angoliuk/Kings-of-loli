@@ -2,7 +2,6 @@
 import { FC } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
-import { SubmitAuthorizationFormSvg } from '../../../resources/svg/button-svg/submit';
 import { FormErrorMessage } from '../../components/error-message/error-message';
 import { FormInput } from '../../components/form-input/form-input';
 import { SignUpFormFields } from '../../constants/authorization/authorization';
@@ -42,7 +41,7 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
           <FormInput
             register={register}
             name={SignUpFormFields.NICKNAME_TYPE}
-            className={styles.signUpFormInput}
+            className={[styles.signUpFormInput, styles.nicknameInput]}
             placeholder={SignUpFormFields.NICKNAME_PLACEHOLDER}
             type={SignUpFormFields.NICKNAME_TYPE}
           >
@@ -51,15 +50,13 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
           <FormInput
             register={register}
             name={SignUpFormFields.PASSWORD_TYPE}
-            className={styles.signUpFormInput}
+            className={[styles.signUpFormInput, styles.passwordInput]}
             placeholder={SignUpFormFields.PASSWORD_PLACEHOLDER}
             type={SignUpFormFields.PASSWORD_TYPE}
           >
             <FormErrorMessage message={errors.password?.message} className={styles.errorMessage} />
           </FormInput>
-          <button type="submit" disabled={!isValid} className={styles.submitButton}>
-            <SubmitAuthorizationFormSvg />
-          </button>
+          <button type="submit" disabled={!isValid} className={styles.submit} />
         </form>
       </div>
     </>

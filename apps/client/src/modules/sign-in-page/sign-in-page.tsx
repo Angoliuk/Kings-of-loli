@@ -12,8 +12,10 @@ export const SignIn: FC = () => {
   return (
     <AuthorizationWrapper>
       <div className={styles.signIn}>
-        <AuthorizationHeader health={health} />
-        <SignInForm onSubmit={OnDamageReceived} />
+        <div className={styles.form}>
+          <AuthorizationHeader health={health} />
+          <SignInForm onSubmit={OnDamageReceived} />
+        </div>
         <div className={styles.signInButtons}>
           <AuthorizationButton />
         </div>

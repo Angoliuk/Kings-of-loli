@@ -8,11 +8,12 @@
   width: 100%;
   height: 100%;
 
-  background: var(--grey);
+  background-image: url('../../../../resources/img/authorization/buttons/active.png');
+  background-repeat: no-repeat;
   background-size: 100% 100%;
-  border: 5px solid transparent;
-  border-image: linear-gradient(to bottom right, #676586, #b002c3, #9295a8);
-  border-image-slice: 1;
+  border: none;
+
+  image-rendering: crisp-edges;
 }
 
 .buttonSvgText {
@@ -23,10 +24,8 @@
 
 .navButtons {
   width: 100%;
-  border-radius: 100px;
-  transition: all 0.12s;
 }
 
-.navButtons:hover {
-  transform: scale(1.1);
+.authorizationButton:hover {
+  background-image: url('../../../../resources/img/authorization/buttons/inactive.png');
 }

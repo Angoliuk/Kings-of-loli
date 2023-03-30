@@ -1,12 +1,12 @@
 .background {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: flex-end;
 
   width: 100vw;
   height: 100vh;
 
-  background-image: url('../../../resources/img/mount_back.png');
+  background-image: url('../../../../resources/img/bg/bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }

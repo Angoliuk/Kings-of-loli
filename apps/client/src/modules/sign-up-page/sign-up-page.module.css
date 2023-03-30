@@ -1,26 +1,38 @@
 .signUp {
-  z-index: 10;
+  position: absolute;
+  left: 63%;
 
   display: flex;
   flex-direction: column;
-  gap: 20px;
   align-items: center;
   justify-content: space-between;
 
   width: 40%;
-  min-height: fit-content;
-  padding: 30px;
+  height: 100%;
+  padding-bottom: 0.3%;
 
-  background-image: url('../../resources/img/background.svg');
+  background-image: url('../../../resources/img/authorization/bg/authorization-bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+
+  image-rendering: crisp-edges;
 }
 
 .signUpButtons {
   display: flex;
   justify-content: space-evenly;
+  width: 70%;
+  height: 15%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 
   width: 100%;
-  height: 20%;
-  margin-bottom: 5%;
+  height: 67%;
+  padding-top: 12%;
+  padding-left: 1%;
 }
