@@ -1,19 +1,19 @@
 import { FC } from 'react';
 
-import { AuthorizationButton } from '../../components/authorization/authorization-button/authorization-button';
-import { AuthorizationHeader } from '../../components/authorization/authorization-header/authorization-header';
-import { healthBarHandler } from '../../components/authorization/authorization-header/health-bar/health-bar';
-import { AuthorizationWrapper } from '../../components/authorization/authorization-page-wrapper/authorization-page-wrapper';
+import { AuthorizationButton } from '../../components/authorization/button/button';
+import { AuthorizationHeader } from '../../components/authorization/header/header';
+import { healthBarHandler } from '../../components/authorization/health-bar/health-bar';
+import { AuthorizationWrapper } from '../../components/authorization/page-wrapper/page-wrapper';
 import { SignUpForm } from './sign-up-form';
 import styles from './sign-up-page.module.css';
 
 export const SignUp: FC = () => {
   const { health, OnDamageReceived } = healthBarHandler();
   return (
-    <AuthorizationWrapper>
+    <AuthorizationWrapper health={health}>
       <div className={styles.signUp}>
         <div className={styles.form}>
-          <AuthorizationHeader health={health} />
+          <AuthorizationHeader />
           <SignUpForm onSubmit={OnDamageReceived} />
         </div>
         <div className={styles.signUpButtons}>
