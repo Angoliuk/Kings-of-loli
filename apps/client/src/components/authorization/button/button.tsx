@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { RoutesEnum } from '../../../routes/app-route/app-route-enums';
 import { NavButton } from '../../nav-button/nav-button';
-import styles from './authorization-button.module.css';
+import styles from './button.module.css';
 export const AuthorizationButton: FC = () => {
   return (
     <>

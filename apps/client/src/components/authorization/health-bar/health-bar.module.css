@@ -1,9 +1,9 @@
-@import url('../../../../css/colors.module.css');
+@import url('../../../css/colors.module.css');
 
 .healthBar {
   display: flex;
 
-  width: 55%;
+  width: 65.3%;
   height: 20px;
   padding: 3px;
 
