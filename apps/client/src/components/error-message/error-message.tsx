@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
-interface FormErrorMessageProperties {
+type FormErrorMessageProperties = {
   message?: string;
   className: string;
-}
+};
 
 export const FormErrorMessage: FC<FormErrorMessageProperties> = ({ message, className }) => {
   return (

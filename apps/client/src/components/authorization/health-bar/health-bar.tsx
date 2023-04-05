@@ -14,9 +14,9 @@ const DAMAGE_USER_HEALTH: number = 1 as const;
 
 export { DAMAGE_USER_HEALTH, HEALTH_BAR_COLOR_STATE, INITIAL_USER_HEALTH, MINIMAL_USER_HEALTH };
 
-interface HealthBarProperties {
+type HealthBarProperties = {
   health: number;
-}
+};
 
 export const HealthBar: FC<HealthBarProperties> = ({ health }) => {
   return (

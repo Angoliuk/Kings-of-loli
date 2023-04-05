@@ -1,9 +1,9 @@
 import { useId } from 'react';
-interface imgInputProperties {
+type imgInputProperties = {
   name: string;
   src: string;
   id: string;
-}
+};
 export const imgInput = (): imgInputProperties[] => {
   return [
     {

@@ -3,10 +3,10 @@ import { FC, useRef, useState } from 'react';
 
 import styles from './range-bar.module.css';
 
-interface RangeBarProperties {
+type RangeBarProperties = {
   value?: number;
   tabIndex?: number;
-}
+};
 
 const SLIDER_MIN_VALUE = 0 as const;
 const SLIDER_MAX_VALUE = 100 as const;
