@@ -1,15 +1,65 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable @typescript-eslint/no-invalid-void-type */
+import { FC, useRef, useState } from 'react';
 
 import styles from './range-bar.module.css';
-const progresHandler = () => {
-  return console.log(1);
-};
-export const RangeBar = () => {
-  const progress = 0;
 
+interface RangeBarProperties {
+  value?: number;
+  tabIndex?: number;
+}
+
+const SLIDER_MIN_VALUE = 0 as const;
+const SLIDER_MAX_VALUE = 100 as const;
+const SLIDER_STEP_VALUE = 10 as const;
+
+export const RangeBar: FC<RangeBarProperties> = ({ value = SLIDER_MAX_VALUE, tabIndex }) => {
+  const [progress, setProgress] = useState(value);
+  const RangeReference = useRef<HTMLInputElement>(null);
+  const moveThumb = (event: MouseEvent): string | void => {
+    if (!RangeReference.current) return;
+    const left = RangeReference.current.offsetLeft;
+    const width = RangeReference.current.clientWidth;
+    const newValue = Math.max(
+      SLIDER_MIN_VALUE,
+      Math.min(
+        SLIDER_MAX_VALUE,
+        SLIDER_MAX_VALUE - ((event.pageX - left) / width) * SLIDER_MAX_VALUE,
+      ),
+    );
+    setProgress(newValue);
+  };
+
+  const handleKeyPress = ({ key }: React.KeyboardEvent<HTMLDivElement>) => {
+    if (key == 'ArrowRight' || key == 'ArrowUp') {
+      const newValue = Math.max(
+        SLIDER_MIN_VALUE,
+        Math.min(SLIDER_MAX_VALUE, progress - SLIDER_STEP_VALUE),
+      );
+      setProgress(newValue);
+    } else if (key == 'ArrowLeft' || key == 'ArrowDown') {
+      const newValue = Math.max(
+        SLIDER_MIN_VALUE,
+        Math.min(SLIDER_MAX_VALUE, progress + SLIDER_STEP_VALUE),
+      );
+      setProgress(newValue);
+    }
+  };
+  const progressHandler = ({ target }: React.MouseEvent<HTMLDivElement>): void => {
+    target.addEventListener('mousemove', moveThumb);
+    target.addEventListener('mouseup', () => target.removeEventListener('mousemove', moveThumb));
+  };
   return (
-    <div className={styles.rangeBar} onMouseDown={progresHandler}>
+    <div
+      role="slider"
+      tabIndex={tabIndex}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={progress}
+      className={styles.rangeBar}
+      onMouseDown={progressHandler}
+      onKeyDown={handleKeyPress}
+      ref={RangeReference}
+    >
       <div className={styles.rangeProgress}>
         <div className={styles.currentProgres} style={{ width: `${progress}%` }} />
       </div>

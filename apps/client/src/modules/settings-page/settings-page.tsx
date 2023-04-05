@@ -13,7 +13,7 @@ export const SettingsPage: FC = () => {
           <div className={styles.settings}>
             <div className={styles.volumeLine}>
               <span>Volume</span>
-              <input type="range" />
+              <RangeBar />
             </div>
             <div className={styles.volumeLine}>
               <span>SFX</span>
@@ -21,7 +21,7 @@ export const SettingsPage: FC = () => {
             </div>
             <div className={styles.volumeLine}>
               <span>Music</span>
-              <input type="range" />
+              <RangeBar />
             </div>
           </div>
         </div>
