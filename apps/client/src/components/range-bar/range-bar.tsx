@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-invalid-void-type */
 import { FC, useRef, useState } from 'react';
 
 import styles from './range-bar.module.css';
@@ -15,7 +14,7 @@ const SLIDER_STEP_VALUE = 10 as const;
 export const RangeBar: FC<RangeBarProperties> = ({ value = SLIDER_MAX_VALUE, tabIndex }) => {
   const [progress, setProgress] = useState(value);
   const RangeReference = useRef<HTMLInputElement>(null);
-  const moveThumb = (event: MouseEvent): string | void => {
+  const moveThumb = (event: MouseEvent) => {
     if (!RangeReference.current) return;
     const left = RangeReference.current.offsetLeft;
     const width = RangeReference.current.clientWidth;
@@ -52,8 +51,8 @@ export const RangeBar: FC<RangeBarProperties> = ({ value = SLIDER_MAX_VALUE, tab
     <div
       role="slider"
       tabIndex={tabIndex}
-      aria-valuemin={0}
-      aria-valuemax={100}
+      aria-valuemin={SLIDER_MIN_VALUE}
+      aria-valuemax={SLIDER_MAX_VALUE}
       aria-valuenow={progress}
       className={styles.rangeBar}
       onMouseDown={progressHandler}

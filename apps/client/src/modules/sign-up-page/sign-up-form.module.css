@@ -34,10 +34,6 @@
   border-radius: 10px;
 }
 
-.errorMessage {
-  color: var(--red);
-}
-
 .signUpFormInput {
   width: 55%;
   height: 10%;
@@ -48,7 +44,7 @@
 
   background: none;
   border: none;
-  border-bottom: 3px solid rgb(0 0 0);
+  border-bottom: 3px solid var(--black);
   outline: none;
 }
 

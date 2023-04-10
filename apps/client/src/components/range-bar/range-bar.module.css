@@ -1,3 +1,5 @@
+@import url('../../css/colors.module.css');
+
 .rangeBar {
   display: flex;
   align-items: center;
@@ -29,5 +31,5 @@
 }
 
 .currentProgres {
-  background: #8693b6;
+  background: var(--gray-progress);
 }

@@ -2,11 +2,17 @@ import { FC, useState } from 'react';
 
 import styles from './health-bar.module.css';
 
+const HEALTH_BAR_COLOR_PICKER = {
+  LOW_HP: '#B22222',
+  HALF_HP: '#FF8825',
+  FULL_HP: '#228B22',
+} as const;
+
 const HEALTH_BAR_COLOR_STATE: Record<number, { color: string }> = {
-  0: { color: '#B22222' },
-  1: { color: '#B22222' },
-  2: { color: '#FF8825' },
-  3: { color: '#228B22' },
+  0: { color: HEALTH_BAR_COLOR_PICKER.LOW_HP },
+  1: { color: HEALTH_BAR_COLOR_PICKER.LOW_HP },
+  2: { color: HEALTH_BAR_COLOR_PICKER.HALF_HP },
+  3: { color: HEALTH_BAR_COLOR_PICKER.FULL_HP },
 } as const;
 const INITIAL_USER_HEALTH: number = 3 as const;
 const MINIMAL_USER_HEALTH: number = 0 as const;
@@ -34,7 +40,7 @@ export const HealthBar: FC<HealthBarProperties> = ({ health }) => {
   );
 };
 
-export const healthBarHandler = () => {
+export const useHealthBarHandler = () => {
   const [health, setHealth] = useState(INITIAL_USER_HEALTH);
   const OnDamageReceived = () =>
     setHealth((previous) =>

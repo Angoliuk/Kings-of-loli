@@ -1,30 +1,24 @@
-import { useId } from 'react';
-type imgInputProperties = {
-  name: string;
-  src: string;
-  id: string;
-};
-export const imgInput = (): imgInputProperties[] => {
+export const imgInput = () => {
   return [
     {
       name: 'large_1',
       src: 'resources/img/leaderboard-background/small_1.jpg',
-      id: useId(),
+      id: 1,
     },
     {
       name: 'large_2',
       src: 'resources/img/leaderboard-background/small_2.jpg',
-      id: useId(),
+      id: 2,
     },
     {
       name: 'large_3',
       src: 'resources/img/leaderboard-background/small_3.jpg',
-      id: useId(),
+      id: 3,
     },
     {
       name: 'large_4',
       src: 'resources/img/leaderboard-background/small_4.jpg',
-      id: useId(),
+      id: 4,
     },
   ];
 };
