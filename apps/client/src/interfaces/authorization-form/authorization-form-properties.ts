@@ -1,3 +1,3 @@
-export interface AuthorizationFormProperties {
+export type AuthorizationFormProperties = {
   onSubmit: () => void;
-}
+};

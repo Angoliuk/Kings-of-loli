@@ -4,13 +4,13 @@ import { ThemePicker } from '../../../resources/svg/theme-icon-svg/theme-picker'
 import styles from './background-picker.module.css';
 import { imgInput } from './photo-list';
 
-interface BackgroundTextEventTarget extends EventTarget {
+type BackgroundTextEventTarget = EventTarget & {
   name: string;
-}
+};
 
-interface BackgroundMouseEvent extends React.MouseEvent<HTMLButtonElement> {
+type BackgroundMouseEvent = React.MouseEvent<HTMLButtonElement> & {
   target: BackgroundTextEventTarget;
-}
+};
 
 type PropertiesImg = {
   imgBackground: string;

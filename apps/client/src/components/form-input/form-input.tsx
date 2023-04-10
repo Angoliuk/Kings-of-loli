@@ -1,22 +1,22 @@
-import { ReactNode } from 'react';
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
-interface FormInputProperties<T extends FieldValues> {
+import { FormErrorMessage } from '../error-message/error-message';
+
+type FormInputProperties<T extends FieldValues> = {
   register: UseFormRegister<T>;
   name: Path<T>;
   className: string[];
   placeholder: string;
   type: string;
-  children: ReactNode;
-}
-
+  error?: string;
+};
 export const FormInput = <T extends FieldValues>({
   register,
   name,
   className,
   placeholder,
   type,
-  children,
+  error,
 }: FormInputProperties<T>) => {
   return (
     <>
@@ -26,7 +26,7 @@ export const FormInput = <T extends FieldValues>({
         placeholder={placeholder}
         type={type}
       />
-      {children}
+      <FormErrorMessage message={error} />
     </>
   );
 };
