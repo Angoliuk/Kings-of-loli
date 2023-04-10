@@ -4,10 +4,12 @@ import { httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 
 import { AppRoute } from './routes/app-route/app-route';
+import { useAuthStore } from './store/auth-store/auth-store';
 import { trpc } from './trpc';
 
 export function App() {
   const [queryClient] = useState(() => new QueryClient());
+  const token = useAuthStore((state) => state.token);
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
@@ -15,7 +17,11 @@ export function App() {
           url: 'http://localhost:5520/trpc',
           headers() {
             return {
-              authorization: 'will be token',
+              authorization: token,
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'POST,GET,OPTIONS',
+              'Access-Control-Allow-Headers': 'Content-Type',
+              credentials: 'include',
             };
           },
         }),
