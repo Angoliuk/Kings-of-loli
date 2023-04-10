@@ -1,18 +1,21 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { FC } from 'react';
 import { SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import { FormErrorMessage } from '../../components/error-message/error-message';
 import { FormInput } from '../../components/form-input/form-input';
 import { SignUpFormFields } from '../../constants/authorization/authorization';
 import { useHookForm } from '../../hooks/use-form';
 import { AuthorizationFormProperties } from '../../interfaces/authorization-form/authorization-form-properties';
+import { RoutesEnum } from '../../routes/app-route/app-route-enums';
 import { trpc } from '../../trpc';
 import styles from './sign-up-form.module.css';
 import { SignUpFormSchema, SignUpSchema } from './validation';
 
 export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
-  const { mutate } = trpc.auth.register.useMutation();
+  const { isError, mutate } = trpc.auth.register.useMutation();
+  const navigate = useNavigate();
   const {
     register,
     formState: { errors, isValid },
@@ -27,8 +30,11 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
       name: data.nickname,
       password: data.password,
     });
-    onSubmit();
-    reset();
+    if (isError) {
+      onSubmit();
+      reset();
+    }
+    navigate(`${RoutesEnum.SignIn}`);
   };
   return (
     <>
