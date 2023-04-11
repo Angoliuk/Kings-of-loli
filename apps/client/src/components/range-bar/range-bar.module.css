@@ -1,3 +1,5 @@
+@import url('../../css/colors.module.css');
+
 .rangeBar {
   display: flex;
   align-items: center;
@@ -19,13 +21,15 @@
   width: 100%;
   height: 100%;
 
+  appearance: none;
   background-image: url('../../../resources/img/progress-bar/progress-bar-full.png');
-  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 
   image-rendering: crisp-edges;
 }
 
 .currentProgres {
-  height: 100%;
-  background: #8693b6;
+  background: var(--gray-progress);
 }

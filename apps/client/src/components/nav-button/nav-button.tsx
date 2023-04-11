@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 
-interface NavUserLinkProperty {
+type NavUserLinkProperty = {
   link: string;
   children?: React.ReactNode;
   className: string[];
-}
+};
 export const NavButton: FC<NavUserLinkProperty> = ({ link, children, className }) => {
   return (
     <NavLink className={className.join(' ')} to={link}>

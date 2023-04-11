@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { FormErrorMessage } from '../../components/error-message/error-message';
 import { FormInput } from '../../components/form-input/form-input';
 import { SignUpFormFields } from '../../constants/authorization/authorization';
 import { useHookForm } from '../../hooks/use-form';
@@ -50,18 +49,17 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
             className={[styles.signUpFormInput, styles.nicknameInput]}
             placeholder={SignUpFormFields.NICKNAME_PLACEHOLDER}
             type={SignUpFormFields.NICKNAME_TYPE}
-          >
-            <FormErrorMessage message={errors.nickname?.message} className={styles.errorMessage} />
-          </FormInput>
+            error={errors[SignUpFormFields.NICKNAME_TYPE]?.message}
+          />
+
           <FormInput
             register={register}
             name={SignUpFormFields.PASSWORD_TYPE}
             className={[styles.signUpFormInput, styles.passwordInput]}
             placeholder={SignUpFormFields.PASSWORD_PLACEHOLDER}
             type={SignUpFormFields.PASSWORD_TYPE}
-          >
-            <FormErrorMessage message={errors.password?.message} className={styles.errorMessage} />
-          </FormInput>
+            error={errors[SignUpFormFields.PASSWORD_TYPE]?.message}
+          />
           <button type="submit" disabled={!isValid} className={styles.submit} />
         </form>
       </div>
