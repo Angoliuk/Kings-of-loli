@@ -1,22 +1,16 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { FC } from 'react';
 import { SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import { FormInput } from '../../components/form-input/form-input';
 import { SignInFormFields } from '../../constants/authorization/authorization';
+import { useAuth } from '../../hooks/use-auth';
 import { useHookForm } from '../../hooks/use-form';
 import { AuthorizationFormProperties } from '../../interfaces/authorization-form/authorization-form-properties';
-import { RoutesEnum } from '../../routes/app-route/app-route-enums';
-import { useAuthStore } from '../../store/auth-store/auth-store';
-import { trpc } from '../../trpc';
 import styles from './sign-in-form.module.css';
 import { signInFormSchema, SignInSchema } from './validation';
 
 export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
-  const { data, isError, mutate } = trpc.auth.login.useMutation();
-  const signIn = useAuthStore((state) => state.signIn);
-  const navigate = useNavigate();
   const {
     register,
     formState: { errors, isValid },
@@ -25,20 +19,12 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   } = useHookForm<SignInSchema>({
     schema: signInFormSchema,
   });
+  const { signIn } = useAuth();
 
   const handleSubmit: SubmitHandler<SignInSchema> = (userInput) => {
-    mutate({
-      name: userInput.nickname,
-      password: userInput.password,
-    });
-    if (isError) {
-      onSubmit();
-      reset();
-    }
-    if (data) {
-      signIn(data.access_token, data.user);
-      navigate(`${RoutesEnum.Home}`);
-    }
+    signIn(userInput);
+    onSubmit();
+    reset();
   };
   return (
     <>

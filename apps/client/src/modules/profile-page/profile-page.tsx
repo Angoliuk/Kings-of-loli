@@ -1,25 +1,13 @@
 import { FC, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
-import { RoutesEnum } from '../../routes/app-route/app-route-enums';
-import { useAuthStore } from '../../store/auth-store/auth-store';
-import { trpc } from '../../trpc';
+import { useAuth } from '../../hooks/use-auth';
 import styles from './profile-page.module.css';
 
 export const ProfilePage: FC = () => {
   const [visibleProfile, setvisibleProfile] = useState(true);
   const [visibleLogout, setvisibleLogout] = useState(true);
-  const logout = useAuthStore((state) => state.logout);
-  const { isSuccess, mutate } = trpc.auth.logout.useMutation();
-  const navigate = useNavigate();
-  const onLogout = () => {
-    mutate();
-    if (isSuccess) {
-      logout();
-      navigate(`${RoutesEnum.SignIn}`);
-    }
-  };
+  const { logout } = useAuth();
   const hoverProfileHandler = () => {
     setvisibleProfile((previous) => !previous);
   };
@@ -50,7 +38,7 @@ export const ProfilePage: FC = () => {
             onFocus={hoverLogoutHandler}
             onMouseOut={hoverLogoutHandler}
             onBlur={hoverLogoutHandler}
-            onClick={onLogout}
+            onClick={() => logout()}
           >
             Logout
             <div className={styles.logoutButtonActive} hidden={visibleLogout}></div>

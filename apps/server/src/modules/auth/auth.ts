@@ -59,7 +59,7 @@ const authRouter = router({
     });
     return true;
   }),
-  refreshToken: protectedProcedure.query(async ({ ctx }) => {
+  refreshToken: publicProcedure.mutation(async ({ ctx }) => {
     const { refresh_token } = ctx.req.cookies as { refresh_token?: string };
 
     const message = 'Could not refresh access token';
