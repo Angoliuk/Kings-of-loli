@@ -81,6 +81,13 @@ const authRouter = router({
       throw new TRPCError({ code: 'FORBIDDEN', message });
     }
 
+    await redisClient.del(user.id.toString());
+    ctx.res.cookie('access_token', '', { maxAge: -1 });
+    ctx.res.cookie('refresh_token', '', { maxAge: -1 });
+    ctx.res.cookie('logged_in', '', {
+      maxAge: -1,
+    });
+
     const { access_token, refresh_token } = await signTokens(user);
     ctx.res.cookie('access_token', access_token, accessTokenCookieOptions);
     ctx.res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
