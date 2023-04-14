@@ -4,49 +4,26 @@ import { persist } from 'zustand/middleware';
 import { RouterOutputs } from '../../trpc';
 
 type State = {
-  profile: RouterOutputs['auth']['me'] | undefined;
-  isAuth: boolean;
-  token: string | undefined;
+  user?: RouterOutputs['auth']['me'];
 };
 
 type Actions = {
-  setToken: (token: string | undefined) => void;
-  signIn: (access_token: string | undefined, user: RouterOutputs['auth']['me'] | undefined) => void;
+  signIn: (user?: RouterOutputs['auth']['me']) => void;
   logout: () => void;
-};
-
-export let token: string | undefined;
-export const setToken = (newToken?: string | undefined) => {
-  token = newToken;
 };
 
 export const useAuthStore = create(
   persist<State & Actions>(
     (set) => ({
-      profile: undefined,
-      isAuth: false,
-      token: undefined,
-      setToken: (token: string) => {
-        setToken(token);
+      user: undefined,
+      signIn: (user) => {
         set(() => ({
-          token,
-          isAuth: !!token,
-        }));
-      },
-      signIn: (access_token, user) => {
-        setToken(access_token);
-        set(() => ({
-          token: access_token,
-          profile: user,
-          isAuth: !!access_token,
+          user,
         }));
       },
       logout: () => {
-        setToken();
         set(() => ({
-          profile: undefined,
-          isAuth: false,
-          token: undefined,
+          user: undefined,
         }));
       },
     }),
