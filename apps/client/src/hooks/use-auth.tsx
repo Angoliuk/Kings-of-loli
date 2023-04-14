@@ -7,18 +7,17 @@ import { trpc } from '../trpc';
 export const useAuth = () => {
   const userLogout = useAuthStore((state) => state.logout);
   const signInStore = useAuthStore((state) => state.signIn);
-  const setToken = useAuthStore((state) => state.setToken);
+
   let tokenRefreshed = false;
   const navigate = useNavigate();
 
   const { mutate: refreshToken } = trpc.auth.refreshToken.useMutation({
+    // refactor
     onSettled: () => {
       tokenRefreshed = true;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       tokenRefreshed = true;
-      setToken(data.access_token);
-      console.log(12_345);
     },
     onError: () => {
       tokenRefreshed = true;
@@ -27,6 +26,7 @@ export const useAuth = () => {
   const { mutate: logout } = trpc.auth.logout.useMutation({
     onSuccess: () => {
       userLogout();
+      // navigation hook instead of component
       return <Navigate to={RoutesEnum.SignIn} />;
     },
     onError: (error) => {
@@ -50,19 +50,21 @@ export const useAuth = () => {
     onError: (error) => console.log(error),
   });
   const { mutate: signInMutation } = trpc.auth.login.useMutation({
-    onSuccess: (data) => {
-      signInStore(data.access_token, data.user);
+    onSuccess: ({ user }) => {
+      signInStore(user);
       return navigate(`${RoutesEnum.Home}`);
     },
     onError: (error) => console.log(error),
   });
   const signIn = (data: { nickname: string; password: string }) => {
+    // signIn is just useless wrapper
     signInMutation({
       name: data.nickname,
       password: data.password,
     });
   };
   const signUp = (data: { nickname: string; password: string }) => {
+    // signUp is just useless wrapper
     signUpMutation({
       name: data.nickname,
       password: data.password,
