@@ -1,10 +1,9 @@
 /* eslint-disable unicorn/filename-case */
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { httpBatchLink } from '@trpc/client';
+import { getFetch, httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 
 import { AppRoute } from './routes/app-route/app-route';
-import { token } from './store/auth-store/auth-store';
 import { trpc } from './trpc';
 
 export function App() {
@@ -14,12 +13,14 @@ export function App() {
       links: [
         httpBatchLink({
           url: 'http://localhost:5520/trpc',
+          fetch: (input, init?) => {
+            return getFetch()(input, {
+              ...init,
+              credentials: 'include',
+            });
+          },
           headers() {
             return {
-              authorization: token,
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': '*',
-              'Access-Control-Allow-Headers': 'Content-Type',
               credentials: 'include',
             };
           },
