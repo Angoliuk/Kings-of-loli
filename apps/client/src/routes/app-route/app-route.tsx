@@ -13,12 +13,12 @@ import styles from './app-route.module.css';
 import { RoutesEnum } from './app-route-enums';
 
 export const AppRoute: FC = () => {
-  const isAuth = useAuthStore((state) => state.isAuth);
+  const currentUserId = useAuthStore((state) => state.user?.id);
   return (
     <div className={styles.app}>
       <BrowserRouter>
         <Routes>
-          <Route element={<GuardedRoutes isAllowed={isAuth} />}>
+          <Route element={<GuardedRoutes isAllowed={!!currentUserId} />}>
             <Route path={RoutesEnum.Home} element={<HomePage />} />
             <Route path={RoutesEnum.Base} element={<Navigate to={RoutesEnum.Home} />} />
             <Route path={RoutesEnum.Profile} element={<ProfilePage />} />
