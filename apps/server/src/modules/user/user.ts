@@ -6,16 +6,16 @@ import { exclude } from '../../services';
 import { protectedProcedure, publicProcedure, router } from '../../trpc/trpc';
 
 const updateUserInput = z.object({
-  userId: z.number().min(1),
+  userId: z.string().min(1),
   values: z.object({
     name: z.string().min(1).max(256).optional(),
     sound: z.number().min(0).max(100).optional(),
   }),
 });
 const deleteUser = z.object({
-  userId: z.number().min(1),
+  userId: z.string().min(1),
 });
-const getUserById = z.object({ id: z.number() });
+const getUserById = z.object({ id: z.string().min(1) });
 const getAllUsers = z.object({
   offset: z.number().min(0).default(0),
   limit: z.number().min(1).max(50).default(20),
