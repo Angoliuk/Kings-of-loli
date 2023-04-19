@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 import { RouterOutputs } from '../../trpc';
 
 type State = {
-  user?: RouterOutputs['auth']['me'];
+  user?: RouterOutputs['auth']['me'] | undefined;
 };
 
 type Actions = {

@@ -21,6 +21,8 @@ export function App() {
           },
           headers() {
             return {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': '*',
               credentials: 'include',
             };
           },
