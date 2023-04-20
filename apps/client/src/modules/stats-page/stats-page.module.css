@@ -1,9 +1,9 @@
 @import url('../../css/colors.module.css');
-@import url('../../css/screen-breakpoints.module.css');
 
 .container {
   display: flex;
   flex-direction: column;
+  gap: 400px;
   align-items: center;
   justify-content: space-around;
 
@@ -13,92 +13,35 @@
   background: var(--silver-gray);
 }
 
-.content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  min-width: 79%;
-  min-height: 82%;
-
-  background-image: url('../../../resources/img/leaderboard-page/signs.png');
-  background-size: 100% 100%;
-
-  image-rendering: crisp-edges;
-}
-
 .projectName {
-  width: 14vw;
-  height: 8vh;
-
-  font-size: 4rem;
-  line-height: 2;
-
-  background-color: var(--shit);
-}
-
-.loaderText {
-  font-size: 4rem;
+  font-size: 3rem;
 }
 
 .leaderboard {
-  z-index: 999;
-
   display: flex;
   flex-direction: column;
+  gap: 10px;
   align-items: center;
 
-  width: 90%;
+  width: 65%;
   height: fit-content;
-  min-height: 85%;
+  min-height: 75%;
+  padding: 30px;
 
-  line-height: 0;
-  color: var(--light-yellow);
-
-  background-image: url('../../../resources/img/leaderboard-page/window.png');
-  background-size: 100% 100%;
-
-  image-rendering: crisp-edges;
+  background: var(--red);
 }
 
-.gridContainer {
-  display: grid;
-  grid-gap: 2vh;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(6, 7vh);
+.liLeaderboard {
   justify-content: space-between;
-
-  width: 58vw;
-  height: 60vh;
-  margin: 0 auto;
-
-  font-size: 2.5rem;
+  width: 100%;
+  list-style-type: decimal;
 }
 
-.statsWrapper {
-  display: grid;
-  grid-template-columns: 10vw minmax(16vw, 1fr) 10vw;
-  margin-left: 1%;
-  line-height: 80px;
-}
+.ulLeaderboard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 
-.statsWrapper > span {
-  place-self: center;
-}
-
-.statsWrapper:nth-child(4) {
-  margin-top: 6vh;
-}
-
-.statsWrapper:nth-child(5) {
-  margin-top: 7vh;
-}
-
-.statsWrapper:nth-child(6) {
-  margin-top: 8vh;
-}
-
-.userName {
-  overflow: hidden;
-  font-size: 2rem;
+  height: fit-content;
 }

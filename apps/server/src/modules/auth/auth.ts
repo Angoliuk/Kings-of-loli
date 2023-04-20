@@ -3,9 +3,13 @@ import { TRPCError } from '@trpc/server';
 import * as argon from 'argon2';
 import { z } from 'zod';
 
-import { accessTokenCookieOptions, refreshTokenCookieOptions } from '../../configs';
+import {
+  accessTokenCookieOptions,
+  environmentConfigs,
+  refreshTokenCookieOptions,
+} from '../../configs';
 import { redisClient } from '../../database';
-import { exclude, signTokens, verifyJwt } from '../../services';
+import { exclude, signJwt, signTokens, verifyJwt } from '../../services';
 import { protectedProcedure, publicProcedure, router } from '../../trpc/trpc';
 
 const loginInput = z.object({
@@ -55,15 +59,15 @@ const authRouter = router({
     });
     return true;
   }),
-  refreshToken: publicProcedure.mutation(async ({ ctx }) => {
-    const { refresh_token: oldRefreshToken } = ctx.req.cookies as { refresh_token?: string };
+  refreshToken: protectedProcedure.query(async ({ ctx }) => {
+    const { refresh_token } = ctx.req.cookies as { refresh_token?: string };
 
     const message = 'Could not refresh access token';
-    if (!oldRefreshToken) {
+    if (!refresh_token) {
       throw new TRPCError({ code: 'FORBIDDEN', message });
     }
 
-    const decoded = verifyJwt<{ sub: string }>(oldRefreshToken, 'refreshTokenPrivateKey');
+    const decoded = verifyJwt<{ sub: string }>(refresh_token, 'refreshTokenPrivateKey');
 
     if (!decoded) {
       throw new TRPCError({ code: 'FORBIDDEN', message });
@@ -81,16 +85,11 @@ const authRouter = router({
       throw new TRPCError({ code: 'FORBIDDEN', message });
     }
 
-    await redisClient.del(user.id.toString());
-    ctx.res.cookie('access_token', '', { maxAge: -1 });
-    ctx.res.cookie('refresh_token', '', { maxAge: -1 });
-    ctx.res.cookie('logged_in', '', {
-      maxAge: -1,
+    const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
+      expiresIn: `${environmentConfigs.accessTokenExpiresIn} m`,
     });
 
-    const { access_token, refresh_token } = await signTokens(user);
     ctx.res.cookie('access_token', access_token, accessTokenCookieOptions);
-    ctx.res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
     ctx.res.cookie('logged_in', true, {
       ...accessTokenCookieOptions,
       httpOnly: false,
