@@ -17,7 +17,6 @@
     "lint": "turbo run lint",
     "lint:staged": "lint-staged",
     "prepareDB": "cd ./apps/server/prisma && pnpx prisma db pull && pnpx prisma generate && cd ../../../",
-    "openDB": "cd ./apps/server/prisma && pnpx prisma studio",
     "prepare": "husky install"
   },
   "dependencies": {

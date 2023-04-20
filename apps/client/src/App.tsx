@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { getFetch, httpBatchLink } from '@trpc/client';
+import { httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 
 import { AppRoute } from './routes/app-route/app-route';
@@ -13,23 +13,16 @@ export function App() {
       links: [
         httpBatchLink({
           url: 'http://localhost:5520/trpc',
-          fetch: (input, init?) => {
-            return getFetch()(input, {
-              ...init,
-              credentials: 'include',
-            });
-          },
           headers() {
             return {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': '*',
-              credentials: 'include',
+              authorization: 'will be token',
             };
           },
         }),
       ],
     }),
   );
+
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
