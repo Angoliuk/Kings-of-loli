@@ -2,27 +2,21 @@ import { FC } from 'react';
 
 import { BackgroundPicker } from '../../components/background-picker/background-picker';
 import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
-import { RouterOutputs, trpc } from '../../trpc';
+import { ScoreProperties } from '../../interfaces/leaderboard/score-properties';
+import { trpc } from '../../trpc';
 import styles from './stats-page.module.css';
 
-type UsersType = RouterOutputs['users']['getAllUsers'];
-
-type ScoreProperties = {
-  inputData: UsersType;
-};
-const UserScoreItem: FC<ScoreProperties> = ({ inputData }) => {
+const UserRatingsList: FC<ScoreProperties> = ({ inputData }) => {
   console.log(inputData);
   return (
     <div className={styles.gridContainer}>
-      {inputData.map((user, index) => {
-        return (
-          <span className={styles.statsWrapper} key={user.id}>
-            <span className={styles.userPlace}>{index + 1}</span>
-            <span className={styles.userName}>{user.name}</span>
-            <span className={styles.userScore}>{user.score}</span>
-          </span>
-        );
-      })}
+      {inputData.map((user, index) => (
+        <span className={styles.statsWrapper} key={user.id}>
+          <span className={styles.userPlace}>{index + 1}</span>
+          <span className={styles.userName}>{user.name}</span>
+          <span className={styles.userScore}>{user.score}</span>
+        </span>
+      ))}
     </div>
   );
 };
@@ -46,7 +40,7 @@ export const StatsPage: FC = () => {
         <div className={styles.leaderboard}>
           <div className={styles.projectName}> LeaderBoard</div>
           <div className={styles.content}>
-            <UserScoreItem inputData={data} />
+            <UserRatingsList inputData={data} />
           </div>
         </div>
       </div>

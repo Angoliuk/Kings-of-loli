@@ -34,7 +34,7 @@
   font-size: 4rem;
   line-height: 2;
 
-  background-color: #452617;
+  background-color: var(--shit);
 }
 
 .loaderText {
