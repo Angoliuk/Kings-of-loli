@@ -21,8 +21,8 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   });
   const { signIn } = useAuth();
 
-  const handleSubmit: SubmitHandler<SignInSchema> = (userInput) => {
-    signIn(userInput);
+  const handleSubmit: SubmitHandler<SignInSchema> = (data) => {
+    signIn({ name: data.nickname, password: data.password });
     onSubmit();
     reset();
   };

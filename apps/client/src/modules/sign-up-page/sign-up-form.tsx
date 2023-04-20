@@ -22,7 +22,7 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   const { signUp } = useAuth();
 
   const handleSubmit: SubmitHandler<SignUpSchema> = (data) => {
-    signUp(data);
+    signUp({ name: data.nickname, password: data.password });
     onSubmit();
     reset();
   };

@@ -12,13 +12,12 @@ export const useAuth = () => {
   const navigate = useNavigate();
 
   const { mutate: refreshToken } = trpc.auth.refreshToken.useMutation({
-    // refactor
     onSettled: () => {
       tokenRefreshed = true;
     },
     onError: (error) => {
       tokenRefreshed = true;
-      return error;
+      throw new Error(error.message);
     },
   });
   const { mutate: logout } = trpc.auth.logout.useMutation({
@@ -29,7 +28,7 @@ export const useAuth = () => {
       if (error.data?.httpStatus === 401) {
         if (tokenRefreshed) {
           tokenRefreshed = false;
-          return new Error('Unlogined');
+          throw new Error('Unlogined');
         }
         refreshToken();
         logout();
@@ -38,14 +37,14 @@ export const useAuth = () => {
   });
   const { mutate: signUp } = trpc.auth.register.useMutation({
     onSuccess: () => navigate(`${RoutesEnum.SignIn}`),
-    onError: (error) => console.log(error),
+    onError: (error) => new Error(error.message),
   });
   const { mutate: signIn } = trpc.auth.login.useMutation({
     onSuccess: ({ user }) => {
       signInStore(user);
       return navigate(`${RoutesEnum.Home}`);
     },
-    onError: (error) => console.log(error),
+    onError: (error) => new Error(error.message),
   });
   return { logout, signUp, signIn };
 };
