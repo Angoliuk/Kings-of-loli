@@ -1,11 +1,13 @@
 import { FC, useState } from 'react';
 
 import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
+import { useAuth } from '../../hooks/use-auth';
 import styles from './profile-page.module.css';
 
 export const ProfilePage: FC = () => {
   const [visibleProfile, setvisibleProfile] = useState(true);
   const [visibleLogout, setvisibleLogout] = useState(true);
+  const { logout } = useAuth();
   const hoverProfileHandler = () => {
     setvisibleProfile((previous) => !previous);
   };
@@ -36,6 +38,7 @@ export const ProfilePage: FC = () => {
             onFocus={hoverLogoutHandler}
             onMouseOut={hoverLogoutHandler}
             onBlur={hoverLogoutHandler}
+            onClick={() => logout()}
           >
             Logout
             <div className={styles.logoutButtonActive} hidden={visibleLogout}></div>
