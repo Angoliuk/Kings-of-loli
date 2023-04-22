@@ -57,7 +57,7 @@ export const getHeaderUser = async ({ req }: CreateExpressContextOptions) => {
       return;
     }
 
-    const decoded = verifyJwt<{ sub: number }>(access_token, 'accessTokenPrivateKey');
+    const decoded = verifyJwt<{ sub: string }>(access_token, 'accessTokenPrivateKey');
     if (!decoded) {
       return;
     }
