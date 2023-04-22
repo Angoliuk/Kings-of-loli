@@ -1,0 +1,25 @@
+@import url('../../../css/colors.module.css');
+
+.healthBar {
+  display: flex;
+
+  width: 65.3%;
+  height: 20px;
+  padding: 3px;
+
+  border: 2px solid var(--black);
+  box-shadow: inset 0 0 0 2px var(--yellow);
+}
+
+.health {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+
+.currentHealth {
+  height: 100%;
+  background: var(--black);
+  transition: width 1s linear;
+}
