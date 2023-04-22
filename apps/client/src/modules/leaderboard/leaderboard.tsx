@@ -2,30 +2,21 @@ import { FC } from 'react';
 
 import { BackgroundPicker } from '../../components/background-picker/background-picker';
 import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
-import { ScoreProperties } from '../../interfaces/leaderboard/score-properties';
-import { trpc } from '../../trpc';
+import { RouterOutputs } from '../../trpc';
+import { LeaderboardItem } from './leaderboard-item';
 import styles from './stats-page.module.css';
 
-const UserRatingsList: FC<ScoreProperties> = ({ inputData }) => {
-  console.log(inputData);
-  return (
-    <div className={styles.gridContainer}>
-      {inputData.map((user, index) => (
-        <span className={styles.statsWrapper} key={user.id}>
-          <span className={styles.userPlace}>{index + 1}</span>
-          <span className={styles.userName}>{user.name}</span>
-          <span className={styles.userScore}>{user.score}</span>
-        </span>
-      ))}
-    </div>
-  );
+type LeaderboardProperties = {
+  users?: RouterOutputs['users']['getAllUsers'];
+  isError: boolean;
+  isLoading: boolean;
 };
 
-export const StatsPage: FC = () => {
-  const { data, isLoading, isError } = trpc.users.getAllUsers.useQuery({ limit: 6 });
+export const Leaderboard: FC<LeaderboardProperties> = ({ users, isError, isLoading }) => {
   if (isLoading) {
     return <div className={styles.loaderText}>Wait, Hero, as soon it all comes clear.</div>;
   }
+
   if (isError) {
     return (
       <div className={styles.loaderText}>
@@ -33,6 +24,7 @@ export const StatsPage: FC = () => {
       </div>
     );
   }
+
   return (
     <NavigationPageWrapper>
       <div className={styles.container}>
@@ -40,7 +32,12 @@ export const StatsPage: FC = () => {
         <div className={styles.leaderboard}>
           <div className={styles.projectName}> LeaderBoard</div>
           <div className={styles.content}>
-            <UserRatingsList inputData={data} />
+            {' '}
+            <div className={styles.gridContainer}>
+              {users?.map((user, index) => (
+                <LeaderboardItem key={user.id} user={user} place={index} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
