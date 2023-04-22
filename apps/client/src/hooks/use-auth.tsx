@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { RoutesEnum } from '../routes/app-route/app-route-enums';
+import { AppRoutes } from '../routes/app-router-enum';
 import { useAuthStore } from '../store/auth-store/auth-store';
 import { trpc } from '../trpc';
 
@@ -36,13 +36,13 @@ export const useAuth = () => {
     },
   });
   const { mutate: signUp } = trpc.auth.register.useMutation({
-    onSuccess: () => navigate(`${RoutesEnum.SignIn}`),
+    onSuccess: () => navigate(`${AppRoutes.SignIn}`),
     onError: (error) => new Error(error.message),
   });
   const { mutate: signIn } = trpc.auth.login.useMutation({
     onSuccess: ({ user }) => {
       signInStore(user);
-      return navigate(`${RoutesEnum.Home}`);
+      return navigate(`${AppRoutes.Home}`);
     },
     onError: (error) => new Error(error.message),
   });
