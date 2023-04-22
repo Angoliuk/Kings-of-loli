@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { RouterOutputs } from '../../trpc';
-import styles from './stats-page.module.css';
+import styles from './leaderboard.module.css';
 
 type LeaderboardItemProperties = {
   user: RouterOutputs['users']['getAllUsers'][0];

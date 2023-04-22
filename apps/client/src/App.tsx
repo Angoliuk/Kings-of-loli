@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getFetch, httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 
-import { AppRoute } from './routes/app-route/app-route';
+import { AppRouter } from './routes/app-router';
 import { trpc } from './trpc';
 
 export function App() {
@@ -33,7 +33,7 @@ export function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <AppRoute />
+        <AppRouter />
       </QueryClientProvider>
     </trpc.Provider>
   );

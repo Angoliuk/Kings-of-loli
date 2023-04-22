@@ -8,7 +8,7 @@ import { SettingsPage } from '../modules/settings-page/settings-page';
 import { SignIn } from '../modules/sign-in-page/sign-in-page';
 import { SignUp } from '../modules/sign-up-page/sign-up-page';
 import { useAuthStore } from '../store/auth-store/auth-store';
-import styles from './app-route.module.css';
+import styles from './app-router.module.css';
 import { AppRoutes } from './app-router-enum';
 import { GuardedRoute } from './guarded-route';
 
