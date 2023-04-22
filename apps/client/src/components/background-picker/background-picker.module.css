@@ -1,0 +1,38 @@
+.themePicker {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  width: 6vw;
+  height: 6vw;
+}
+
+.themePickerButton {
+  width: inherit;
+  height: inherit;
+  background: 0;
+  border: 0;
+}
+
+.themeImg {
+  width: 6vw;
+  height: 6vw;
+}
+
+.themeButton {
+  width: 5vw;
+  height: 5vw;
+  padding: 0;
+  border: 0;
+}
+
+.backgroundImg {
+  position: absolute;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+}

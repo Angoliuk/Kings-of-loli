@@ -1,0 +1,8 @@
+node_modules
+.pretiterrc.js
+dist
+.vscode
+.github
+.husky
+pnpm-lock.yaml
+pnpm-workspace.yaml

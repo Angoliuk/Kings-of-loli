@@ -1,0 +1,8 @@
+.vscode
+.gitignore
+Dockerfile
+pnpm-lock.yaml
+dist
+.history
+node_modules
+.git

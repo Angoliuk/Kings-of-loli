@@ -1,0 +1,7 @@
+{
+  "*.{js,jsx,ts,tsx}": [
+    "tsc-files --noEmit",
+    "eslint --max-warnings=0 --ignore-pattern '!.prettierrc.js'",
+    "prettier --check"
+  ]
+}

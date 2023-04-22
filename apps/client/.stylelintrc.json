@@ -1,0 +1,22 @@
+{
+  "ignoreFiles": [".git", "dist", "node_modules"],
+  "files": ["src/**.module.css"],
+  "extends": ["stylelint-config-standard", "stylelint-config-clean-order"],
+  "plugins": [
+    "stylelint-css-modules-no-global-scoped-selector",
+    "stylelint-csstree-validator",
+    "stylelint-declaration-block-no-ignored-properties"
+  ],
+  "rules": {
+    "css-modules/no-global-scoped-selector": [
+      true,
+      {
+        "fileExtensions": [".module.css"]
+      }
+    ],
+    "csstree/validator": true,
+    "plugin/declaration-block-no-ignored-properties": true,
+    "color-named": "never",
+    "selector-class-pattern": "^[a-z]+([A-Z]?[a-z]+)+$"
+  }
+}
