@@ -13,6 +13,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'unicorn/no-null': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'off',
     '@typescript-eslint/consistent-type-definitions': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

@@ -4,14 +4,13 @@ import { SubmitHandler } from 'react-hook-form';
 
 import { FormInput } from '../../components/form-input/form-input';
 import { SignUpFormFields } from '../../constants/authorization/authorization';
+import { useAuth } from '../../hooks/use-auth';
 import { useHookForm } from '../../hooks/use-form';
 import { AuthorizationFormProperties } from '../../interfaces/authorization-form/authorization-form-properties';
-import { trpc } from '../../trpc';
 import styles from './sign-up-form.module.css';
 import { SignUpFormSchema, SignUpSchema } from './validation';
 
 export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
-  const { mutate } = trpc.auth.register.useMutation();
   const {
     register,
     formState: { errors, isValid },
@@ -20,12 +19,10 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   } = useHookForm<SignUpSchema>({
     schema: SignUpFormSchema,
   });
+  const { signUp } = useAuth();
 
   const handleSubmit: SubmitHandler<SignUpSchema> = (data) => {
-    mutate({
-      name: data.nickname,
-      password: data.password,
-    });
+    signUp({ name: data.nickname, password: data.password });
     onSubmit();
     reset();
   };

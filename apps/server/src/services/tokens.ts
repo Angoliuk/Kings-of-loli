@@ -51,29 +51,22 @@ export const signTokens = async (user: Omit<User, 'password'>) => {
 
 export const getHeaderUser = async ({ req }: CreateExpressContextOptions) => {
   try {
-    const { access_token: cookiesAccessToken } = req.cookies as { access_token?: string };
+    const { access_token } = req.cookies as { access_token?: string };
 
-    let access_token;
-    if (req.headers.authorization) {
-      access_token = req.headers.authorization;
-    } else if (cookiesAccessToken) {
-      access_token = cookiesAccessToken;
-    }
-    if (!access_token) {
+    if (typeof access_token !== 'string') {
       return;
     }
 
-    const decoded = verifyJwt<{ sub: string }>(access_token, 'accessTokenPrivateKey');
+    const decoded = verifyJwt<{ sub: number }>(access_token, 'accessTokenPrivateKey');
     if (!decoded) {
       return;
     }
 
-    const redisSession = await redisClient.get(decoded.sub);
+    const redisSession = await redisClient.get(decoded.sub.toString());
     const session = redisSession ? (JSON.parse(redisSession) as Omit<User, 'password'>) : undefined;
     if (!session) {
       return;
     }
-
     const user = await prisma.user.findUnique({ where: { id: session.id } });
 
     if (!user) {
