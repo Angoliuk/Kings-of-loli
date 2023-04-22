@@ -14,17 +14,7 @@
 }
 
 .projectName {
-  width: 14vw;
-  height: 8vh;
-
-  font-size: 4rem;
-  line-height: 2;
-
-  background-color: var(--brown);
-}
-
-.loaderText {
-  font-size: 4rem;
+  font-size: 3rem;
 }
 
 .leaderboard {

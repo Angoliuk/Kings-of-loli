@@ -33,6 +33,3 @@ tsconfig.tsbuildinfo
 # db
 dev.db
 dev.db-journal
-
-.idea
-.vscode
