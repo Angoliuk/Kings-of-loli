@@ -9,14 +9,14 @@ export const AuthorizationButton: FC = () => {
       <NavButton link={AppRoutes.SignIn} className={[styles.navButtons]}>
         <button className={styles.authorizationButton}>
           <h2>
-            <span className={styles.buttonSvgText}>Sign In</span>
+            <span className={styles.buttonText}>Sign In</span>
           </h2>
         </button>
       </NavButton>
       <NavButton link={AppRoutes.SignUp} className={[styles.navButtons]}>
         <button className={styles.authorizationButton}>
           <h2>
-            <span className={styles.buttonSvgText}>Sign Up</span>
+            <span className={styles.buttonText}>Sign Up</span>
           </h2>
         </button>
       </NavButton>

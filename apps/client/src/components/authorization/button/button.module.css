@@ -16,7 +16,7 @@
   image-rendering: crisp-edges;
 }
 
-.buttonSvgText {
+.buttonText {
   position: relative;
   font-size: 2rem;
   color: var(--light-yellow);
@@ -24,8 +24,9 @@
 
 .navButtons {
   width: 100%;
+  text-decoration: none;
 }
 
 .authorizationButton:hover {
-  background-image: url('../../../../resources/img/authorization/buttons/inactive.png');
+  filter: brightness(0.8);
 }

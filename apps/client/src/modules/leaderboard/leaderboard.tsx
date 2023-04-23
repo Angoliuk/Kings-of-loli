@@ -32,7 +32,6 @@ export const Leaderboard: FC<LeaderboardProperties> = ({ users, isError, isLoadi
         <div className={styles.leaderboard}>
           <div className={styles.projectName}> LeaderBoard</div>
           <div className={styles.content}>
-            {' '}
             <div className={styles.gridContainer}>
               {users?.map((user, index) => (
                 <LeaderboardItem key={user.id} user={user} place={index} />

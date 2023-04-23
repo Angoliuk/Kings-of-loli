@@ -75,29 +75,57 @@
 }
 
 .statsWrapper {
-  display: grid;
-  grid-template-columns: 10vw minmax(16vw, 1fr) 10vw;
-  margin-left: 1%;
-  line-height: 80px;
-}
+  position: relative;
 
-.statsWrapper > span {
-  place-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 101%;
+  height: 90%;
 }
 
 .statsWrapper:nth-child(4) {
-  margin-top: 6vh;
+  margin-top: 5.5vh;
 }
 
 .statsWrapper:nth-child(5) {
-  margin-top: 7vh;
+  margin-top: 6.3vh;
 }
 
 .statsWrapper:nth-child(6) {
-  margin-top: 8vh;
+  margin-top: 7vh;
 }
 
 .userName {
-  overflow: hidden;
-  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40%;
+  height: 100%;
+}
+
+.userPlace {
+  position: absolute;
+  left: 0.4vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 17.6%;
+  height: 100%;
+}
+
+.userScore {
+  position: absolute;
+  right: 0.5vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 17.6%;
+  height: 100%;
 }
