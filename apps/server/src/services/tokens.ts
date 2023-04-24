@@ -35,9 +35,12 @@ export const verifyJwt = <T>(
 };
 
 export const signTokens = async (user: Omit<User, 'password'>) => {
-  await redisClient.set(`${user.id}`, JSON.stringify(user), {
-    EX: Number(environmentConfigs.redisCacheExpiresIn) * 60,
-  });
+  await redisClient.set(
+    `${user.id}`,
+    JSON.stringify(user),
+    'EX',
+    Number(environmentConfigs.redisCacheExpiresIn) * 60,
+  );
   const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
     expiresIn: `${environmentConfigs.accessTokenExpiresIn}m`,
   });
@@ -62,7 +65,7 @@ export const getHeaderUser = async ({ req }: CreateExpressContextOptions) => {
       return;
     }
 
-    const redisSession = await redisClient.get(decoded.sub.toString());
+    const redisSession = await redisClient.get(decoded.sub);
     const session = redisSession ? (JSON.parse(redisSession) as Omit<User, 'password'>) : undefined;
     if (!session) {
       return;

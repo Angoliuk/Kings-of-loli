@@ -1,22 +1,13 @@
-import { createClient } from 'redis';
+import Redis, { RedisOptions } from 'ioredis';
 
-const redisUrl = `redis://localhost:6379`;
-const redisClient = createClient({
-  url: redisUrl,
-});
+import { environmentConfigs } from '../configs';
 
-const connectRedis = async () => {
-  try {
-    await redisClient.connect();
-    console.log('🚀 Redis client connected...');
-  } catch (error: unknown) {
-    console.log(error);
-    throw new Error('Redis error');
-  }
+export const REDIS_CONFIG: RedisOptions = {
+  host: environmentConfigs.redisHost,
+  port: Number.parseInt(environmentConfigs.redisPort),
+  db: Number.parseInt(environmentConfigs.redisDB),
 };
 
-void connectRedis();
-
-redisClient.on('error', (error) => console.log(error));
-
-export { redisClient };
+export const redisClient = new Redis(REDIS_CONFIG);
+redisClient.on('connect', () => console.log('🚀 Redis client connected...'));
+redisClient.on('error', (error) => console.error('Redis Client error:', '\n', error));
