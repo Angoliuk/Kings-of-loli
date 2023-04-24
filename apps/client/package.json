@@ -2,7 +2,7 @@
   "name": "web",
   "version": "1.0.0",
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "rm -rf ./dist && vite build",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint:js": "eslint ./src --max-warnings=0 && tsc --noEmit",
