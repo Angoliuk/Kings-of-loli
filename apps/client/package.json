@@ -7,7 +7,7 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "lint:js": "eslint ./src --max-warnings=0 && tsc --noEmit",
     "lint:css": "stylelint ./src --max-warnings=0",
-    "lint": "pnpm lint:js"
+    "lint": "pnpm lint:js && pnpm lint:css"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.11",
