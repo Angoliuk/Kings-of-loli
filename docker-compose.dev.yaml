@@ -26,7 +26,6 @@ services:
       - '6379:6379'
     volumes:
       - /data
-    user: redis
   postgres:
     image: postgres:15.2-alpine
     container_name: postgres
