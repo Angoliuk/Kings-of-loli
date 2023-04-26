@@ -12,7 +12,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: 'http://localhost:5520/trpc',
+          url: process.env.API_URL,
           fetch: (input, init?) => {
             return getFetch()(input, {
               ...init,
