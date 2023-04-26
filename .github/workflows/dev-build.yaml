@@ -1,7 +1,7 @@
 name: dev-build
 
 on:
-  push:
+  pull_request:
     branches:
       - '!master'
 
