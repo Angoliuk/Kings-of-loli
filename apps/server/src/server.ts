@@ -6,7 +6,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Request, Response } from 'express';
 
-import { environmentConfigs } from './configs';
 import { appRouter } from './modules/routes';
 import { createTRPCContext } from './trpc';
 export type TRPCContext = {
@@ -28,6 +27,6 @@ app.use(
     createContext: createTRPCContext,
   }),
 );
-app.listen(environmentConfigs.backendPort, () =>
-  console.log(`Server started on port ${environmentConfigs.backendPort}`),
+app.listen(process.env.API_PORT, () =>
+  console.log(`Server started on port ${process.env.API_PORT}`),
 );
