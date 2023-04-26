@@ -3,18 +3,16 @@
   "globalEnv": [
     ".env",
     "DATABASE_URL",
+    "REDIS_DATABASE_URL",
     "NODE_ENV",
     "API_PORT",
-    "REDIS_PORT",
     "ACCESS_TOKEN_EXPIRES_IN",
     "REFRESH_TOKEN_EXPIRES_IN",
     "ACCESS_TOKEN_PRIVATE_KEY",
     "ACCESS_TOKEN_PUBLIC_KEY",
     "REFRESH_TOKEN_PRIVATE_KEY",
     "REFRESH_TOKEN_PUBLIC_KEY",
-    "REDIS_CACHE_EXPIRES_IN",
-    "REDIS_HOST",
-    "REDIS_DB"
+    "REDIS_CACHE_EXPIRES_IN"
   ],
   "pipeline": {
     "build": {
