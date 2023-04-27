@@ -29,4 +29,3 @@ services:
     envVars:
       - fromGroup: kings-of-loli-web
     plan: Free
-    region: frankfurt
