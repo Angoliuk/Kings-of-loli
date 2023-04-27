@@ -19,12 +19,7 @@ services:
       paths:
         - apps/client/**
     buildCommand: pnpm i && pnpm build --filter=web
-    staticPublishPath: ./apps/web/build
     dockerfilePath: ./src/apps/client/Dockerfile.prod
     dockerContext: ./src
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
     envVars:
       - fromGroup: kings-of-loli-web
