@@ -12,7 +12,7 @@ importers:
       prettier: ^2.5.1
       tsc-files: ^1.1.3
       turbo: ^1.7.3
-      typescript: ^4.9.4
+      typescript: ^5.0.4
     dependencies:
       dotenv: 16.0.3
       turbo: 1.7.3
@@ -22,8 +22,8 @@ importers:
       lint-staged: 13.1.2
       pre-commit: 1.2.2
       prettier: 2.8.4
-      tsc-files: 1.1.3_typescript@4.9.4
-      typescript: 4.9.4
+      tsc-files: 1.1.3_typescript@5.0.4
+      typescript: 5.0.4
 
   apps/client:
     specifiers:
@@ -54,7 +54,7 @@ importers:
       stylelint-declaration-block-no-ignored-properties: ^2.7.0
       ts-css-modules-vite-plugin: ^1.0.20
       tsconfig: workspace:*
-      typescript: ^4.9.4
+      typescript: ^5.0.4
       vite: ^4.1.4
       zod: ^3.21.4
       zustand: ^4.3.6
@@ -87,9 +87,9 @@ importers:
       stylelint-css-modules-no-global-scoped-selector: 1.0.2_stylelint@15.2.0
       stylelint-csstree-validator: 2.1.0_stylelint@15.2.0
       stylelint-declaration-block-no-ignored-properties: 2.7.0_stylelint@15.2.0
-      ts-css-modules-vite-plugin: 1.0.20_bpz4vgwyhebgmmzidj32ehkns4
+      ts-css-modules-vite-plugin: 1.0.20_xu4yy3w5vjb2np7ekk65ptaciy
       tsconfig: link:../../packages/tsconfig
-      typescript: 4.9.4
+      typescript: 5.0.4
       vite: 4.1.4_@types+node@18.15.0
 
   apps/server:
@@ -5754,12 +5754,12 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /ts-css-modules-vite-plugin/1.0.20_bpz4vgwyhebgmmzidj32ehkns4:
+  /ts-css-modules-vite-plugin/1.0.20_xu4yy3w5vjb2np7ekk65ptaciy:
     resolution: {integrity: sha512-FlD2dyFAhmfOcmaxWR5WQ7Eu0ypvBwqjxgY54kYpEgpCEBqLAdO/w40h5XZn5zlUKUVjc7f69AIsfuhlGVjBSw==}
     dependencies:
       postcss-js: 4.0.1_postcss@8.4.21
       sass: 1.58.3
-      ts-node: 10.9.1_o7tgoigvlfrwarv2nha5dmhuka
+      ts-node: 10.9.1_o5pgwr3o5fudspbgizxxi44mt4
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -5772,7 +5772,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-node/10.9.1_o7tgoigvlfrwarv2nha5dmhuka:
+  /ts-node/10.9.1_o5pgwr3o5fudspbgizxxi44mt4:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -5798,7 +5798,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 4.9.4
+      typescript: 5.0.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
@@ -5835,13 +5835,13 @@ packages:
       yn: 3.1.1
     dev: true
 
-  /tsc-files/1.1.3_typescript@4.9.4:
+  /tsc-files/1.1.3_typescript@5.0.4:
     resolution: {integrity: sha512-G6uXkTNofGU9EE1fYBaCpR72x/aqXW4PDAuznWj4JYlDwhcaKnUn4CiCHBMc89lDxLmikK+hhaEWLoTPEKKvXg==}
     hasBin: true
     peerDependencies:
       typescript: '>=3'
     dependencies:
-      typescript: 4.9.4
+      typescript: 5.0.4
     dev: true
 
   /tsconfig-paths/3.14.2:
@@ -6040,6 +6040,12 @@ packages:
   /typescript/4.9.4:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
     engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true
+
+  /typescript/5.0.4:
+    resolution: {integrity: sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==}
+    engines: {node: '>=12.20'}
     hasBin: true
     dev: true
 
