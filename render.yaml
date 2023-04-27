@@ -1,4 +1,4 @@
-service:
+services:
   - type: web
     env: docker
     name: web
