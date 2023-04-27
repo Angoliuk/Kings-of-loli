@@ -4,11 +4,11 @@ services:
     name: backend
     buildFilter:
       paths:
-        - apps/server/**
+        - ./sub/apps/server/**
     buildCommand: pnpm i && pnpm build --filter=backend
     repo: https://github.com/Angoliuk/Kings-of-loli
-    dockerfilePath: apps/server/Dockerfile.prod
-    dockerContext: /
+    dockerfilePath: ./sub/apps/server/Dockerfile.prod
+    dockerContext: ./sub
     envVars:
       - fromGroup: kings-of-loli-backend
     region: frankfurt
@@ -18,9 +18,9 @@ services:
     repo: https://github.com/Angoliuk/Kings-of-loli
     buildFilter:
       paths:
-        - apps/client/**
+        - ./sub/apps/client/**
     buildCommand: pnpm i && pnpm build --filter=web
-    staticPublishPath: apps/client/build
+    staticPublishPath: ./sub/apps/client/build
     routes:
       - type: rewrite
         source: /*
