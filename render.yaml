@@ -7,11 +7,12 @@ services:
         - apps/server/**
     buildCommand: pnpm i && pnpm build --filter=backend
     repo: https://github.com/Angoliuk/Kings-of-loli
-    dockerfilePath: ./src/apps/server/Dockerfile.prod
-    dockerContext: ./src
+    dockerfilePath: ./apps/server/Dockerfile.prod
+    dockerContext: ./
     envVars:
       - fromGroup: kings-of-loli-backend
     plan: Free
+    region: frankfurt
   - type: web
     env: docker
     name: web
@@ -20,8 +21,9 @@ services:
       paths:
         - apps/client/**
     buildCommand: pnpm i && pnpm build --filter=web
-    dockerfilePath: ./src/apps/client/Dockerfile.prod
-    dockerContext: ./src
+    dockerfilePath: ./apps/client/Dockerfile.prod
+    dockerContext: ./
     envVars:
       - fromGroup: kings-of-loli-web
     plan: Free
+    region: frankfurt
