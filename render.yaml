@@ -7,8 +7,8 @@ services:
         - apps/server/**
     buildCommand: pnpm i && pnpm build --filter=backend
     repo: https://github.com/Angoliuk/Kings-of-loli
-    dockerfilePath: ./apps/server/Dockerfile.prod
-    dockerContext: ./
+    dockerfilePath: apps/server/Dockerfile.prod
+    dockerContext: /
     envVars:
       - fromGroup: kings-of-loli-backend
     region: frankfurt
@@ -20,7 +20,7 @@ services:
       paths:
         - apps/client/**
     buildCommand: pnpm i && pnpm build --filter=web
-    staticPublishPath: ./apps/client/build
+    staticPublishPath: apps/client/build
     routes:
       - type: rewrite
         source: /*
