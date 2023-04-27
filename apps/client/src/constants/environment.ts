@@ -5,7 +5,7 @@ const environmentVariables = z.object({
   FRONTEND_PORT: z.string(),
 });
 
-environmentVariables.parse(process.env);
+environmentVariables.parse(import.meta.env);
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
