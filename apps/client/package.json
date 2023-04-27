@@ -41,7 +41,7 @@
     "stylelint-declaration-block-no-ignored-properties": "^2.7.0",
     "ts-css-modules-vite-plugin": "^1.0.20",
     "tsconfig": "workspace:*",
-    "typescript": "^4.9.4",
+    "typescript": "^5.0.4",
     "vite": "^4.1.4"
   }
 }
