@@ -29,7 +29,9 @@ COPY .gitignore .gitignore
 
 RUN pnpm install
 RUN pnpm build --filter=backend...
-RUN cd ./apps/server && npm run pushDB
+
+WORKDIR /app/apps/server
+RUN npm run pushDB
 
 
 
