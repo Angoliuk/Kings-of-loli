@@ -11,6 +11,7 @@ services:
     dockerContext: ./src
     envVars:
       - fromGroup: kings-of-loli-backend
+    plan: Free
   - type: web
     env: docker
     name: kol-web
@@ -23,3 +24,4 @@ services:
     dockerContext: ./src
     envVars:
       - fromGroup: kings-of-loli-web
+    plan: Free
