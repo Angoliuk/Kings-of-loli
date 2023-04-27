@@ -5,7 +5,7 @@ import Redis from 'ioredis';
 const connectRedis = () => {
   if (!process.env.REDIS_DATABASE_URL) {
     console.warn('no REDIS_DATABASE_URL found, retrying');
-    setTimeout(connectRedis, 10);
+    setTimeout(connectRedis, 1000);
     return;
   }
   const redis = new Redis(process.env.REDIS_DATABASE_URL);
