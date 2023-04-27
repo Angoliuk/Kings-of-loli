@@ -1,7 +1,7 @@
 services:
   - type: web
     env: docker
-    name: web
+    name: backend
     buildFilter:
       paths:
         - apps/server/**
@@ -14,7 +14,7 @@ services:
     plan: Free
   - type: web
     env: docker
-    name: kol-web
+    name: web
     repo: https://github.com/Angoliuk/Kings-of-loli
     buildFilter:
       paths:
