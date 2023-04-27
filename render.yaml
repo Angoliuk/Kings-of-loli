@@ -1,0 +1,30 @@
+service:
+  - type: web
+    env: docker
+    name: web
+    buildFilter:
+      paths:
+        - apps/server/**
+    buildCommand: pnpm i && pnpm build --filter=backend
+    repo: https://github.com/Angoliuk/Kings-of-loli
+    dockerfilePath: ./src/apps/server/Dockerfile.prod
+    dockerContext: ./src
+    envVars:
+      - fromGroup: kings-of-loli-backend
+  - type: web
+    env: docker
+    name: kol-web
+    repo: https://github.com/Angoliuk/Kings-of-loli
+    buildFilter:
+      paths:
+        - apps/client/**
+    buildCommand: pnpm i && pnpm build --filter=web
+    staticPublishPath: ./apps/web/build
+    dockerfilePath: ./src/apps/client/Dockerfile.prod
+    dockerContext: ./src
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - fromGroup: kings-of-loli-web
