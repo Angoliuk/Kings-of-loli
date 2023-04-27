@@ -14,15 +14,18 @@ services:
     plan: Free
     region: frankfurt
   - type: web
-    env: docker
+    env: static
     name: web
     repo: https://github.com/Angoliuk/Kings-of-loli
     buildFilter:
       paths:
         - apps/client/**
     buildCommand: pnpm i && pnpm build --filter=web
-    dockerfilePath: ./apps/client/Dockerfile.prod
-    dockerContext: ./
+    staticPublishPath: ./apps/client/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       - fromGroup: kings-of-loli-web
     plan: Free
