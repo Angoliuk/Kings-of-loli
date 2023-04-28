@@ -1,4 +1,6 @@
+import * as dotenv from 'dotenv';
 import { z } from 'zod';
+dotenv.config({ path: './.api.env' });
 
 const environmentVariables = z.object({
   DATABASE_URL: z.string(),
