@@ -19,8 +19,7 @@ tsconfig.tsbuildinfo
 
 # local env files
 .env
-.env.dev
-.env.prod
+*.env
 
 # turbo
 .turbo
