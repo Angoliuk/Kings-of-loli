@@ -10,7 +10,7 @@
     "lint": "pnpm lint:js && pnpm lint:css"
   },
   "dependencies": {
-    "@hookform/resolvers": "^2.9.11",
+    "@hookform/resolvers": "^3.1.0",
     "@tanstack/react-query": "^4.26.1",
     "@tanstack/react-query-devtools": "^4.26.1",
     "@trpc/client": "^10.14.1",

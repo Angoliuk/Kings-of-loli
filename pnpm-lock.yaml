@@ -27,7 +27,7 @@ importers:
 
   apps/client:
     specifiers:
-      '@hookform/resolvers': ^2.9.11
+      '@hookform/resolvers': ^3.1.0
       '@tanstack/react-query': ^4.26.1
       '@tanstack/react-query-devtools': ^4.26.1
       '@trpc/client': ^10.14.1
@@ -59,7 +59,7 @@ importers:
       zod: ^3.21.4
       zustand: ^4.3.6
     dependencies:
-      '@hookform/resolvers': 2.9.11_react-hook-form@7.43.5
+      '@hookform/resolvers': 3.1.0_react-hook-form@7.43.5
       '@tanstack/react-query': 4.26.1_biqbaboplfbrettd7655fr4n2y
       '@tanstack/react-query-devtools': 4.26.1_brdhmlf72zuns3lsk66phyptty
       '@trpc/client': 10.14.1_@trpc+server@10.14.1
@@ -895,8 +895,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@hookform/resolvers/2.9.11_react-hook-form@7.43.5:
-    resolution: {integrity: sha512-bA3aZ79UgcHj7tFV7RlgThzwSSHZgvfbt2wprldRkYBcMopdMvHyO17Wwp/twcJasNFischFfS7oz8Katz8DdQ==}
+  /@hookform/resolvers/3.1.0_react-hook-form@7.43.5:
+    resolution: {integrity: sha512-z0A8K+Nxq+f83Whm/ajlwE6VtQlp/yPHZnXw7XWVPIGm1Vx0QV8KThU3BpbBRfAZ7/dYqCKKBNnQh85BkmBKkA==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
