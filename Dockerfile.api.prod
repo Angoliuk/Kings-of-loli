@@ -6,7 +6,6 @@ RUN apk update
 WORKDIR /app
 
 RUN npm install -g turbo
-RUN npm install -g dotenv-cli
 
 COPY . .
 
@@ -27,6 +26,7 @@ COPY --from=installer /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=installer /app/out/full/ .
 COPY turbo.json turbo.json
 COPY .gitignore .gitignore
+COPY .api.env .api.env
 
 RUN pnpm install
 RUN pnpm build --filter=backend...
@@ -46,4 +46,4 @@ COPY --from=builder ./app ./
 
 EXPOSE 5520
 
-ENTRYPOINT [ "dotenv", "-e", "../../.env", "node", "./apps/server/dist/server.js" ]
+CMD node ./apps/server/dist/server.js
