@@ -45,11 +45,11 @@ export const signTokens = async (user: Omit<User, 'password'>) => {
     'EX',
     Number(process.env.REDIS_CACHE_EXPIRES_IN) * 60,
   );
-  const access_token = signJwt({ sub: user.id }, process.env.ACCESS_TOKEN_PRIVATE_KEY, {
+  const access_token = signJwt({ sub: user.id }, 'ACCESS_TOKEN_PRIVATE_KEY', {
     expiresIn: `${process.env.ACCESS_TOKEN_EXPIRES_IN}m`,
   });
 
-  const refresh_token = signJwt({ sub: user.id }, process.env.REFRESH_TOKEN_PRIVATE_KEY, {
+  const refresh_token = signJwt({ sub: user.id }, 'REFRESH_TOKEN_PRIVATE_KEY', {
     expiresIn: `${process.env.REFRESH_TOKEN_EXPIRES_IN}m`,
   });
 
@@ -64,7 +64,7 @@ export const getHeaderUser = async ({ req }: CreateExpressContextOptions) => {
       return;
     }
 
-    const decoded = verifyJwt<{ sub: string }>(access_token, 'accessTokenPrivateKey');
+    const decoded = verifyJwt<{ sub: string }>(access_token, 'ACCESS_TOKEN_PRIVATE_KEY');
     if (!decoded) {
       return;
     }

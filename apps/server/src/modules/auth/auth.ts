@@ -63,7 +63,7 @@ const authRouter = router({
       throw new TRPCError({ code: 'FORBIDDEN', message });
     }
 
-    const decoded = verifyJwt<{ sub: string }>(oldRefreshToken, 'refreshTokenPrivateKey');
+    const decoded = verifyJwt<{ sub: string }>(oldRefreshToken, 'REFRESH_TOKEN_PRIVATE_KEY');
 
     if (!decoded) {
       throw new TRPCError({ code: 'FORBIDDEN', message });
