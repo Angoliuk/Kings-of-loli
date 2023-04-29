@@ -1,13 +1,12 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
-import { environmentalVariables } from './src/constants/environment';
-
-export default () => {
+export default ({ mode }: { mode: string }) => {
+  const environments = loadEnv(mode, process.cwd());
   return defineConfig({
     server: {
       host: '0.0.0.0',
-      port: Number(environmentalVariables.VITE_FRONTEND_PORT),
+      port: Number(environments.VITE_FRONTEND_PORT),
       hmr: {
         host: 'localhost',
       },

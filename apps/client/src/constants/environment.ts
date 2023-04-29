@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 import { z } from 'zod';
 
 const environmentVariablesSchema = z.object({
@@ -6,14 +5,11 @@ const environmentVariablesSchema = z.object({
   VITE_FRONTEND_PORT: z.string(),
   VITE_ENV: z.string(),
 });
-// Yes, i know, i'm clown
 
-const dotenvVariables = dotenv.config({
-  path: '../../.web.env',
-}).parsed;
+// Yes, i know, i'm clown
 export const environmentalVariables = (
-  dotenvVariables?.VITE_ENV === 'dev'
-    ? dotenvVariables
+  import.meta.env.mode === 'dev'
+    ? import.meta.env
     : {
         VITE_FRONTEND_PORT: '3000',
         VITE_API_URL: 'https://backend-65ls.onrender.com/trpc',
