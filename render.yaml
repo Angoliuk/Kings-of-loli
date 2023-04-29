@@ -1,0 +1,29 @@
+services:
+  - type: web
+    env: docker
+    name: backend
+    buildFilter:
+      paths:
+        - apps/server/**
+    buildCommand: pnpm i && pnpm build --filter=backend
+    repo: https://github.com/Angoliuk/Kings-of-loli
+    dockerfilePath: ./Dockerfile.api.prod
+    dockerContext: ./
+    envVars:
+      - fromGroup: kings-of-loli-backend
+    plan: Free
+    region: frankfurt
+  - type: web
+    env: docker
+    name: web
+    repo: https://github.com/Angoliuk/Kings-of-loli
+    buildFilter:
+      paths:
+        - apps/client/**
+    buildCommand: pnpm i && pnpm build --filter=web
+    dockerfilePath: ./Dockerfile.web.prod
+    dockerContext: ./
+    envVars:
+      - fromGroup: kings-of-loli-web
+    plan: Free
+    region: frankfurt

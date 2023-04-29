@@ -1,0 +1,39 @@
+# PRODUCTION
+FROM --platform=linux/amd64 node:18-alpine AS installer
+RUN apk update
+
+WORKDIR /app
+
+RUN npm install -g turbo
+COPY . .
+
+RUN turbo prune --scope=web --docker
+
+
+
+FROM --platform=linux/amd64 node:18-alpine AS builder
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
+WORKDIR /app
+
+RUN npm install -g pnpm
+
+COPY --from=installer /app/out/json/ .
+COPY --from=installer /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=installer /app/out/full/ .
+COPY .gitignore .gitignore
+COPY turbo.json turbo.json
+COPY .web.env .web.env
+
+RUN pnpm install
+RUN pnpm build --filter=web...
+
+
+FROM --platform=linux/amd64 nginx
+
+EXPOSE 80
+
+COPY --from=builder ./app/apps/client/dist ./usr/share/nginx/html
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

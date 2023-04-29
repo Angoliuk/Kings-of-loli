@@ -1,0 +1,49 @@
+# PRODUCTION
+FROM --platform=linux/amd64 node:18-alpine AS installer
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
+WORKDIR /app
+
+RUN npm install -g turbo
+
+COPY . .
+
+RUN turbo prune --scope=backend --docker
+
+
+
+FROM --platform=linux/amd64 node:18-alpine AS builder
+RUN apk add --no-cache libc6-compat
+RUN apk update
+
+WORKDIR /app
+
+RUN npm install -g pnpm
+
+COPY --from=installer /app/out/json/ .
+COPY --from=installer /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=installer /app/out/full/ .
+COPY turbo.json turbo.json
+COPY .gitignore .gitignore
+COPY .api.env .api.env
+
+RUN pnpm install
+RUN pnpm build --filter=backend...
+
+WORKDIR /app/apps/server
+RUN npm run generateDB
+
+
+
+FROM --platform=linux/amd64 node:18-alpine AS runner
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+COPY --from=builder ./app ./
+
+EXPOSE 5520
+
+CMD node ./apps/server/dist/server.js
