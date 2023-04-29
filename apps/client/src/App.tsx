@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getFetch, httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 
+import { environmentalVariables } from './constants/environment';
 import { AppRouter } from './routes/app-router';
 import { trpc } from './trpc';
 
@@ -12,7 +13,7 @@ export function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: 'http://localhost:5520/trpc',
+          url: environmentalVariables.VITE_API_URL,
           fetch: (input, init?) => {
             return getFetch()(input, {
               ...init,

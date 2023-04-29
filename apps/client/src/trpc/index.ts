@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createTRPCReact } from '@trpc/react-query';
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 
-import { AppRouter } from '../../../server/src/modules/routes';
+// eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+// @ts-ignore TODO: better aliases
+import type { AppRouter } from '../../../server/src/modules/routes';
 
 export const trpc = createTRPCReact<AppRouter>();
 

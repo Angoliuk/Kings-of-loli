@@ -3,16 +3,20 @@
   "globalEnv": [
     ".env",
     "DATABASE_URL",
+    "REDIS_DATABASE_URL",
+    "API_URL",
+    "FRONTEND_URL",
     "NODE_ENV",
-    "PORT",
-    "ORIGIN",
+    "API_PORT",
     "ACCESS_TOKEN_EXPIRES_IN",
     "REFRESH_TOKEN_EXPIRES_IN",
     "ACCESS_TOKEN_PRIVATE_KEY",
     "ACCESS_TOKEN_PUBLIC_KEY",
     "REFRESH_TOKEN_PRIVATE_KEY",
     "REFRESH_TOKEN_PUBLIC_KEY",
-    "REDIS_CACHE_EXPIRES_IN"
+    "REDIS_CACHE_EXPIRES_IN",
+    "VITE_API_URL",
+    "VITE_FRONTEND_PORT"
   ],
   "pipeline": {
     "build": {
@@ -30,10 +34,15 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "dependsOn": [
+        "//#docker"
+      ]
     },
     "clean": {
       "cache": false
+    },
+    "//#docker": {
+      "dependsOn": []
     }
   }
 }

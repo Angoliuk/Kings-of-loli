@@ -47,7 +47,7 @@ const authRouter = router({
   logout: protectedProcedure.mutation(async ({ ctx }) => {
     const user = ctx.user;
     if (!user?.id) return false;
-    await redisClient.del(user.id.toString());
+    await redisClient.del(user.id);
     ctx.res.cookie('access_token', '', { maxAge: -1 });
     ctx.res.cookie('refresh_token', '', { maxAge: -1 });
     ctx.res.cookie('logged_in', '', {
@@ -63,7 +63,7 @@ const authRouter = router({
       throw new TRPCError({ code: 'FORBIDDEN', message });
     }
 
-    const decoded = verifyJwt<{ sub: string }>(oldRefreshToken, 'refreshTokenPrivateKey');
+    const decoded = verifyJwt<{ sub: string }>(oldRefreshToken, 'REFRESH_TOKEN_PRIVATE_KEY');
 
     if (!decoded) {
       throw new TRPCError({ code: 'FORBIDDEN', message });
@@ -81,7 +81,7 @@ const authRouter = router({
       throw new TRPCError({ code: 'FORBIDDEN', message });
     }
 
-    await redisClient.del(user.id.toString());
+    await redisClient.del(user.id);
     ctx.res.cookie('access_token', '', { maxAge: -1 });
     ctx.res.cookie('refresh_token', '', { maxAge: -1 });
     ctx.res.cookie('logged_in', '', {

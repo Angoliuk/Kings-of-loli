@@ -1,26 +1,28 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  server: {
-    host: '0.0.0.0',
-    port: 3001,
-    hmr: {
-      host: 'localhost',
+export default ({ mode }: { mode: string }) => {
+  const environments = loadEnv(mode, process.cwd());
+  return defineConfig({
+    server: {
+      host: '0.0.0.0',
+      port: Number(environments.VITE_FRONTEND_PORT),
+      hmr: {
+        host: 'localhost',
+      },
+      watch: {
+        usePolling: true,
+      },
     },
-    watch: {
-      usePolling: true,
+    plugins: [
+      react({
+        include: '**/*.tsx',
+      }),
+    ],
+    css: {
+      modules: {
+        localsConvention: 'camelCase',
+      },
     },
-  },
-  plugins: [
-    react({
-      include: '**/*.tsx',
-    }),
-  ],
-  css: {
-    modules: {
-      localsConvention: 'camelCase',
-    },
-  },
-});
+  });
+};

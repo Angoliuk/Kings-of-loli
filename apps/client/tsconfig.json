@@ -2,8 +2,10 @@
   "extends": "tsconfig/vite.json",
   "compilerOptions": {
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "jsx": "react-jsx",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
     "outDir": "./dist",
     "rootDir": "./"
   },

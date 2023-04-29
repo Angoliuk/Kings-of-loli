@@ -17,4 +17,25 @@ model User {
   score           Int      @default(0)
   sound           Int      @default(100)
   updatedAt       DateTime @updatedAt
+
+  @@index([score(sort: Desc)])
+}
+
+model MatchStats {
+  id        String   @id
+  duration  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model UserMatchStats {
+  id           String   @id
+  userId       String
+  isWinner     Boolean
+  matchStatsId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+
+  @@index([matchStatsId])
+  @@index([userId])
 }

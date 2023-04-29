@@ -10,10 +10,10 @@ type LeaderboardItemProperties = {
 
 export const LeaderboardItem: FC<LeaderboardItemProperties> = ({ user, place }) => {
   return (
-    <span className={styles.statsWrapper} key={user.id}>
-      <span className={styles.userPlace}>{place}</span>
-      <span className={styles.userName}>{user.name}</span>
-      <span className={styles.userScore}>{user.score}</span>
-    </span>
+    <div className={styles.statsWrapper} key={user.id}>
+      <div className={styles.userPlace}>{place}</div>
+      <div className={styles.userName}>{user.name}</div>
+      <div className={styles.userScore}>{user.score}</div>
+    </div>
   );
 };
