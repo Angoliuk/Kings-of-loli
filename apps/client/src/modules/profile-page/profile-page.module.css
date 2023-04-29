@@ -13,7 +13,7 @@
   background-image: url('.././../../resources/img/bg/bg.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .content {
@@ -29,7 +29,7 @@
   background-image: url('.././../../resources/img/bg/window.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .userContainer {
@@ -45,7 +45,7 @@
   background-image: url('.././../../resources/img/bg/main-stone.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .profiles {
@@ -64,7 +64,7 @@
   background-size: 100% 100%;
   border-radius: 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .userProfileActive {
@@ -78,7 +78,7 @@
   background-image: url('.././../../resources/img/profile/avatar-select.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .userProfileActive:hover {
@@ -103,7 +103,7 @@
   background-size: 100% 100%;
   border: none;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .logoutButtonActive {
@@ -123,7 +123,7 @@
   background-image: url('.././../../resources/img/profile/button-select.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .logoutButtonActive:hover {

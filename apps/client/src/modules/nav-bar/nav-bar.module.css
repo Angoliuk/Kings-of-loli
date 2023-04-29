@@ -19,7 +19,7 @@
   background-image: url('../../../resources/img/menu/left-menu-background.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .navButtons {
@@ -31,7 +31,7 @@
   background-size: 100% 100%;
   border-radius: 100px;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 
   transition: all 0.12s;
 }
