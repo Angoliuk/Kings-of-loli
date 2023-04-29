@@ -6,6 +6,7 @@ const environmentVariables = z.object({
   DATABASE_URL: z.string(),
   NODE_ENV: z.string(),
   API_PORT: z.string(),
+  FRONTEND_URL: z.string(),
   REDIS_DATABASE_URL: z.string(),
   ACCESS_TOKEN_EXPIRES_IN: z.string(),
   REFRESH_TOKEN_EXPIRES_IN: z.string(),

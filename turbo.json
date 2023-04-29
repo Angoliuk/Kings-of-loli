@@ -5,7 +5,7 @@
     "DATABASE_URL",
     "REDIS_DATABASE_URL",
     "API_URL",
-    "FRONTEND_PORT",
+    "FRONTEND_URL",
     "NODE_ENV",
     "API_PORT",
     "ACCESS_TOKEN_EXPIRES_IN",
