@@ -24,14 +24,17 @@ COPY --from=installer /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=installer /app/out/full/ .
 COPY .gitignore .gitignore
 COPY turbo.json turbo.json
+COPY .web.env .web.env
 
 RUN pnpm install
-RUN pnpm build --filter=web...
-
+CMD pnpm build --filter=web...
 
 
 FROM --platform=linux/amd64 nginx
 
 EXPOSE 80
 
+COPY --from=builder ./app ./app
 COPY --from=builder ./app/apps/client/dist ./usr/share/nginx/html
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

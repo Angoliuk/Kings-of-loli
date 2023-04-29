@@ -3,7 +3,7 @@ services:
   kol-api:
     build:
      context: ./
-     dockerfile: ./apps/server/Dockerfile.dev
+     dockerfile: ./Dockerfile.api.dev
     depends_on:
       - redis
       - postgres
