@@ -31,6 +31,15 @@ module.exports = {
         'src/**': 'KEBAB_CASE',
       },
     ],
+    '@typescript-eslint/consistent-type-imports': [
+      'warn',
+      {
+        prefer: 'type-imports',
+        fixStyle: 'inline-type-imports',
+      },
+    ],
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    'unicorn/no-array-callback-reference': 'off',
   },
   ignorePatterns: ['node_modules'],
 };
