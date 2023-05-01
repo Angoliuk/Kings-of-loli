@@ -1,12 +1,11 @@
-import { User } from '@prisma/client';
+import { accessTokenCookieOptions, refreshTokenCookieOptions } from '@api/configs';
+import { redisClient } from '@api/database';
+import { exclude, signTokens, verifyJwt } from '@api/services';
+import { protectedProcedure, publicProcedure, router } from '@api/trpc';
+import { type User } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import * as argon from 'argon2';
 import { z } from 'zod';
-
-import { accessTokenCookieOptions, refreshTokenCookieOptions } from '../../configs';
-import { redisClient } from '../../database';
-import { exclude, signTokens, verifyJwt } from '../../services';
-import { protectedProcedure, publicProcedure, router } from '../../trpc/trpc';
 
 const loginInput = z.object({
   password: z.string().min(6).max(256),
@@ -101,17 +100,15 @@ const authRouter = router({
       access_token,
     };
   }),
-  register: publicProcedure
-    .input(registerInput)
-    .mutation(async ({ input: { name, password }, ctx }) => {
-      const newUser = await ctx.prisma.user.create({
-        data: {
-          name: name.trim(),
-          password: await argon.hash(password),
-        },
-      });
-      return newUser;
-    }),
+  register: publicProcedure.input(registerInput).mutation(async ({ input: { name, password }, ctx }) => {
+    const newUser = await ctx.prisma.user.create({
+      data: {
+        name: name.trim(),
+        password: await argon.hash(password),
+      },
+    });
+    return newUser;
+  }),
 });
 
 export { authRouter, loginInput, registerInput };

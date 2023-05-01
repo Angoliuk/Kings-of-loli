@@ -1,4 +1,5 @@
-import { isAuthorized } from '../middleware';
+import { isAuthorized } from '@api/middlewares';
+
 import { t } from '../trpc';
 
 export const router = t.router;

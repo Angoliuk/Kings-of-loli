@@ -1,9 +1,8 @@
+import { SortOrder } from '@api/interfaces';
+import { exclude } from '@api/services';
+import { protectedProcedure, publicProcedure, router } from '@api/trpc';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
-
-import { SortOrder } from '../../interfaces/global-interfaces';
-import { exclude } from '../../services';
-import { protectedProcedure, publicProcedure, router } from '../../trpc/trpc';
 
 const updateUserInput = z.object({
   userId: z.string().min(1),
@@ -64,18 +63,16 @@ const userRouter = router({
     });
     return user ? exclude(user, ['password']) : {};
   }),
-  getAllUsers: publicProcedure
-    .input(getAllUsers)
-    .query(async ({ ctx, input: { limit, offset, orderBy } }) => {
-      const users = await ctx.prisma.user.findMany({
-        skip: offset,
-        take: limit,
-        orderBy: orderBy && {
-          [orderBy.key]: orderBy.order,
-        },
-      });
-      return users.map((user) => exclude(user, ['password']));
-    }),
+  getAllUsers: publicProcedure.input(getAllUsers).query(async ({ ctx, input: { limit, offset, orderBy } }) => {
+    const users = await ctx.prisma.user.findMany({
+      skip: offset,
+      take: limit,
+      orderBy: orderBy && {
+        [orderBy.key]: orderBy.order,
+      },
+    });
+    return users.map((user) => exclude(user, ['password']));
+  }),
 });
 
 export { deleteUser, getAllUsers, getUserById, updateUserInput, userRouter };

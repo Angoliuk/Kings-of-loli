@@ -1,17 +1,15 @@
+import { type EnvironmentVariablesKeys } from '@api/configs';
+import { prisma, redisClient } from '@api/database';
 import type { User } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import type { CreateExpressContextOptions } from '@trpc/server/adapters/express';
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt, { type SignOptions } from 'jsonwebtoken';
 
-import { EnvironmentVariablesKeys } from '../configs';
-import { prisma, redisClient } from '../database';
-import { exclude } from '.';
+import { exclude } from './exclude';
 
 export const signJwt = (
   payload: Record<string, unknown>,
-  key:
-    | EnvironmentVariablesKeys['ACCESS_TOKEN_PRIVATE_KEY']
-    | EnvironmentVariablesKeys['REFRESH_TOKEN_PRIVATE_KEY'],
+  key: EnvironmentVariablesKeys['ACCESS_TOKEN_PRIVATE_KEY'] | EnvironmentVariablesKeys['REFRESH_TOKEN_PRIVATE_KEY'],
   options: SignOptions = {},
 ) => {
   const tokenKey = process.env[key];
@@ -23,9 +21,7 @@ export const signJwt = (
 
 export const verifyJwt = <T>(
   token: string,
-  key:
-    | EnvironmentVariablesKeys['ACCESS_TOKEN_PRIVATE_KEY']
-    | EnvironmentVariablesKeys['REFRESH_TOKEN_PRIVATE_KEY'],
+  key: EnvironmentVariablesKeys['ACCESS_TOKEN_PRIVATE_KEY'] | EnvironmentVariablesKeys['REFRESH_TOKEN_PRIVATE_KEY'],
 ) => {
   try {
     const tokenKey = process.env[key];
@@ -39,12 +35,7 @@ export const verifyJwt = <T>(
 };
 
 export const signTokens = async (user: Omit<User, 'password'>) => {
-  await redisClient.set(
-    `${user.id}`,
-    JSON.stringify(user),
-    'EX',
-    Number(process.env.REDIS_CACHE_EXPIRES_IN) * 60,
-  );
+  await redisClient.set(`${user.id}`, JSON.stringify(user), 'EX', Number(process.env.REDIS_CACHE_EXPIRES_IN) * 60);
   const access_token = signJwt({ sub: user.id }, 'ACCESS_TOKEN_PRIVATE_KEY', {
     expiresIn: `${process.env.ACCESS_TOKEN_EXPIRES_IN}m`,
   });
