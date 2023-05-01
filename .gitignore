@@ -9,6 +9,7 @@ node_modules
 
 # build
 dist
+build
 
 # debug
 npm-debug.log*
@@ -31,5 +32,14 @@ tsconfig.tsbuildinfo
 dev.db
 dev.db-journal
 
+# configs
 .idea
 .vscode
+
+# next.js
+.next
+/out/
+next-env.d.ts
+
+# vercel
+.vercel
