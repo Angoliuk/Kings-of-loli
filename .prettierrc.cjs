@@ -1,5 +1,5 @@
-/* eslint-disable unicorn/prefer-module */
-module.exports = {
+/** @type {import("prettier").Config} */
+const config = {
   semi: true,
   trailingComma: 'all',
   singleQuote: true,
@@ -16,5 +16,8 @@ module.exports = {
   requirePragma: false,
   useTabs: false,
   vueIndentScriptAndStyle: false,
-  printWidth: 100,
+  printWidth: 120,
+  plugins: [require.resolve('prettier-plugin-tailwindcss')],
 };
+
+module.exports = config;
