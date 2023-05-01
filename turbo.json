@@ -16,7 +16,10 @@
     "REFRESH_TOKEN_PUBLIC_KEY",
     "REDIS_CACHE_EXPIRES_IN",
     "VITE_API_URL",
-    "VITE_FRONTEND_PORT"
+    "VITE_FRONTEND_PORT",
+    "VERCEL_URL",
+    "COMPANION_PORT",
+    "SKIP_ENV_VALIDATION"
   ],
   "pipeline": {
     "build": {
