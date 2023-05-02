@@ -32,23 +32,32 @@ export const statsRouter = createRouter({
     .input(
       z
         .object({
-          scoreLimits: z.tuple([z.number(), z.number()]),
-          name: z.string().min(1),
+          scoreLimits: z.tuple([z.number(), z.number()]).default([0, 9999]),
+          name: z.string().optional(),
           sortBy: z
             .object({
               field: z.nativeEnum(Prisma.UserScalarFieldEnum),
               order: z.nativeEnum(SortOrder),
             })
-            .optional(),
+            .default({
+              field: 'createdAt',
+              order: SortOrder.DESC,
+            }),
         })
         .and(paginationSchema),
     )
     .query(
       async ({
         ctx: { prisma },
-        input: { scoreLimits, name, limit, offset, sortBy: { field, order } = { field: 'name', order: SortOrder.ASC } },
+        input: {
+          scoreLimits,
+          name,
+          limit,
+          offset,
+          sortBy: { field, order },
+        },
       }) => {
-        const nameSearch = `%${name}%`;
+        const nameSearch = name ? `%${name}%` : '%';
         const orderBy = `${field} ${order}`;
         return await prisma.$queryRaw<User[]>`
           SELECT * FROM "User"
@@ -148,10 +157,7 @@ export const statsRouter = createRouter({
           userId,
           limit,
           offset,
-          sortBy: { field, order } = {
-            field: 'createdAt',
-            order: SortOrder.DESC,
-          },
+          sortBy: { field, order },
         },
       }) => {
         const orderBy = `${field} ${order}`;

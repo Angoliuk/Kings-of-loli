@@ -10,18 +10,20 @@ const UsersStats: NextPage = () => {
     isFetching: isFetchingMore,
     isError,
     isRefetching,
-  } = api.stats.getUsers.useQuery({ name: '123', scoreLimits: [0, 12_300] });
+  } = api.stats.getUsers.useQuery({});
   return (
     <PageWrapper>
-      <ListWrapper
-        data={users}
-        isError={isError}
-        isFetchingMore={isFetchingMore}
-        isFirstLoading={isFirstLoading}
-        isRefetching={isRefetching}
-        error={error?.message}
-        listItem={(user) => <UserCard user={user} />}
-      />
+      <div className="flex flex-col flex-wrap md:flex-row">
+        <ListWrapper
+          data={users}
+          isError={isError}
+          isFetchingMore={isFetchingMore}
+          isFirstLoading={isFirstLoading}
+          isRefetching={isRefetching}
+          error={error?.message}
+          listItem={(user) => <UserCard user={user} />}
+        />
+      </div>
     </PageWrapper>
   );
 };

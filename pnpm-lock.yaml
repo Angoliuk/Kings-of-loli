@@ -141,6 +141,9 @@ importers:
       '@trpc/server':
         specifier: ^10.18.0
         version: 10.18.0
+      dotenv:
+        specifier: ^16.0.3
+        version: 16.0.3
       luxon:
         specifier: ^3.3.0
         version: 3.3.0
