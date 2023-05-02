@@ -8,9 +8,11 @@ type PageWrapperProps = {
 
 export const PageWrapper: FC<PageWrapperProps> = ({ children }) => {
   return (
-    <div className="flex w-screen flex-row">
+    <div className="flex w-screen min-w-full flex-row justify-end">
       <NavBar />
-      <div className="h-screen min-h-screen w-5/6 bg-zinc-800/80 px-6 py-4">{children}</div>
+      <div className="mt-20 h-full min-h-screen w-screen bg-zinc-800/80 px-6 py-4 lg:mt-0 lg:w-5/6 lg:min-w-min">
+        {children}
+      </div>
     </div>
   );
 };
