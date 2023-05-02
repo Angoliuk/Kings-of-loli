@@ -32,8 +32,8 @@ export const UserGamesGeneralStats: FC<UserGamesGeneralStatsProps> = ({ userId }
   return (
     <>
       <p className="text-xl text-slate-200">General:</p>
-      <div className="container my-4 flex flex-row justify-around rounded-xl bg-zinc-700/60 px-6 py-4">
-        <div className="flex w-5/12 justify-around rounded-lg bg-zinc-700/60 p-5">
+      <div className="my-4 flex w-full flex-col items-stretch justify-around rounded-xl bg-zinc-700/60 px-6 py-4 md:flex-row">
+        <div className="mb-5 flex flex-col items-center justify-around rounded-lg bg-zinc-700/60 p-5 sm:mb-5 sm:w-full sm:flex-row md:mb-0 md:w-5/12 md:flex-col xl:flex-row">
           <p className="text-green-500">
             Wins: {ratio.wins} {`(${ratio.winRatio}%)`}
           </p>
@@ -42,7 +42,7 @@ export const UserGamesGeneralStats: FC<UserGamesGeneralStatsProps> = ({ userId }
             Loses: {ratio.loses} {`(${ratio.loseRatio}%)`}
           </p>
         </div>
-        <div className="flex w-5/12 items-center justify-around rounded-lg bg-zinc-700/60 p-5">
+        <div className="flex flex-col items-center justify-around rounded-lg bg-zinc-700/60 p-5 sm:w-full sm:flex-row md:w-5/12 md:flex-col xl:flex-row">
           <p className="text-slate-200">
             Average: {Duration.fromMillis(gamesDurationStats.avg * 1000).toFormat("mm 'min' ss 'sec'")}
           </p>
