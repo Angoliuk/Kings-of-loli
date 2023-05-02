@@ -18,13 +18,13 @@ export const GetUserLongestAndShortestGames: FC<GetUserLongestAndShortestGames> 
   if (isError || !longestAndShortestGames || longestAndShortestGames.length !== 2) return null;
 
   return (
-    <div className="flex flex-col justify-between 2xl:flex-row">
+    <div className="flex flex-col justify-between">
       <>
-        <div className="w-full 2xl:mr-5">
+        <div className="w-full">
           <p className="text-xl text-slate-200">Shortest game:</p>
           {!!longestAndShortestGames?.[0] && <GameCard game={longestAndShortestGames?.[0]} />}
         </div>
-        <div className="w-full 2xl:ml-5">
+        <div className="w-full">
           <p className="text-xl text-slate-200">Longest game:</p>
           {!!longestAndShortestGames?.[1] && <GameCard game={longestAndShortestGames?.[1]} />}
         </div>
