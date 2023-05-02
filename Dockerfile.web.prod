@@ -34,6 +34,6 @@ FROM --platform=linux/amd64 nginx
 
 EXPOSE 80
 
-COPY --from=builder ./app/apps/client/dist ./usr/share/nginx/html
+COPY --from=builder ./app/apps/web/dist ./usr/share/nginx/html
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

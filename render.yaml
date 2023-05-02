@@ -4,7 +4,7 @@ services:
     name: backend
     buildFilter:
       paths:
-        - apps/server/**
+        - apps/api/**
     buildCommand: pnpm i && pnpm build --filter=backend
     repo: https://github.com/Angoliuk/Kings-of-loli
     dockerfilePath: ./Dockerfile.api.prod
@@ -19,7 +19,7 @@ services:
     repo: https://github.com/Angoliuk/Kings-of-loli
     buildFilter:
       paths:
-        - apps/client/**
+        - apps/web/**
     buildCommand: pnpm i && pnpm build --filter=web
     dockerfilePath: ./Dockerfile.web.prod
     dockerContext: ./

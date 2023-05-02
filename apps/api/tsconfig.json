@@ -1,0 +1,23 @@
+{
+  "extends": "tsconfig/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "ES2022",
+    "rootDir": "./",
+    "allowJs": true,
+    "module": "Node16",
+    "strict": true,
+    "paths": {
+      "@api/middlewares": ["./src/middlewares"],
+      "@api/database": ["./src/database"],
+      "@api/services": ["./src/services"],
+      "@api/configs": ["./src/configs"],
+      "@api/modules": ["./src/modules"],
+      "@api/trpc": ["./src/trpc/trpc"],
+      "@api/TRPC": ["./src/trpc"],
+      "@api/interfaces": ["./src/interfaces"]
+    }
+  },
+  "include": ["./", ".eslintrc.js"],
+  "exclude": ["node_modules"]
+}

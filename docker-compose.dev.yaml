@@ -15,7 +15,7 @@ services:
       - ./node_modules/eslint-config-base:/app/node_modules/eslint-config-base
       - ./node_modules/tsconfig:/app/node_modules/tsconfig
       - /app/node_modules
-      - /app/apps/server/node_modules
+      - /app/apps/api/node_modules
       - /app/packages/eslint/node_modules
       - /app/packages/tsconfig/node_modules
   redis:
