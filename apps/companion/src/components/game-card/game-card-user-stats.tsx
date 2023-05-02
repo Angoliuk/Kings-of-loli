@@ -32,7 +32,7 @@ export const GameUserStats: FC<GameUserStatsProps> = ({ userGameStats }) => {
         <div className="pl-5 md:pl-0 lg:pl-5">
           <div className="mt-3 flex">
             <SVGIcon name="userIcon" width={16} height={16} />
-            <p className="truncate pl-5 text-xl text-slate-200">{userGameStats.user.name}Some longer name</p>
+            <p className="truncate pl-5 text-xl text-slate-200">{userGameStats.user.name}</p>
           </div>
           <div className="flex justify-between md:mt-2 md:flex-row lg:mt-0 lg:flex-col">
             <div className="flex">
