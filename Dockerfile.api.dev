@@ -42,4 +42,6 @@ COPY --from=builder ./app .
 
 WORKDIR /app/apps/api
 
+RUN npm run generateDB
+
 CMD npm run dev
