@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { z } from 'zod';
 
-dotenv.config({ path: '../../.companion.env' });
+dotenv.config({ path: '.env' });
 
 /**
  * Specify your server-side environment variables schema here. This way you can ensure the app isn't

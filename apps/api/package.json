@@ -16,7 +16,6 @@
   },
   "scripts": {
     "build": "tsup",
-    "generateDB:docker": "docker-compose -f ../../docker-compose.dev.yaml exec kol-api npm run pushDB",
     "dev": "tsup --watch --onSuccess \"node dist/server.js\"",
     "lint": "eslint ./src --max-warnings=0 && tsc --noEmit",
     "pushDB": "cd ./prisma && npx prisma db push && npx prisma generate && cd ../",
