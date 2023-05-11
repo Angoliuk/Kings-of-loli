@@ -9,11 +9,11 @@
   align-items: center;
   justify-content: center;
 
-  width: 5%;
+  width: fit-content;
   min-width: 70px;
   height: 100%;
-  padding-right: 20px;
-  padding-left: 20px;
+  padding-right: 1.5%;
+  padding-left: 1%;
 
   background: var(--gray);
   background-image: url('../../../resources/img/menu/left-menu-background.png');
@@ -23,29 +23,10 @@
 }
 
 .navButtons {
-  width: 100%;
-  min-width: 70px;
-  height: 9%;
-  min-height: 70px;
-
   background-size: 100% 100%;
   border-radius: 100px;
-
   image-rendering: pixelated;
-
   transition: all 0.12s;
-}
-
-.profileButton {
-  background-image: url('../../../resources/img/menu/left-menu-profile-icon.png');
-}
-
-.leaderboardButton {
-  background-image: url('../../../resources/img/menu/left-menu-leaderboard-icon.png');
-}
-
-.settingsButton {
-  background-image: url('../../../resources/img/menu/left-menu-settings-icon.png');
 }
 
 .navButtons:hover {

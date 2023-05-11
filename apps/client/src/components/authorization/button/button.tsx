@@ -1,25 +1,25 @@
 import { FC } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import { AppRoutes } from '../../../routes/app-router-enum';
-import { NavButton } from '../../nav-button/nav-button';
 import styles from './button.module.css';
 export const AuthorizationButton: FC = () => {
   return (
     <>
-      <NavButton link={AppRoutes.SignIn} className={[styles.navButtons]}>
+      <NavLink to={AppRoutes.SignIn} className={styles.navButtons}>
         <button className={styles.authorizationButton}>
           <h2>
             <span className={styles.buttonText}>Sign In</span>
           </h2>
         </button>
-      </NavButton>
-      <NavButton link={AppRoutes.SignUp} className={[styles.navButtons]}>
+      </NavLink>
+      <NavLink to={AppRoutes.SignUp} className={styles.navButtons}>
         <button className={styles.authorizationButton}>
           <h2>
             <span className={styles.buttonText}>Sign Up</span>
           </h2>
         </button>
-      </NavButton>
+      </NavLink>
     </>
   );
 };

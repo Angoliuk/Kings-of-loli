@@ -24,18 +24,24 @@ export const Leaderboard: FC<LeaderboardProperties> = ({ users, isError, isLoadi
       </div>
     );
   }
-
   return (
     <NavigationPageWrapper>
       <div className={styles.container}>
         <BackgroundPicker imgBackground={'resources/img/leaderboard-background/large_1.jpg'} />
         <div className={styles.leaderboard}>
-          <div className={styles.projectName}> LeaderBoard</div>
           <div className={styles.content}>
             <div className={styles.gridContainer}>
-              {users?.map((user, index) => (
-                <LeaderboardItem key={user.id} user={user} place={index} />
-              ))}
+              <div className={styles.topUsers}>
+                {users?.splice(0, 3)?.map((user, index) => (
+                  <LeaderboardItem key={user.id} user={user} place={index} />
+                ))}
+              </div>
+
+              <div className={styles.aroundUser}>
+                {users?.splice(3)?.map((user, index) => (
+                  <LeaderboardItem key={user.id} user={user} place={index} />
+                ))}
+              </div>
             </div>
           </div>
         </div>
