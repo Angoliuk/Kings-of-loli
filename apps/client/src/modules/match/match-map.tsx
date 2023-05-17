@@ -1,12 +1,11 @@
 import { Container, Sprite } from '@pixi/react';
 import React, { useRef } from 'react';
 
-import { SpriteSizes } from './utils/sprite-sizes';
+import { GAME_FIELD, HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from './constants';
+import { SpriteSizes, useSizes } from './utils/sprite-sizes';
 
-const gameFieldY = 6;
-const gameFieldX = 13;
-const gameField = Array.from({ length: gameFieldY }, (_, yIndex) =>
-  Array.from({ length: gameFieldX }, (_, xIndex) => ({
+const gameField = Array.from({ length: GAME_FIELD.y }, (_, yIndex) =>
+  Array.from({ length: GAME_FIELD.x }, (_, xIndex) => ({
     x: xIndex,
     y: yIndex,
     src: `resources/img/map/tiles/${yIndex}/${xIndex + 1}.gif`,
@@ -61,9 +60,10 @@ type CreateGameObjectProperties = {
   handleClick?: React.MouseEventHandler;
   hoverhandler?: React.MouseEventHandler;
   hoverOutHandler?: React.MouseEventHandler;
-  size: Coordinates;
+  scale: Coordinates;
   source: string;
   hp?: number;
+  size?: { width?: number; height?: number };
 } & Coordinates;
 
 type BattleMap = {
@@ -73,12 +73,7 @@ type BattleMap = {
   setUnitActions: React.Dispatch<React.SetStateAction<UnitActions[]>>;
   setSelected: React.Dispatch<React.SetStateAction<Unit | Card | null>>;
 };
-const mapTiles = new SpriteSizes(
-  { width: 200, height: 200 },
-  { width: (innerWidth - 40) / 13, height: (innerHeight - 290) / 6 },
-);
 
-const hpBar = new SpriteSizes({ width: 50, height: 15 }, { height: 20, width: 50 });
 class GameUnits {
   #source;
   #hp;
@@ -149,9 +144,9 @@ export class Unit extends GameUnits {
     console.log(units);
     const possibleActions = patterns[this.#pattern](this.#coords).filter((action) =>
       (action.x === this.#coords.x && action.y === this.#coords.y) ||
-      action.x > gameFieldX ||
+      action.x > GAME_FIELD.x ||
       action.x < 0 ||
-      action.y >= gameFieldY ||
+      action.y >= GAME_FIELD.y ||
       action.y < 0 ||
       units.some(
         (unit) =>
@@ -196,8 +191,8 @@ export class Card extends GameUnits {
   }
   getPossibleCardActions(units: Unit[]) {
     const possibleMoves: UnitActions[] = [];
-    for (let y = 0; y < gameFieldY; y++) {
-      for (let x = 0; x < Math.floor(gameFieldX / 2); x++) {
+    for (let y = 0; y < GAME_FIELD.y; y++) {
+      for (let x = 0; x < Math.floor(GAME_FIELD.x / 2); x++) {
         possibleMoves.push({
           x: x,
           y: y,
@@ -264,40 +259,44 @@ const patterns = {
 };
 
 const CreateGameObjectHealth = ({ x, y, hp }: { hp: number } & Coordinates) => {
+  const { hpBar, hpBarContainer } = useSizes();
   return (
     <>
       <Container
-        width={mapTiles.desiredSize.width}
-        x={x - hpBar.desiredSize.width * 1.5}
+        {...hpBarContainer.desiredSize}
+        scale={hpBarContainer.scale}
+        x={x - hpBar.desiredSize.width + 0.5 * hpBarContainerPadding}
         y={y - hpBar.desiredSize.height}
       >
-        {hp == 1 ? (
+        {hp === 1 ? (
           <Sprite
             source={'resources/img/map/units/Rectangle 41.png'}
-            scale={{ x: 1, y: 1 }}
-            x={mapTiles.desiredSize.width / 2 + 10}
-            width={(mapTiles.desiredSize.width - hpBar.desiredSize.height) / 3}
+            scale={hpBar.scale}
+            width={hpBar.desiredSize.width * 2}
+            height={hpBar.desiredSize.height}
+            x={hpBar.desiredSize.width}
+            y={-5}
           />
         ) : (
           Array.from({ length: hp }).map((_, index) => {
+            const hpPositionInRow = index + 1 > HP_ROW_LIMIT ? index % HP_ROW_LIMIT : index;
+            const isHpBarInLastRow =
+              hp < HP_ROW_LIMIT ||
+              (hp > HP_ROW_LIMIT &&
+                hp % HP_ROW_LIMIT !== 0 &&
+                index + 1 >= Math.ceil(hp / HP_ROW_LIMIT) * (HP_ROW_LIMIT - 1) &&
+                index + 1 < Math.ceil(hp / HP_ROW_LIMIT) * HP_ROW_LIMIT);
             return (
               <>
                 <Sprite
                   source={'resources/img/map/units/Rectangle 41.png'}
-                  scale={{ x: 1, y: 1 }}
-                  width={(mapTiles.desiredSize.width - hpBar.desiredSize.height) / 3}
+                  scale={hpBar.scale}
+                  {...hpBar.desiredSize}
                   x={
-                    30 +
-                    ((mapTiles.desiredSize.width - hpBar.desiredSize.height) / 3) *
-                      (index > 2 ? index % 3 : index) +
-                    5 * (index > 2 ? index % 3 : index) +
-                    (((index >= (index > 3 ? Math.floor(index / 3) : 1) * 3 && hp > 3) ||
-                      hp <= 3) &&
-                    hp % 3 !== 0
-                      ? 25 + (index % 3)
-                      : 0)
+                    (hpBar.desiredSize.width + hpBarPadding) * hpPositionInRow +
+                    (isHpBarInLastRow ? 0.75 * hpBar.desiredSize.width + hpPositionInRow : 0)
                   }
-                  y={hpBar.desiredSize.height * (index + 1 > 3 ? -Math.floor((index + 1) / 3) : 0)}
+                  y={1.5 * hpBar.desiredSize.height * -Math.floor(index / HP_ROW_LIMIT) - 5}
                 />
               </>
             );
@@ -311,9 +310,10 @@ export const CreateGameObject = ({
   handleClick,
   x,
   y,
-  size,
+  scale,
   source,
   hp,
+  size,
   hoverhandler,
   hoverOutHandler,
 }: CreateGameObjectProperties) => {
@@ -325,8 +325,9 @@ export const CreateGameObject = ({
         pointerout={hoverOutHandler}
         interactive={true}
         pointerdown={handleClick}
-        scale={{ x: size.x, y: size.y }}
+        scale={scale}
         image={source}
+        {...size}
         x={x}
         y={y}
       />
@@ -341,6 +342,7 @@ export const BattleMap = ({
   setSelected,
   setUnitActions,
 }: BattleMap) => {
+  const { mapTile, unit: unitSizes, unitAction } = useSizes();
   const unitClick = (unit: Unit) => {
     if (selected?.id === unit.id) {
       setSelected(null);
@@ -369,12 +371,9 @@ export const BattleMap = ({
             <CreateGameObject
               source={src}
               key={`sprite-${y}-${x}`}
-              x={x * mapTiles.desiredSize.width}
-              y={y * mapTiles.desiredSize.height}
-              size={{
-                x: mapTiles.desiredSize.width / mapTiles.originalSize.width,
-                y: mapTiles.desiredSize.height / mapTiles.originalSize.height,
-              }}
+              x={x * mapTile.desiredSize.width}
+              y={y * mapTile.desiredSize.height}
+              scale={mapTile.scale}
               handleClick={() => console.log('work')}
             />
           );
@@ -387,10 +386,11 @@ export const BattleMap = ({
           <>
             <CreateGameObject
               handleClick={() => unitClick(unit)}
-              size={{ x: 0.5, y: 0.5 }}
+              scale={unitSizes.scale}
               key={`${x}-${y}-unit`}
-              x={x * mapTiles.desiredSize.width}
-              y={y * mapTiles.desiredSize.height}
+              x={x * mapTile.desiredSize.width + mapTile.desiredSize.width * 0.2}
+              y={y * mapTile.desiredSize.height + mapTile.desiredSize.height * 0.3}
+              size={unitSizes.desiredSize}
               source={unit.source}
               hp={unit.hp}
             />
@@ -401,10 +401,11 @@ export const BattleMap = ({
         return (
           <CreateGameObject
             handleClick={() => hadleMoveClick(action)}
-            size={{ x: 0.5, y: 0.5 }}
+            scale={unitAction.scale}
             key={`${action.x}-${action.y}-action`}
-            x={action.x * mapTiles.desiredSize.width}
-            y={action.y * mapTiles.desiredSize.height}
+            x={action.x * mapTile.desiredSize.width + mapTile.desiredSize.width * (0.25 / 2)}
+            y={action.y * mapTile.desiredSize.height + mapTile.desiredSize.height * (0.25 / 2)}
+            size={unitAction.desiredSize}
             source={
               action.type === UnitActionsTypes.ATTACK
                 ? 'resources/img/map/units/shield.png'

@@ -150,6 +150,7 @@ export const BattleHud: FC<BattleHudprops> = ({
         x={sidePanelLeft.desiredSize.width * -1}
         y={topPanel.desiredSize.height / 1.67}
         {...map.desiredSize}
+        scale={map.scale}
       >
         {children}
       </Container>
@@ -222,7 +223,7 @@ export const BattleHud: FC<BattleHudprops> = ({
           {cards.map((card, index) => (
             <CreateGameObject
               key={index}
-              size={{ x: 0.1, y: 0.1 }}
+              scale={{ x: 0.1, y: 0.1 }}
               source={card.source}
               x={
                 cardSize.originalSize.width * 0.1 +

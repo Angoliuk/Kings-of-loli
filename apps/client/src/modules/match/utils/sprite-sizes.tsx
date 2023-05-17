@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { HP_ROW_LIMIT } from '../constants';
+import { GAME_FIELD, HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from '../constants';
 
 type SpriteSizesProperties = {
   originalSize: { width: number; height: number };
@@ -78,17 +78,37 @@ export const useSizes = () => {
   const mapTile = new SpriteSizes(
     { width: 201, height: 201 },
     {
-      width: map.desiredSize.width / 13,
-      height: map.desiredSize.height / 6,
+      width: map.desiredSize.width / GAME_FIELD.x,
+      height: map.desiredSize.height / GAME_FIELD.y,
     },
   );
 
+  const hpBarContainer = new SpriteSizes({
+    width: mapTile.desiredSize.width - hpBarContainerPadding,
+    height: 40,
+  });
+
   const hpBar = new SpriteSizes(
     { width: 50, height: 15 },
-    { height: 10, width: mapTile.desiredSize.width / HP_ROW_LIMIT - 8 },
+    {
+      height: 8,
+      width: hpBarContainer.desiredSize.width / HP_ROW_LIMIT - hpBarPadding,
+    },
+  );
+
+  const unit = new SpriteSizes(
+    { width: 140, height: 130 },
+    { height: 0.6 * mapTile.desiredSize.height, width: 0.6 * mapTile.desiredSize.width },
+  );
+
+  const unitAction = new SpriteSizes(
+    { width: 160, height: 160 },
+    { height: 0.75 * mapTile.desiredSize.height, width: 0.75 * mapTile.desiredSize.width },
   );
 
   return {
+    hpBarContainer,
+    unitAction,
     bottomPanel,
     cardSize,
     sidePanelLeft,
@@ -98,5 +118,6 @@ export const useSizes = () => {
     mapTile,
     hpBar,
     map,
+    unit,
   };
 };
