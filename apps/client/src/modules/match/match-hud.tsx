@@ -103,7 +103,8 @@ export const BattleHud: FC<BattleHudprops> = ({
   selected,
 }) => {
   const cards = useUser((state) => state.cards);
-  const { bottomPanel, cardSize, sidePanelLeft, sidePanelRight, topPanel, windowSize } = useSizes();
+  const { bottomPanel, cardSize, sidePanelLeft, sidePanelRight, topPanel, windowSize, map } =
+    useSizes();
   const { openModal } = useModalContext();
   const handleOpenModal = () => {
     const content = <LeaveWindowPIXI />;
@@ -148,10 +149,7 @@ export const BattleHud: FC<BattleHudprops> = ({
       <Container
         x={sidePanelLeft.desiredSize.width * -1}
         y={topPanel.desiredSize.height / 1.67}
-        width={
-          windowSize.width - sidePanelLeft.desiredSize.width * -1 - sidePanelRight.desiredSize.width
-        }
-        height={windowSize.height - bottomPanel.desiredSize.height - topPanel.desiredSize.height}
+        {...map.desiredSize}
       >
         {children}
       </Container>
