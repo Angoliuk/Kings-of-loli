@@ -28,7 +28,7 @@ import { useSizes } from './utils/sprite-sizes';
 export const useUser = create((set, get) => ({
   units: [],
   resources: {
-    gold: 0,
+    gold: 42,
     energy: 0,
     hp: 0,
   },
@@ -96,6 +96,7 @@ export const BattleHud: FC<BattleHudprops> = ({
   selected,
 }) => {
   const cards = useUser((state) => state.cards);
+  const { gold }: number = useUser((state) => state.resources);
   const { bottomPanel, cardSize, sidePanelLeft, sidePanelRight, topPanel, windowSize, map } =
     useSizes();
   const { openModal } = useModalContext();
@@ -121,11 +122,6 @@ export const BattleHud: FC<BattleHudprops> = ({
     setSelected(card);
     setUnitActions(card.getPossibleCardActions(unitsList));
   };
-  console.log(
-    windowSize.width,
-    sidePanelLeft.desiredSize.width * -1,
-    sidePanelRight.desiredSize.width,
-  );
 
   const draw = useCallback((g) => {
     g.clear();
@@ -148,8 +144,12 @@ export const BattleHud: FC<BattleHudprops> = ({
         {children}
       </Container>
       <Container>
-        <Sprite image={`resources/img/map/hud/top-panel.png`} scale={topPanel.scale}>
-          {CoinBar({ coins: 99 })}
+        <Sprite
+          image={`resources/img/map/hud/top-panel.png`}
+          scale={topPanel.scale}
+          {...topPanel.desiredSize}
+        >
+          {CoinBar({ coins: gold })}
           <Container>
             <Sprite anchor={[-1.05, 0]} image={`resources/img/map/hud/energy-bar-inactive.png`}>
               <Sprite anchor={[-19.2, 0]} image={`resources/img/map/hud/enery-active.png`} />
@@ -179,13 +179,17 @@ export const BattleHud: FC<BattleHudprops> = ({
       <Container>
         <Sprite
           y={topPanel.desiredSize.height / 1.8}
-          image={`resources/img/map/hud/side-panel.png`}
+          image={`resources/img/map/background/side-panel-hd.png`}
           scale={sidePanelRight.scale}
+          {...sidePanelRight.desiredSize}
         >
           <Container>
-            <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/health-bar-empty.png`}>
+            <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/healthbar-empty-hd.png`}>
               {HudHealthBar({ hp: 100 })}
-              <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/flask.png`} />
+              <Sprite
+                anchor={[0, -0.35]}
+                image={`resources/img/map/hud/healthbar-empty-flask-hd.png`}
+              />
             </Sprite>
           </Container>
         </Sprite>
@@ -194,13 +198,17 @@ export const BattleHud: FC<BattleHudprops> = ({
         <Sprite
           y={topPanel.desiredSize.height / 1.8}
           x={windowSize.width}
-          image={`resources/img/map/hud/side-panel.png`}
+          image={`resources/img/map/background/side-panel-hd.png`}
           scale={sidePanelLeft.scale}
+          {...sidePanelLeft.desiredSize}
         >
           <Container>
-            <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/health-bar-empty.png`}>
+            <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/healthbar-empty-hd.png`}>
               {HudHealthBar({ hp: 100 })}
-              <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/flask.png`} />
+              <Sprite
+                anchor={[0, -0.35]}
+                image={`resources/img/map/hud/healthbar-empty-flask-hd.png`}
+              />
             </Sprite>
           </Container>
         </Sprite>
@@ -210,28 +218,30 @@ export const BattleHud: FC<BattleHudprops> = ({
           roundPixels={true}
           x={0}
           y={windowSize.height - bottomPanel.desiredSize.height}
-          image={`resources/img/map/hud/bottom-panel.png`}
+          image={`resources/img/map/background/bottom-panel-hd.png`}
           scale={bottomPanel.scale}
+          {...bottomPanel.desiredSize}
         >
           {cards.map((card, index) => (
             <CreateGameObject
               key={index}
-              scale={{ x: 0.1, y: 0.1 }}
+              scale={{ x: 1, y: 1 }}
               source={card.source}
               x={
                 cards.length <= 2
                   ? bottomPanel.originalSize.width / 2 +
-                    cardSize.originalSize.width * 0.1 * index -
-                    cardSize.originalSize.width * 0.1
+                    cardSize.originalSize.width * index -
+                    cardSize.originalSize.width
                   : bottomPanel.originalSize.width / cards.length +
-                    cardSize.originalSize.width * 0.1 * index
+                    cardSize.originalSize.width * index -
+                    cardSize.originalSize.width / 2
               }
               y={15}
               hoverOutHandler={(e) => {
-                e.target.y += 20;
+                e.target.y += cardSize.originalSize.height / 3;
               }}
               hoverhandler={(e) => {
-                e.target.y -= 20;
+                e.target.y -= cardSize.originalSize.height / 3;
               }}
               handleClick={cardHandler}
             />

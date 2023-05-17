@@ -2,9 +2,9 @@ import { Sprite } from '@pixi/react';
 
 export const HudHealthBar = ({ hp }: { hp: number }) => {
   const maxHp = 100;
-  const height = -58;
+  const height = -360;
   const hpHeight = (hp / maxHp) * height;
-  const heightTop = 81;
+  const heightTop = 520;
   const hpHeightTop = hpHeight + heightTop;
   return (
     <>
@@ -12,13 +12,13 @@ export const HudHealthBar = ({ hp }: { hp: number }) => {
         y={hpHeightTop}
         anchor={[0, 0]}
         image={`resources/img/map/hud/health-top.png`}
-        scale={{ x: 1, y: 1 }}
+        scale={{ x: 5, y: 3 }}
       />
       <Sprite
-        y={85}
+        y={530}
         anchor={[0, 0]}
         image={`resources/img/map/hud/health.png`}
-        scale={{ x: 1, y: hpHeight }}
+        scale={{ x: 5, y: hpHeight }}
       />
     </>
   );

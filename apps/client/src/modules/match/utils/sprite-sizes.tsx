@@ -51,8 +51,9 @@ export const useSizes = () => {
   }, []);
 
   const cardSize = new SpriteSizes({ width: 320, height: 490 });
+
   const bottomPanel = new SpriteSizes(
-    { width: 268, height: 46 },
+    { width: 1920, height: 329 },
     { width: windowSize.width, height: windowSize.height / 3.5 },
   );
 
@@ -60,13 +61,15 @@ export const useSizes = () => {
     { width: 268, height: 20 },
     { width: windowSize.width, height: windowSize.height / 8 },
   );
+
   const sidePanelRight = new SpriteSizes(
-    { width: 7, height: 95 },
-    { width: windowSize.width / 33, height: windowSize.height / 1.45 },
+    { width: 57, height: 695 },
+    { width: windowSize.width / 33, height: windowSize.height / 1.4 },
   );
+
   const sidePanelLeft = new SpriteSizes(
-    { width: 7, height: 95 },
-    { width: -windowSize.width / 33, height: windowSize.height / 1.45 },
+    { width: 57, height: 695 },
+    { width: -windowSize.width / 33, height: windowSize.height / 1.4 },
   );
 
   const map = new SpriteSizes({
@@ -76,7 +79,7 @@ export const useSizes = () => {
   });
 
   const mapTile = new SpriteSizes(
-    { width: 201, height: 201 },
+    { width: 200, height: 200 },
     {
       width: map.desiredSize.width / GAME_FIELD.x,
       height: map.desiredSize.height / GAME_FIELD.y,

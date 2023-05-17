@@ -1,8 +1,9 @@
 import { Container, Sprite } from '@pixi/react';
-import React, { useRef } from 'react';
+import React from 'react';
 
 import { GAME_FIELD, HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from './constants';
-import { SpriteSizes, useSizes } from './utils/sprite-sizes';
+import { useUser } from './match-hud';
+import { useSizes } from './utils/sprite-sizes';
 
 const gameField = Array.from({ length: GAME_FIELD.y }, (_, yIndex) =>
   Array.from({ length: GAME_FIELD.x }, (_, xIndex) => ({
@@ -106,14 +107,14 @@ class GameUnits {
     return this.#type;
   }
   receiveDamage(damage: number, units: Unit[]) {
-    console.log(this.#hp);
     if (this.#hp < 2) {
-      this.killUnit(units);
+      return this.killUnit(units);
     }
     this.#hp -= damage;
   }
   killUnit(units: Unit[]) {
     units.map((unit, index) => unit.id === this.#id && units.splice(index, 1));
+    return true;
   }
 }
 export class Unit extends GameUnits {
@@ -169,6 +170,7 @@ export class Unit extends GameUnits {
   }
   killUnit(units: Unit[]) {
     units.map((unit, index) => unit.id === this.id && units.splice(index, 1));
+    return true;
   }
 }
 
@@ -272,9 +274,8 @@ const CreateGameObjectHealth = ({ x, y, hp }: { hp: number } & Coordinates) => {
           <Sprite
             source={'resources/img/map/units/Rectangle 41.png'}
             scale={hpBar.scale}
-            width={hpBar.desiredSize.width * 2}
-            height={hpBar.desiredSize.height}
-            x={hpBar.desiredSize.width}
+            {...hpBar.desiredSize}
+            x={hpBar.desiredSize.width + hpBarPadding}
             y={-5}
           />
         ) : (
@@ -342,6 +343,8 @@ export const BattleMap = ({
   setSelected,
   setUnitActions,
 }: BattleMap) => {
+  const incrementGold = useUser((state) => state.incrementGold);
+  const { gold }: number = useUser((state) => state.resources);
   const { mapTile, unit: unitSizes, unitAction } = useSizes();
   const unitClick = (unit: Unit) => {
     if (selected?.id === unit.id) {
@@ -354,11 +357,17 @@ export const BattleMap = ({
   };
   const hadleMoveClick = (coords: UnitActions) => {
     if (!selected) return;
-    coords.type === UnitActionsTypes.MOVE
-      ? (selected.move(coords, gameUnits), setUnitActions([]), setSelected(null))
-      : gameUnits
-          .find((unit) => unit.coords.x === coords.x && unit.coords.y === coords.y)
-          .receiveDamage(selected.damage, gameUnits);
+
+    if (coords.type === UnitActionsTypes.MOVE) {
+      selected.move(coords, gameUnits), setUnitActions([]), setSelected(null);
+    } else {
+      const dead = gameUnits
+        .find((unit) => unit.coords.x === coords.x && unit.coords.y === coords.y)
+        .receiveDamage(selected.damage, gameUnits);
+      if (dead) {
+        incrementGold(3);
+      }
+    }
     setSelected(null);
     setUnitActions([]);
   };
