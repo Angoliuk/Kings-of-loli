@@ -285,16 +285,16 @@ const CreateGameObjectHealth = ({ x, y, hp }: { hp: number } & Coordinates) => {
                 <Sprite
                   source={'resources/img/map/units/Rectangle 41.png'}
                   scale={{ x: 1, y: 1 }}
-                  width={(mapTiles.desiredSize.width - hpBar.desiredSize.height) / 3}
+                  width={(mapTiles.desiredSize.width - hpBar.desiredSize.width) / 3}
                   x={
-                    30 +
-                    ((mapTiles.desiredSize.width - hpBar.desiredSize.height) / 3) *
+                    40 +
+                    ((mapTiles.desiredSize.width - hpBar.desiredSize.width) / 3) *
                       (index > 2 ? index % 3 : index) +
                     5 * (index > 2 ? index % 3 : index) +
                     (((index >= (index > 3 ? Math.floor(index / 3) : 1) * 3 && hp > 3) ||
                       hp <= 3) &&
                     hp % 3 !== 0
-                      ? 25 + (index % 3)
+                      ? 20 + (index % 3)
                       : 0)
                   }
                   y={hpBar.desiredSize.height * (index + 1 > 3 ? -Math.floor((index + 1) / 3) : 0)}
@@ -389,8 +389,8 @@ export const BattleMap = ({
               handleClick={() => unitClick(unit)}
               size={{ x: 0.5, y: 0.5 }}
               key={`${x}-${y}-unit`}
-              x={x * mapTiles.desiredSize.width}
-              y={y * mapTiles.desiredSize.height}
+              x={x * 180}
+              y={y * 120}
               source={unit.source}
               hp={unit.hp}
             />
@@ -403,8 +403,8 @@ export const BattleMap = ({
             handleClick={() => hadleMoveClick(action)}
             size={{ x: 0.5, y: 0.5 }}
             key={`${action.x}-${action.y}-action`}
-            x={action.x * mapTiles.desiredSize.width}
-            y={action.y * mapTiles.desiredSize.height}
+            x={action.x * 155}
+            y={action.y * 115}
             source={
               action.type === UnitActionsTypes.ATTACK
                 ? 'resources/img/map/units/shield.png'

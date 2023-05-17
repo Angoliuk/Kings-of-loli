@@ -57,15 +57,8 @@ export const useUser = create((set, get) => ({
       source: 'resources/img/cards/peasant-card.png',
       type: UnitTypes.WARRIOR,
     }),
-    new Card({
-      team: Teams.BLUE,
-      radius: 2,
-      damage: 1,
-      hp: 3,
-      source: 'resources/img/cards/peasant-card.png',
-      type: UnitTypes.WARRIOR,
-    }),
   ],
+
   time: '00:00',
 
   addUnit: (newUnit) => set({ units: [...get().units, newUnit] }),
@@ -253,10 +246,12 @@ export const BattleHud: FC<BattleHudprops> = ({
               size={{ x: 0.1, y: 0.1 }}
               source={card.source}
               x={
-                cardSize.originalSize.width * 0.1 +
-                bottomPanel.originalSize.width / 2 +
-                cardSize.originalSize.width * 0.1 * index -
-                cardSize.originalSize.width * 0.1 * cards.length
+                cards.length <= 2
+                  ? bottomPanel.originalSize.width / 2 +
+                    cardSize.originalSize.width * 0.1 * index -
+                    cardSize.originalSize.width * 0.1
+                  : bottomPanel.originalSize.width / cards.length +
+                    cardSize.originalSize.width * 0.1 * index
               }
               y={15}
               hoverOutHandler={(e) => {
