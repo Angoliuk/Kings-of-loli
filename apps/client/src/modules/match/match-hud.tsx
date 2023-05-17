@@ -1,5 +1,5 @@
 import { Container, Graphics, Sprite, Stage } from '@pixi/react';
-import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useCallback, useRef, useState } from 'react';
 import { create } from 'zustand';
 
 import { CoinBar } from '../../components/hud/coin-bar/coin-bar';
@@ -8,7 +8,7 @@ import { LeaveWindowPIXI } from '../../components/hud/leave-window/leave-window'
 import { TimerBar } from '../../components/hud/timer-bar/timer-bar';
 import { useModalContext } from '../../hooks/use-modal';
 import { Card, CreateGameObject, Teams, Unit, UnitActions, UnitTypes } from './match-map';
-import { SpriteSizes } from './utils/sprite-sizes';
+import { useSizes } from './utils/sprite-sizes';
 
 // setUnit((previous) => {
 //   return [
@@ -96,45 +96,14 @@ export const BattleHud: FC<BattleHudprops> = ({
   selected,
 }) => {
   const cards = useUser((state) => state.cards);
-
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const { bottomPanel, cardSize, sidePanelLeft, sidePanelRight, topPanel, windowSize, map } =
+    useSizes();
   const { openModal } = useModalContext();
   const handleOpenModal = () => {
     const content = <LeaveWindowPIXI />;
     openModal(content);
   };
 
-  const cardSize = new SpriteSizes({ width: 320, height: 490 });
-  const bottomPanel = new SpriteSizes(
-    { width: 268, height: 46 },
-    { width: windowSize.width, height: windowSize.height / 3.5 },
-  );
-
-  const topPanel = new SpriteSizes(
-    { width: 268, height: 20 },
-    { width: windowSize.width, height: windowSize.height / 8 },
-  );
-  const sidePanelR = new SpriteSizes(
-    { width: 7, height: 95 },
-    { width: windowSize.width / 33, height: windowSize.height / 1.45 },
-  );
-  const sidePanelL = new SpriteSizes(
-    { width: 7, height: 95 },
-    { width: -windowSize.width / 33, height: windowSize.height / 1.45 },
-  );
   const cardHandler = () => {
     const card = new Card({
       radius: 2,
@@ -152,7 +121,11 @@ export const BattleHud: FC<BattleHudprops> = ({
     setSelected(card);
     setUnitActions(card.getPossibleCardActions(unitsList));
   };
-  console.log(windowSize.width, sidePanelL.desiredSize.width * -1, sidePanelR.desiredSize.width);
+  console.log(
+    windowSize.width,
+    sidePanelLeft.desiredSize.width * -1,
+    sidePanelRight.desiredSize.width,
+  );
 
   const draw = useCallback((g) => {
     g.clear();
@@ -167,10 +140,9 @@ export const BattleHud: FC<BattleHudprops> = ({
     <Stage width={windowSize.width} height={windowSize.height}>
       <Graphics draw={draw} ref={spriteReference} />
       <Container
-        x={sidePanelL.desiredSize.width * -1}
+        x={sidePanelLeft.desiredSize.width * -1}
         y={topPanel.desiredSize.height / 1.67}
-        width={windowSize.width - sidePanelL.desiredSize.width * -1 - sidePanelR.desiredSize.width}
-        height={windowSize.height - bottomPanel.desiredSize.height - topPanel.desiredSize.height}
+        {...map.desiredSize}
       >
         {children}
       </Container>
@@ -207,7 +179,7 @@ export const BattleHud: FC<BattleHudprops> = ({
         <Sprite
           y={topPanel.desiredSize.height / 1.8}
           image={`resources/img/map/hud/side-panel.png`}
-          scale={sidePanelR.scale}
+          scale={sidePanelRight.scale}
         >
           <Container>
             <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/health-bar-empty.png`}>
@@ -222,7 +194,7 @@ export const BattleHud: FC<BattleHudprops> = ({
           y={topPanel.desiredSize.height / 1.8}
           x={windowSize.width}
           image={`resources/img/map/hud/side-panel.png`}
-          scale={sidePanelL.scale}
+          scale={sidePanelLeft.scale}
         >
           <Container>
             <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/health-bar-empty.png`}>
