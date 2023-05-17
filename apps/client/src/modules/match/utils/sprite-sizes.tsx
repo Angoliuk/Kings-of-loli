@@ -50,31 +50,37 @@ export const useSizes = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const cardSize = new SpriteSizes({ width: 320, height: 490 });
-
   const bottomPanel = new SpriteSizes(
     { width: 1920, height: 329 },
     { width: windowSize.width, height: windowSize.height / 3.5 },
   );
 
+  const card = new SpriteSizes(
+    { width: 320, height: 490 },
+    {
+      height: 1.2 * bottomPanel.desiredSize.height,
+      width: 0.8 * bottomPanel.desiredSize.height,
+    },
+  );
+
   const topPanel = new SpriteSizes(
-    { width: 268, height: 20 },
+    { width: 1920, height: 143 },
     { width: windowSize.width, height: windowSize.height / 8 },
   );
 
   const sidePanelRight = new SpriteSizes(
     { width: 57, height: 695 },
-    { width: windowSize.width / 33, height: windowSize.height / 1.4 },
+    { width: -windowSize.width / 33.6, height: windowSize.height / 1.4 },
   );
 
   const sidePanelLeft = new SpriteSizes(
     { width: 57, height: 695 },
-    { width: -windowSize.width / 33, height: windowSize.height / 1.4 },
+    { width: windowSize.width / 33.6, height: windowSize.height / 1.4 },
   );
 
   const map = new SpriteSizes({
     width:
-      innerWidth - (Math.abs(sidePanelLeft.desiredSize.width) + sidePanelRight.desiredSize.width),
+      innerWidth - (Math.abs(sidePanelRight.desiredSize.width) + sidePanelLeft.desiredSize.width),
     height: innerHeight - (topPanel.desiredSize.height + bottomPanel.desiredSize.height) + 100,
   });
 
@@ -113,7 +119,7 @@ export const useSizes = () => {
     hpBarContainer,
     unitAction,
     bottomPanel,
-    cardSize,
+    card,
     sidePanelLeft,
     sidePanelRight,
     topPanel,

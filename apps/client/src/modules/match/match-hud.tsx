@@ -7,23 +7,11 @@ import { HudHealthBar } from '../../components/hud/health-bar/health-bar';
 import { LeaveWindowPIXI } from '../../components/hud/leave-window/leave-window';
 import { TimerBar } from '../../components/hud/timer-bar/timer-bar';
 import { useModalContext } from '../../hooks/use-modal';
-import { Card, CreateGameObject, Teams, Unit, UnitActions, UnitTypes } from './match-map';
+import { UnitAction } from './actions/actions';
+import { Cards } from './cards/cards';
+import { Card, Teams, Unit, UnitTypes } from './match-map';
+import { SidePanel } from './side-panel/side-panel';
 import { useSizes } from './utils/sprite-sizes';
-
-// setUnit((previous) => {
-//   return [
-//     ...previous,
-//     new Unit({
-//       x: 3,
-//       y: 3,
-//       damage: 3,
-//       hp: 5,
-//       radius: 1,
-//       source: 'resources/img/map/units/Worker_blue.png',
-//       type: 'warrior',
-//     }),
-//   ];
-// });
 
 export const useUser = create((set, get) => ({
   units: [],
@@ -82,51 +70,37 @@ export const useUser = create((set, get) => ({
 }));
 type BattleHudprops = {
   children: ReactNode;
-  setUnitActions: React.Dispatch<React.SetStateAction<UnitActions[]>>;
+  setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
   unitsList: Unit[];
-  selected: Unit | Card | null;
-  setSelected: React.Dispatch<React.SetStateAction<Unit | Card | null>>;
 };
 
-export const BattleHud: FC<BattleHudprops> = ({
-  children,
-  unitsList,
-  setUnitActions,
-  setSelected,
-  selected,
-}) => {
+export const BattleHud: FC<BattleHudprops> = ({ children, unitsList, setUnitActions }) => {
+  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const cards = useUser((state) => state.cards);
   const { gold }: number = useUser((state) => state.resources);
-  const { bottomPanel, cardSize, sidePanelLeft, sidePanelRight, topPanel, windowSize, map } =
-    useSizes();
+  const { bottomPanel, sidePanelLeft, topPanel, windowSize, map } = useSizes();
   const { openModal } = useModalContext();
   const handleOpenModal = () => {
     const content = <LeaveWindowPIXI />;
     openModal(content);
   };
 
-  const cardHandler = () => {
-    const card = new Card({
-      radius: 2,
-      damage: 1,
-      hp: 3,
-      source: 'resources/img/map/units/Worker_blue.png',
-      type: UnitTypes.WARRIOR,
-      team: Teams.BLUE,
-    });
-    if (selected?.id === card.id) {
-      setSelected(null);
-      setUnitActions([]);
-      return;
-    }
-    setSelected(card);
-    setUnitActions(card.getPossibleCardActions(unitsList));
-  };
-
+  const cardHandler = useCallback(
+    (card: Card) => {
+      if (selectedCard?.id === card.id) {
+        setSelectedCard(null);
+        setUnitActions([]);
+        return;
+      }
+      setSelectedCard(card);
+      setUnitActions(card.getPossibleCardActions(unitsList));
+    },
+    [selectedCard],
+  );
   const draw = useCallback((g) => {
     g.clear();
     g.beginFill(0xff_70_0b, 1);
-    g.drawRect(0, 100, windowSize.width, windowSize.height);
+    g.drawRect(0, 0, windowSize.width, windowSize.height);
     g.lineStyle(2, 0xff_00_ff, 1);
   }, []);
 
@@ -136,13 +110,15 @@ export const BattleHud: FC<BattleHudprops> = ({
     <Stage width={windowSize.width} height={windowSize.height}>
       <Graphics draw={draw} ref={spriteReference} />
       <Container
-        x={sidePanelLeft.desiredSize.width * -1}
+        x={sidePanelLeft.desiredSize.width}
         y={topPanel.desiredSize.height / 1.67}
         {...map.desiredSize}
         scale={map.scale}
       >
         {children}
       </Container>
+      <SidePanel side="Left" />
+      <SidePanel side="Right" />
       <Container>
         <Sprite
           image={`resources/img/map/hud/top-panel.png`}
@@ -178,43 +154,6 @@ export const BattleHud: FC<BattleHudprops> = ({
       </Container>
       <Container>
         <Sprite
-          y={topPanel.desiredSize.height / 1.8}
-          image={`resources/img/map/background/side-panel-hd.png`}
-          scale={sidePanelRight.scale}
-          {...sidePanelRight.desiredSize}
-        >
-          <Container>
-            <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/healthbar-empty-hd.png`}>
-              {HudHealthBar({ hp: 100 })}
-              <Sprite
-                anchor={[0, -0.35]}
-                image={`resources/img/map/hud/healthbar-empty-flask-hd.png`}
-              />
-            </Sprite>
-          </Container>
-        </Sprite>
-      </Container>
-      <Container>
-        <Sprite
-          y={topPanel.desiredSize.height / 1.8}
-          x={windowSize.width}
-          image={`resources/img/map/background/side-panel-hd.png`}
-          scale={sidePanelLeft.scale}
-          {...sidePanelLeft.desiredSize}
-        >
-          <Container>
-            <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/healthbar-empty-hd.png`}>
-              {HudHealthBar({ hp: 100 })}
-              <Sprite
-                anchor={[0, -0.35]}
-                image={`resources/img/map/hud/healthbar-empty-flask-hd.png`}
-              />
-            </Sprite>
-          </Container>
-        </Sprite>
-      </Container>
-      <Container>
-        <Sprite
           roundPixels={true}
           x={0}
           y={windowSize.height - bottomPanel.desiredSize.height}
@@ -222,30 +161,7 @@ export const BattleHud: FC<BattleHudprops> = ({
           scale={bottomPanel.scale}
           {...bottomPanel.desiredSize}
         >
-          {cards.map((card, index) => (
-            <CreateGameObject
-              key={index}
-              scale={{ x: 1, y: 1 }}
-              source={card.source}
-              x={
-                cards.length <= 2
-                  ? bottomPanel.originalSize.width / 2 +
-                    cardSize.originalSize.width * index -
-                    cardSize.originalSize.width
-                  : bottomPanel.originalSize.width / cards.length +
-                    cardSize.originalSize.width * index -
-                    cardSize.originalSize.width / 2
-              }
-              y={15}
-              hoverOutHandler={(e) => {
-                e.target.y += cardSize.originalSize.height / 3;
-              }}
-              hoverhandler={(e) => {
-                e.target.y -= cardSize.originalSize.height / 3;
-              }}
-              handleClick={cardHandler}
-            />
-          ))}
+          <Cards selectedCard={selectedCard} cards={cards} onClick={cardHandler} />
         </Sprite>
       </Container>
     </Stage>

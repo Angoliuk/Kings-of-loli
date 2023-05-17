@@ -1,21 +1,12 @@
 import { Container, Sprite } from '@pixi/react';
-import React from 'react';
+import React, { FC } from 'react';
 
+import { GameObjectActions, UnitAction, UnitActionsTypes } from './actions/actions';
 import { GAME_FIELD, HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from './constants';
+import { GameField } from './field/field';
 import { useUser } from './match-hud';
 import { useSizes } from './utils/sprite-sizes';
 
-const gameField = Array.from({ length: GAME_FIELD.y }, (_, yIndex) =>
-  Array.from({ length: GAME_FIELD.x }, (_, xIndex) => ({
-    x: xIndex,
-    y: yIndex,
-    src: `resources/img/map/tiles/${yIndex}/${xIndex + 1}.gif`,
-  })),
-);
-enum UnitActionsTypes {
-  ATTACK = 'attack',
-  MOVE = 'move',
-}
 enum PatternTypes {
   STAR = 'star',
 }
@@ -27,14 +18,10 @@ export enum UnitTypes {
   ARCHER = 'archer',
   WARRIOR = 'warrior',
 }
-type Coordinates = {
+export type Coordinates = {
   x: number;
   y: number;
 };
-export type UnitActions = {
-  type: UnitActionsTypes;
-  src: string;
-} & Coordinates;
 
 type GameUnitsProperties = {
   source: string;
@@ -69,9 +56,9 @@ type CreateGameObjectProperties = {
 
 type BattleMap = {
   gameUnits: Unit[];
-  actions: UnitActions[];
+  actions: UnitAction[];
   selected: Unit | Card | null;
-  setUnitActions: React.Dispatch<React.SetStateAction<UnitActions[]>>;
+  setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
   setSelected: React.Dispatch<React.SetStateAction<Unit | Card | null>>;
 };
 
@@ -192,7 +179,7 @@ export class Card extends GameUnits {
     return this.#damage;
   }
   getPossibleCardActions(units: Unit[]) {
-    const possibleMoves: UnitActions[] = [];
+    const possibleMoves: UnitAction[] = [];
     for (let y = 0; y < GAME_FIELD.y; y++) {
       for (let x = 0; x < Math.floor(GAME_FIELD.x / 2); x++) {
         possibleMoves.push({
@@ -307,7 +294,7 @@ const CreateGameObjectHealth = ({ x, y, hp }: { hp: number } & Coordinates) => {
     </>
   );
 };
-export const CreateGameObject = ({
+export const CreateUnit = ({
   handleClick,
   x,
   y,
@@ -336,13 +323,13 @@ export const CreateGameObject = ({
   );
 };
 
-export const BattleMap = ({
+export const BattleMap: FC<BattleMap> = ({
   gameUnits,
   actions,
   selected,
   setSelected,
   setUnitActions,
-}: BattleMap) => {
+}) => {
   const incrementGold = useUser((state) => state.incrementGold);
   const { gold }: number = useUser((state) => state.resources);
   const { mapTile, unit: unitSizes, unitAction } = useSizes();
@@ -355,7 +342,7 @@ export const BattleMap = ({
     setSelected(unit);
     setUnitActions(unit.getPossibleActions(gameUnits));
   };
-  const hadleMoveClick = (coords: UnitActions) => {
+  const handleMoveClick = (coords: UnitAction) => {
     if (!selected) return;
 
     if (coords.type === UnitActionsTypes.MOVE) {
@@ -374,26 +361,13 @@ export const BattleMap = ({
 
   return (
     <>
-      {gameField.map((row) =>
-        row.map(({ x, y, src }) => {
-          return (
-            <CreateGameObject
-              source={src}
-              key={`sprite-${y}-${x}`}
-              x={x * mapTile.desiredSize.width}
-              y={y * mapTile.desiredSize.height}
-              scale={mapTile.scale}
-              handleClick={() => console.log('work')}
-            />
-          );
-        }),
-      )}
+      <GameField />
 
       {gameUnits.map((unit) => {
         const { x, y } = unit.coords;
         return (
           <>
-            <CreateGameObject
+            <CreateUnit
               handleClick={() => unitClick(unit)}
               scale={unitSizes.scale}
               key={`${x}-${y}-unit`}
@@ -406,23 +380,8 @@ export const BattleMap = ({
           </>
         );
       })}
-      {actions.map((action) => {
-        return (
-          <CreateGameObject
-            handleClick={() => hadleMoveClick(action)}
-            scale={unitAction.scale}
-            key={`${action.x}-${action.y}-action`}
-            x={action.x * mapTile.desiredSize.width + mapTile.desiredSize.width * (0.25 / 2)}
-            y={action.y * mapTile.desiredSize.height + mapTile.desiredSize.height * (0.25 / 2)}
-            size={unitAction.desiredSize}
-            source={
-              action.type === UnitActionsTypes.ATTACK
-                ? 'resources/img/map/units/shield.png'
-                : 'resources/img/map/tiles/point.png'
-            }
-          />
-        );
-      })}
+
+      <GameObjectActions actions={actions} onClick={handleMoveClick} />
     </>
   );
 };
