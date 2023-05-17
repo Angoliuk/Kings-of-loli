@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { HP_ROW_LIMIT } from '../constants';
+
 type SpriteSizesProperties = {
   originalSize: { width: number; height: number };
   desiredSize: { width: number; height: number };
@@ -66,12 +68,25 @@ export const useSizes = () => {
     { width: 7, height: 95 },
     { width: -windowSize.width / 33, height: windowSize.height / 1.45 },
   );
-  const mapTiles = new SpriteSizes(
+
+  const map = new SpriteSizes({
+    width:
+      innerWidth - (Math.abs(sidePanelLeft.desiredSize.width) + sidePanelRight.desiredSize.width),
+    height: innerHeight - (topPanel.desiredSize.height + bottomPanel.desiredSize.height) + 100,
+  });
+
+  const mapTile = new SpriteSizes(
     { width: 201, height: 201 },
-    { width: (innerWidth - 100) / 13, height: (innerHeight - 290) / 6 },
+    {
+      width: map.desiredSize.width / 13,
+      height: map.desiredSize.height / 6,
+    },
   );
 
-  const hpBar = new SpriteSizes({ width: 50, height: 15 }, { height: 10, width: 50 });
+  const hpBar = new SpriteSizes(
+    { width: 50, height: 15 },
+    { height: 10, width: mapTile.desiredSize.width / HP_ROW_LIMIT - 8 },
+  );
 
   return {
     bottomPanel,
@@ -80,7 +95,8 @@ export const useSizes = () => {
     sidePanelRight,
     topPanel,
     windowSize,
-    mapTiles,
+    mapTile,
     hpBar,
+    map,
   };
 };
