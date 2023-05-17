@@ -1,0 +1,57 @@
+.leave {
+  display: flex;
+  flex-direction: column;
+  gap: 2%;
+  align-items: center;
+  justify-content: center;
+
+  width: 50%;
+  height: 100%;
+
+  background-image: url('../../../../resources/img/map/hud/window.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  image-rendering: crisp-edges;
+}
+
+.context {
+  display: flex;
+  justify-content: center;
+
+  width: 50%;
+  height: 50%;
+
+  font-size: 2rem;
+  text-align: center;
+
+  background-image: url('../../../../resources/img/map/hud/main-stone.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  image-rendering: crisp-edges;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 50%;
+  height: 20%;
+}
+
+.button {
+  width: 45%;
+  height: 50%;
+
+  font-size: 3rem;
+  text-align: center;
+
+  background-image: url('../../../../resources/img/map/hud/button.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border: none;
+
+  image-rendering: crisp-edges;
+}

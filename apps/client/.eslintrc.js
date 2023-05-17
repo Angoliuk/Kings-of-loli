@@ -24,5 +24,6 @@ module.exports = {
     'unicorn/no-null': 'off',
     '@typescript-eslint/consistent-type-definitions': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-empty-function': 'off',
   },
 };
