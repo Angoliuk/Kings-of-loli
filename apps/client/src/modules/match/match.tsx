@@ -8,7 +8,7 @@ export const Match = () => {
   const [selected, setSelected] = useState<Card | Unit | null>(null);
   const [gameUnits, setGameUnits] = useState<Unit[]>([
     new Unit({
-      coords: { x: 2, y: 1 },
+      coords: { x: 1, y: 1 },
       damage: 1,
       hp: 5,
       radius: 1,
