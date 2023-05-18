@@ -28,6 +28,7 @@ type GameUnitsProperties = {
   hp: number;
   type: UnitTypes;
   team: Teams;
+  id?: number;
 };
 
 export type UnitProperties = {
@@ -42,6 +43,9 @@ type BuildProperties = { coords: Coordinates } & GameUnitsProperties;
 type CardProperties = {
   damage: number;
   radius: number;
+  unitSource: string;
+  energy: number;
+  price: number;
 } & GameUnitsProperties;
 
 type CreateGameObjectProperties = {
@@ -57,9 +61,11 @@ type CreateGameObjectProperties = {
 type BattleMap = {
   gameUnits: Unit[];
   actions: UnitAction[];
-  selected: Unit | Card | null;
+  selectedUnit: Unit | null;
   setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
-  setSelected: React.Dispatch<React.SetStateAction<Unit | Card | null>>;
+  setSelectedUnit: React.Dispatch<React.SetStateAction<Unit | null>>;
+  selectedCard: Card | null;
+  setSelectedCard: React.Dispatch<React.SetStateAction<Card | null>>;
 };
 
 class GameUnits {
@@ -164,16 +170,37 @@ export class Unit extends GameUnits {
 export class Card extends GameUnits {
   #radius;
   #damage;
-
-  constructor({ damage, hp, source, type, radius, team }: CardProperties) {
+  #unitSource;
+  #price;
+  #energy;
+  constructor({
+    damage,
+    hp,
+    source,
+    type,
+    radius,
+    team,
+    unitSource,
+    price,
+    energy,
+  }: CardProperties) {
     super({
       hp: hp,
       source: source,
       team: team,
       type: type,
     });
+    this.#unitSource = unitSource;
     this.#damage = damage;
     this.#radius = radius;
+    this.#price = price;
+    this.#energy = energy;
+  }
+  get price() {
+    return this.#price;
+  }
+  get energy() {
+    return this.#energy;
   }
   get damage() {
     return this.#damage;
@@ -202,7 +229,7 @@ export class Card extends GameUnits {
         damage: this.#damage,
         hp: this.hp,
         radius: this.#radius,
-        source: this.source,
+        source: this.#unitSource,
         team: this.team,
         type: this.type,
       }),
@@ -250,48 +277,45 @@ const patterns = {
 const CreateGameObjectHealth = ({ x, y, hp }: { hp: number } & Coordinates) => {
   const { hpBar, hpBarContainer } = useSizes();
   return (
-    <>
-      <Container
-        {...hpBarContainer.desiredSize}
-        scale={hpBarContainer.scale}
-        x={x - hpBar.desiredSize.width + 0.5 * hpBarContainerPadding}
-        y={y - hpBar.desiredSize.height}
-      >
-        {hp === 1 ? (
-          <Sprite
-            source={'resources/img/map/units/Rectangle 41.png'}
-            scale={hpBar.scale}
-            {...hpBar.desiredSize}
-            x={hpBar.desiredSize.width + hpBarPadding}
-            y={-5}
-          />
-        ) : (
-          Array.from({ length: hp }).map((_, index) => {
-            const hpPositionInRow = index + 1 > HP_ROW_LIMIT ? index % HP_ROW_LIMIT : index;
-            const isHpBarInLastRow =
-              hp < HP_ROW_LIMIT ||
-              (hp > HP_ROW_LIMIT &&
-                hp % HP_ROW_LIMIT !== 0 &&
-                index + 1 >= Math.ceil(hp / HP_ROW_LIMIT) * (HP_ROW_LIMIT - 1) &&
-                index + 1 < Math.ceil(hp / HP_ROW_LIMIT) * HP_ROW_LIMIT);
-            return (
-              <>
-                <Sprite
-                  source={'resources/img/map/units/Rectangle 41.png'}
-                  scale={hpBar.scale}
-                  {...hpBar.desiredSize}
-                  x={
-                    (hpBar.desiredSize.width + hpBarPadding) * hpPositionInRow +
-                    (isHpBarInLastRow ? 0.75 * hpBar.desiredSize.width + hpPositionInRow : 0)
-                  }
-                  y={1.5 * hpBar.desiredSize.height * -Math.floor(index / HP_ROW_LIMIT) - 5}
-                />
-              </>
-            );
-          })
-        )}
-      </Container>
-    </>
+    <Container
+      {...hpBarContainer.desiredSize}
+      scale={hpBarContainer.scale}
+      x={x - hpBar.desiredSize.width + 0.5 * hpBarContainerPadding}
+      y={y - hpBar.desiredSize.height}
+    >
+      {hp === 1 ? (
+        <Sprite
+          source={'resources/img/map/units/Rectangle 41.png'}
+          scale={hpBar.scale}
+          {...hpBar.desiredSize}
+          x={hpBar.desiredSize.width + hpBarPadding}
+          y={-5}
+        />
+      ) : (
+        Array.from({ length: hp }).map((_, index) => {
+          const hpPositionInRow = index + 1 > HP_ROW_LIMIT ? index % HP_ROW_LIMIT : index;
+          const isHpBarInLastRow =
+            hp < HP_ROW_LIMIT ||
+            (hp > HP_ROW_LIMIT &&
+              hp % HP_ROW_LIMIT !== 0 &&
+              index + 1 >= Math.ceil(hp / HP_ROW_LIMIT) * (HP_ROW_LIMIT - 1) &&
+              index + 1 < Math.ceil(hp / HP_ROW_LIMIT) * HP_ROW_LIMIT);
+          return (
+            <Sprite
+              key={index}
+              source={'resources/img/map/units/Rectangle 41.png'}
+              scale={hpBar.scale}
+              {...hpBar.desiredSize}
+              x={
+                (hpBar.desiredSize.width + hpBarPadding) * hpPositionInRow +
+                (isHpBarInLastRow ? 0.75 * hpBar.desiredSize.width + hpPositionInRow : 0)
+              }
+              y={1.5 * hpBar.desiredSize.height * -Math.floor(index / HP_ROW_LIMIT) - 5}
+            />
+          );
+        })
+      )}
+    </Container>
   );
 };
 export const CreateUnit = ({
@@ -326,36 +350,55 @@ export const CreateUnit = ({
 export const BattleMap: FC<BattleMap> = ({
   gameUnits,
   actions,
-  selected,
-  setSelected,
   setUnitActions,
+  setSelectedUnit,
+  selectedUnit,
+  selectedCard,
+  setSelectedCard,
 }) => {
-  const incrementGold = useUser((state) => state.incrementGold);
-  const { gold }: number = useUser((state) => state.resources);
-  const { mapTile, unit: unitSizes, unitAction } = useSizes();
+  const decrementCard = useUser((state) => state.decrementCard);
+  const decrementEnergy = useUser((state) => state.decrementEnergy);
+  const decrementGold = useUser((state) => state.decrementGold);
+  const { mapTile, unit: unitSizes } = useSizes();
+
+  const unitActions = {
+    move: (coords: UnitAction) => {
+      selectedUnit?.move(coords),
+        setUnitActions([]),
+        setSelectedUnit(null),
+        decrementEnergy(selectedCard?.energy);
+    },
+    attack: (coords: UnitAction) =>
+      gameUnits
+        .find((unit) => unit.coords.x === coords.x && unit.coords.y === coords.y)
+        .receiveDamage(selectedUnit.damage, gameUnits),
+  };
   const unitClick = (unit: Unit) => {
-    if (selected?.id === unit.id) {
-      setSelected(null);
+    if (selectedUnit?.id === unit.id) {
+      setSelectedUnit(null);
       setUnitActions([]);
-      return;
     }
-    setSelected(unit);
+    setSelectedUnit(unit);
     setUnitActions(unit.getPossibleActions(gameUnits));
   };
-  const handleMoveClick = (coords: UnitAction) => {
-    if (!selected) return;
 
-    if (coords.type === UnitActionsTypes.MOVE) {
-      selected.move(coords, gameUnits), setUnitActions([]), setSelected(null);
-    } else {
-      const dead = gameUnits
-        .find((unit) => unit.coords.x === coords.x && unit.coords.y === coords.y)
-        .receiveDamage(selected.damage, gameUnits);
-      if (dead) {
-        incrementGold(3);
-      }
-    }
-    setSelected(null);
+  const handleCardAction = (coords: UnitAction) => {
+    selectedCard?.move(coords, gameUnits);
+    setUnitActions([]);
+    setSelectedCard(null);
+    decrementCard(selectedCard?.id);
+    decrementGold(selectedCard?.energy);
+    setSelectedUnit(null);
+  };
+
+  const handleUnitAction = (coords: UnitAction) => unitActions[coords.type](coords);
+
+  const handleMoveClick = (coords: UnitAction) => {
+    selectedUnit
+      ? handleUnitAction(coords)
+      : selectedCard && coords.type === UnitActionsTypes.MOVE
+      ? handleCardAction(coords)
+      : null;
     setUnitActions([]);
   };
 
@@ -363,23 +406,18 @@ export const BattleMap: FC<BattleMap> = ({
     <>
       <GameField />
 
-      {gameUnits.map((unit) => {
-        const { x, y } = unit.coords;
-        return (
-          <>
-            <CreateUnit
-              handleClick={() => unitClick(unit)}
-              scale={unitSizes.scale}
-              key={`${x}-${y}-unit`}
-              x={x * mapTile.desiredSize.width + mapTile.desiredSize.width * 0.2}
-              y={y * mapTile.desiredSize.height + mapTile.desiredSize.height * 0.3}
-              size={unitSizes.desiredSize}
-              source={unit.source}
-              hp={unit.hp}
-            />
-          </>
-        );
-      })}
+      {gameUnits.map((unit) => (
+        <CreateUnit
+          handleClick={() => unitClick(unit)}
+          scale={unitSizes.scale}
+          key={`${unit.coords.x}-${unit.coords.y}-unit`}
+          x={unit.coords.x * mapTile.desiredSize.width + mapTile.desiredSize.width * 0.2}
+          y={unit.coords.y * mapTile.desiredSize.height + mapTile.desiredSize.height * 0.3}
+          size={unitSizes.desiredSize}
+          source={unit.source}
+          hp={unit.hp}
+        />
+      ))}
 
       <GameObjectActions actions={actions} onClick={handleMoveClick} />
     </>

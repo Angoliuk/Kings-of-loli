@@ -115,6 +115,25 @@ export const useSizes = () => {
     { height: 0.75 * mapTile.desiredSize.height, width: 0.75 * mapTile.desiredSize.width },
   );
 
+  const homeButton = new SpriteSizes(
+    {
+      height: 9,
+      width: 9,
+    },
+    { height: innerHeight / 9, width: innerWidth / 9 },
+  );
+  const surrenderButton = new SpriteSizes(
+    {
+      width: 9,
+      height: 9,
+    },
+    { height: innerHeight / 9, width: innerWidth / 9 },
+  );
+  const coinBar = new SpriteSizes({
+    width: 191,
+    height: 86,
+  });
+
   return {
     hpBarContainer,
     unitAction,
@@ -128,5 +147,8 @@ export const useSizes = () => {
     hpBar,
     map,
     unit,
+    homeButton,
+    surrenderButton,
+    coinBar,
   };
 };

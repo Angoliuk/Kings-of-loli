@@ -5,7 +5,8 @@ import { BattleMap, Card, Teams, Unit, UnitActions, UnitTypes } from './match-ma
 
 export const Match = () => {
   const [unitActions, setUnitActions] = useState<UnitActions[]>([]);
-  const [selected, setSelected] = useState<Card | Unit | null>(null);
+  const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
+  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [gameUnits, setGameUnits] = useState<Unit[]>([
     new Unit({
       coords: { x: 1, y: 1 },
@@ -21,15 +22,17 @@ export const Match = () => {
     <BattleHud
       unitsList={gameUnits}
       setUnitActions={setUnitActions}
-      setSelected={setSelected}
-      selected={selected}
+      selectedCard={selectedCard}
+      setSelectedCard={setSelectedCard}
     >
       <BattleMap
         gameUnits={gameUnits}
         actions={unitActions}
         setUnitActions={setUnitActions}
-        selected={selected}
-        setSelected={setSelected}
+        setSelectedUnit={setSelectedUnit}
+        selectedUnit={selectedUnit}
+        selectedCard={selectedCard}
+        setSelectedCard={setSelectedCard}
       />
     </BattleHud>
   );
