@@ -1,7 +1,7 @@
+import { NavigationPageWrapper } from '@web/components/navigation-page-wrapper/navigation-page-wrapper';
+import { RangeBar } from '@web/components/range-bar/range-bar';
 import { type FC } from 'react';
 
-import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
-import { RangeBar } from '../../components/range-bar/range-bar';
 import styles from './setting-page.module.css';
 
 export const SettingsPage: FC = () => {

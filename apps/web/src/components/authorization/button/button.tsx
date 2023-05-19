@@ -1,7 +1,7 @@
+import { NavButton } from '@web/components/nav-button/nav-button';
+import { AppRoutes } from '@web/routes/app-router-enum';
 import { type FC } from 'react';
 
-import { AppRoutes } from '../../../routes/app-router-enum';
-import { NavButton } from '../../nav-button/nav-button';
 import styles from './button.module.css';
 export const AuthorizationButton: FC = () => {
   return (

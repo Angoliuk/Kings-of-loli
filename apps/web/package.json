@@ -24,7 +24,12 @@
     "react-router-dom": "^6.8.2",
     "socket.io": "^4.6.1",
     "zod": "^3.21.4",
-    "zustand": "^4.3.6"
+    "zustand": "^4.3.6",
+    "pixi-filters": "^5.2.1",
+    "pixi.js": "^7.2.3",
+    "@pixi/filter-blur": "^7.2.4",
+    "@pixi/react": "^7.0.3",
+    "socket.io-client": "^4.6.1"
   },
   "devDependencies": {
     "@types/node": "^18.15.0",

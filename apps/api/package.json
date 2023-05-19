@@ -18,7 +18,7 @@
     "build": "tsup",
     "dev": "tsup --watch --onSuccess \"node dist/server.js\"",
     "lint": "eslint ./src --max-warnings=0 && tsc --noEmit",
-    "pushDB": "cd ./prisma && npx prisma db push && npx prisma generate && cd ../",
+    "pushDB": "cd ./prisma && npx prisma generate && npx prisma db push && cd ../",
     "generateDB": "cd ./prisma && npx prisma generate && cd ../",
     "pullDB": "cd ./prisma && npx prisma db pull && npx prisma generate && cd ../",
     "openDB": "cd ./prisma && npx prisma studio",
@@ -36,7 +36,8 @@
     "prisma": "^4.11.0",
     "ts-node": "^10.9.1",
     "tsup": "^6.6.3",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "socket.io": "^4.6.1"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",

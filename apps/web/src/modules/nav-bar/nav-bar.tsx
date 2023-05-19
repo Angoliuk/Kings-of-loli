@@ -1,8 +1,8 @@
+import { NavButton } from '@web/components/nav-button/nav-button';
+import { AppRoutes } from '@web/routes/app-router-enum';
 import { type FC } from 'react';
 
 import { LeftBattleMenu } from '../../../resources/svg/button-svg/left-button-battle-menu';
-import { NavButton } from '../../components/nav-button/nav-button';
-import { AppRoutes } from '../../routes/app-router-enum';
 import styles from './nav-bar.module.css';
 
 export const NavBar: FC = () => {

@@ -1,3 +1,4 @@
+import './configs/environment';
 import './database/redis';
 
 import type { PrismaClient, User } from '@prisma/client';

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { FormInput } from '@web/components/form-input/form-input';
+import { SignUpFormFields } from '@web/constants/authorization/authorization';
+import { useAuth } from '@web/hooks/use-auth';
+import { useHookForm } from '@web/hooks/use-form';
+import { type AuthorizationFormProperties } from '@web/interfaces/authorization-form/authorization-form-properties';
 import { type FC } from 'react';
 import { type SubmitHandler } from 'react-hook-form';
 
-import { FormInput } from '../../components/form-input/form-input';
-import { SignUpFormFields } from '../../constants/authorization/authorization';
-import { useAuth } from '../../hooks/use-auth';
-import { useHookForm } from '../../hooks/use-form';
-import { type AuthorizationFormProperties } from '../../interfaces/authorization-form/authorization-form-properties';
 import styles from './sign-up-form.module.css';
 import { SignUpFormSchema, type SignUpSchema } from './validation';
 

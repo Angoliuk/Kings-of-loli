@@ -24,6 +24,7 @@ RUN npm install -g pnpm
 COPY --from=installer /app/out/json/ .
 COPY --from=installer /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=installer /app/out/full/ .
+COPY ./apps/api/prisma ./apps/api/prisma
 COPY .gitignore .gitignore
 COPY turbo.json turbo.json
 
@@ -42,6 +43,4 @@ COPY --from=builder ./app .
 
 WORKDIR /app/apps/api
 
-RUN npm run generateDB
-
-CMD npm run dev
+CMD npm run pushDB && npm run dev

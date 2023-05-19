@@ -1,7 +1,6 @@
+import { type RouterOutputs } from '@web/trpc';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-import { type RouterOutputs } from '../../trpc';
 
 type State = {
   user?: RouterOutputs['auth']['me'];
