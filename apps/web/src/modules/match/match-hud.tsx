@@ -8,12 +8,71 @@ import { create } from 'zustand';
 
 import { type UnitAction } from './actions/actions';
 import { Cards } from './cards/cards';
-import { Card, Teams, type Unit, UnitTypes } from './match-map';
+import { Card, Teams, Unit, UnitTypes } from './match-map';
 import { SidePanel } from './side-panel/side-panel';
 import { useSizes } from './utils/sprite-sizes';
-/// всіх юнітів хранити в зустанд , всі данні тут зберігати
+
+type useUserPorps = {
+  units: Unit[];
+  resources: {
+    gold: number;
+    energy: number;
+    hp: number;
+  };
+  cards: Card[];
+  time: string;
+  addUnit: (newUnit: Unit) => void;
+  killUnit: (unitId: number) => void;
+  addnCard: (newCard: Card) => void;
+  removeCard: (cardId: number) => void;
+  decrementGold: (gold: number) => void;
+  incrementGold: (gold: number) => void;
+  decrementEnergy: (energy: number) => void;
+  incrementEnergy: (energy: number) => void;
+  decrementHp: (hp: number) => void;
+  incrementHp: (hp: number) => void;
+  setTime: (time: string) => void;
+};
+
+const GameUnitPossibleStats = {
+  unit: {
+    damage: [1, 4],
+    hp: [1, 6],
+    radius: [1, 2],
+    energy: [1, 4],
+  },
+  card: {
+    damage: [1, 4],
+    hp: [1, 6],
+    radius: [1, 2],
+    team: Teams,
+    type: UnitTypes,
+    price: [2, 6],
+    energy: [1, 4],
+  },
+  build: {
+    hp: [2, 6],
+    team: Teams,
+    type: UnitTypes, // enum for Build
+    price: [1, 5],
+  },
+};
+
+const randomIntFromInterval = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
+
 export const useUser = create<useUserPorps>((set, get) => ({
-  units: [],
+  units: [
+    new Unit({
+      coords: { x: 1, y: 1 },
+      damage: randomIntFromInterval(GameUnitPossibleStats.unit.damage[0], GameUnitPossibleStats.unit.damage[1]),
+      hp: randomIntFromInterval(GameUnitPossibleStats.unit.hp[0], GameUnitPossibleStats.unit.hp[1]),
+      radius: randomIntFromInterval(GameUnitPossibleStats.unit.radius[0], GameUnitPossibleStats.unit.radius[1]),
+      source: 'resources/img/map/units/Worker_green.png',
+      type: UnitTypes.WARRIOR,
+      team: Teams.GREEN,
+      energy: randomIntFromInterval(GameUnitPossibleStats.unit.energy[0], GameUnitPossibleStats.unit.energy[1]),
+    }),
+  ],
   resources: {
     gold: 42,
     energy: 0,
@@ -22,44 +81,45 @@ export const useUser = create<useUserPorps>((set, get) => ({
   cards: [
     new Card({
       team: Teams.BLUE,
-      radius: 2,
-      damage: 1,
-      hp: 5,
+      radius: randomIntFromInterval(GameUnitPossibleStats.card.radius[0], GameUnitPossibleStats.card.radius[1]),
+      damage: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
+      hp: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
       source: 'resources/img/cards/peasant-card.png',
       unitSource: 'resources/img/map/units/Worker_blue.png',
       type: UnitTypes.WARRIOR,
-      price: 2,
-      energy: 2,
+      price: randomIntFromInterval(GameUnitPossibleStats.card.price[0], GameUnitPossibleStats.card.price[1]),
+      energy: randomIntFromInterval(GameUnitPossibleStats.card.energy[0], GameUnitPossibleStats.card.energy[1]),
     }),
     new Card({
       team: Teams.BLUE,
-      radius: 2,
-      damage: 1,
-      hp: 4,
+      radius: randomIntFromInterval(GameUnitPossibleStats.card.radius[0], GameUnitPossibleStats.card.radius[1]),
+      damage: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
+      hp: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
       source: 'resources/img/cards/peasant-card.png',
       unitSource: 'resources/img/map/units/Worker_blue.png',
       type: UnitTypes.WARRIOR,
-      price: 2,
-      energy: 2,
+      price: randomIntFromInterval(GameUnitPossibleStats.card.price[0], GameUnitPossibleStats.card.price[1]),
+      energy: randomIntFromInterval(GameUnitPossibleStats.card.energy[0], GameUnitPossibleStats.card.energy[1]),
     }),
     new Card({
       team: Teams.BLUE,
-      radius: 2,
-      damage: 1,
-      hp: 1,
+      radius: randomIntFromInterval(GameUnitPossibleStats.card.radius[0], GameUnitPossibleStats.card.radius[1]),
+      damage: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
+      hp: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
       source: 'resources/img/cards/peasant-card.png',
       unitSource: 'resources/img/map/units/Worker_blue.png',
       type: UnitTypes.WARRIOR,
-      price: 2,
-      energy: 2,
+      price: randomIntFromInterval(GameUnitPossibleStats.card.price[0], GameUnitPossibleStats.card.price[1]),
+      energy: randomIntFromInterval(GameUnitPossibleStats.card.energy[0], GameUnitPossibleStats.card.energy[1]),
     }),
   ],
 
   time: '00:00',
 
   addUnit: (newUnit) => set({ units: [...get().units, newUnit] }),
-  addCard: (newCard) => set({ cards: [...get().cards, newCard] }),
-  decrementCard: (cardId) => set({ cards: get().cards.filter((card) => card.id !== cardId) }),
+  killUnit: (unitId) => set({ units: get().units.filter((unit) => unit.id !== unitId) }),
+  addnCard: (newCard) => set({ cards: [...get().cards, newCard] }),
+  removeCard: (cardId) => set({ cards: get().cards.filter((card) => card.id !== cardId) }),
 
   decrementGold: (gold) => set({ resources: { ...get().resources, gold: get().resources.gold - gold } }),
   incrementGold: (gold) => set({ resources: { ...get().resources, gold: get().resources.gold + gold } }),
@@ -73,26 +133,6 @@ export const useUser = create<useUserPorps>((set, get) => ({
   setTime: (time) => set({ time: time }),
 }));
 
-type useUserPorps = {
-  units: Unit[];
-  resources: {
-    gold: number;
-    energy: number;
-    hp: number;
-  };
-  cards: Card[];
-  time: string;
-  addUnit: (newUnit: Unit) => void;
-  addCard: (newCard: Card) => void;
-  decrementCard: (cardId: number) => void;
-  decrementGold: (gold: number) => void;
-  incrementGold: (gold: number) => void;
-  decrementEnergy: (energy: number) => void;
-  incrementEnergy: (energy: number) => void;
-  decrementHp: (hp: number) => void;
-  incrementHp: (hp: number) => void;
-  setTime: (time: string) => void;
-};
 type BattleHudprops = {
   children: ReactNode;
   setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
@@ -129,18 +169,9 @@ export const BattleHud: FC<BattleHudprops> = ({
     },
     [selectedCard],
   );
-  // const draw = useCallback((g) => {
-  //   g.clear();
-  //   g.beginFill(0xff_70_0b, 1);
-  //   g.drawRect(0, 0, windowSize.width, windowSize.height);
-  //   g.lineStyle(2, 0xff_00_ff, 1);
-  // }, []);
-
-  // const spriteReference = useRef(null);
 
   return (
     <Stage width={windowSize.width} height={windowSize.height}>
-      {/* <Graphics draw={draw} ref={spriteReference} /> */}
       <Container
         x={sidePanelLeft.desiredSize.width}
         y={topPanel.desiredSize.height / 1.67}

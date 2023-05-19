@@ -36,6 +36,7 @@ export type UnitProperties = {
   radius: number;
   pattern?: PatternTypes;
   coords: Coordinates;
+  energy: number;
 } & GameUnitsProperties;
 
 type BuildProperties = { coords: Coordinates } & GameUnitsProperties;
@@ -100,10 +101,10 @@ class GameUnits {
     return this.#type;
   }
   receiveDamage(damage: number, units: Unit[]) {
+    this.#hp -= damage;
     if (this.#hp < 2) {
       return this.killUnit(units);
     }
-    this.#hp -= damage;
   }
   killUnit(units: Unit[]) {
     units.map((unit, index) => unit.id === this.#id && units.splice(index, 1));
@@ -115,14 +116,16 @@ export class Unit extends GameUnits {
   #radius;
   #damage;
   #coords;
+  #energy;
 
-  constructor({ source, hp, coords, damage, radius, type, pattern, team }: UnitProperties) {
+  constructor({ source, hp, coords, damage, radius, type, pattern, team, energy }: UnitProperties) {
     super({
       hp: hp,
       source: source,
       team: team,
       type: type,
     });
+    this.#energy = energy;
     this.#coords = coords;
     this.#damage = damage;
     this.#radius = radius;
@@ -134,8 +137,10 @@ export class Unit extends GameUnits {
   get coords() {
     return this.#coords;
   }
+  get energy() {
+    return this.#energy;
+  }
   getPossibleActions(units: Unit[]) {
-    console.log(units);
     const possibleActions = patterns[this.#pattern](this.#coords).filter((action) =>
       (action.x === this.#coords.x && action.y === this.#coords.y) ||
       action.x > GAME_FIELD.x ||
@@ -156,6 +161,7 @@ export class Unit extends GameUnits {
     }));
   }
   move(coords: Coordinates) {
+    console.log(1);
     this.#coords = coords;
   }
   killUnit(units: Unit[]) {
@@ -204,10 +210,12 @@ export class Card extends GameUnits {
         });
       }
     }
-
-    return possibleMoves.filter((move) => !units.some((unit) => move.x === unit.coords.x && move.y === unit.coords.y));
+    return possibleMoves.filter(
+      (move) => !units.some((unit) => move.x === unit.coords.x && move.y === unit.coords.y),
+    );
   }
   move(coords: Coordinates, units: Unit[]) {
+    console.log(units, 'Card');
     units.push(
       new Unit({
         coords: coords,
@@ -217,6 +225,7 @@ export class Card extends GameUnits {
         source: this.#unitSource,
         team: this.team,
         type: this.type,
+        energy: this.#energy,
       }),
     );
   }
@@ -341,7 +350,7 @@ export const BattleMap: FC<BattleMap> = ({
   selectedCard,
   setSelectedCard,
 }) => {
-  const decrementCard = useUser((state) => state.decrementCard);
+  const removeCard = useUser((state) => state.removeCard);
   const decrementEnergy = useUser((state) => state.decrementEnergy);
   const decrementGold = useUser((state) => state.decrementGold);
   const { mapTile, unit: unitSizes } = useSizes();
@@ -355,32 +364,37 @@ export const BattleMap: FC<BattleMap> = ({
         .find((unit) => unit.coords.x === coords.x && unit.coords.y === coords.y)
         .receiveDamage(selectedUnit.damage, gameUnits),
   };
+
   const unitClick = (unit: Unit) => {
+    console.log('1    double click');
+    setSelectedUnit(unit);
+    setUnitActions(unit.getPossibleActions(gameUnits));
+
     if (selectedUnit?.id === unit.id) {
+      console.log('double click');
+
       setSelectedUnit(null);
       setUnitActions([]);
     }
-    setSelectedUnit(unit);
-    setUnitActions(unit.getPossibleActions(gameUnits));
   };
 
   const handleCardAction = (coords: UnitAction) => {
     selectedCard?.move(coords, gameUnits);
     setUnitActions([]);
     setSelectedCard(null);
-    decrementCard(selectedCard?.id);
+    removeCard(selectedCard?.id);
     decrementGold(selectedCard?.energy);
     setSelectedUnit(null);
   };
 
   const handleUnitAction = (coords: UnitAction) => unitActions[coords.type](coords);
-
   const handleMoveClick = (coords: UnitAction) => {
-    selectedUnit
-      ? handleUnitAction(coords)
-      : selectedCard && coords.type === UnitActionsTypes.MOVE
+    selectedCard && coords.type === UnitActionsTypes.MOVE
       ? handleCardAction(coords)
+      : selectedUnit
+      ? handleUnitAction(coords)
       : null;
+
     setUnitActions([]);
   };
 
