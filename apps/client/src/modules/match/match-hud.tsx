@@ -12,8 +12,39 @@ import { Card, Teams, Unit, UnitTypes } from './match-map';
 import { SidePanel } from './side-panel/side-panel';
 import { useSizes } from './utils/sprite-sizes';
 /// всіх юнітів хранити в зустанд , всі данні тут зберігати
+type useUserPorps = {
+  units: Unit[];
+  resources: {
+    gold: number;
+    energy: number;
+    hp: number;
+  };
+  cards: Card[];
+  time: string;
+  incremenUnit: (newUnit: Unit) => void;
+  decrementUnit: (unitId: number) => void;
+  incremenCard: (newCard: Card) => void;
+  decrementCard: (cardId: number) => void;
+  decrementGold: (gold: number) => void;
+  incrementGold: (gold: number) => void;
+  decrementEnergy: (energy: number) => void;
+  incrementEnergy: (energy: number) => void;
+  decrementHp: (hp: number) => void;
+  incrementHp: (hp: number) => void;
+  setTime: (time: string) => void;
+};
 export const useUser = create<useUserPorps>((set, get) => ({
-  units: [],
+  units: [
+    new Unit({
+      coords: { x: 1, y: 1 },
+      damage: 1,
+      hp: 5,
+      radius: 1,
+      source: 'resources/img/map/units/Worker_green.png',
+      type: UnitTypes.WARRIOR,
+      team: Teams.GREEN,
+    }),
+  ],
   resources: {
     gold: 42,
     energy: 0,
@@ -57,8 +88,9 @@ export const useUser = create<useUserPorps>((set, get) => ({
 
   time: '00:00',
 
-  addUnit: (newUnit) => set({ units: [...get().units, newUnit] }),
-  addCard: (newCard) => set({ cards: [...get().cards, newCard] }),
+  incremenUnit: (newUnit) => set({ units: [...get().units, newUnit] }),
+  decrementUnit: (unitId) => set({ units: get().units.filter((unit) => unit.id !== unitId) }),
+  incremenCard: (newCard) => set({ cards: [...get().cards, newCard] }),
   decrementCard: (cardId) => set({ cards: get().cards.filter((card) => card.id !== cardId) }),
 
   decrementGold: (gold) =>
@@ -77,43 +109,22 @@ export const useUser = create<useUserPorps>((set, get) => ({
   setTime: (time) => set({ time: time }),
 }));
 
-type useUserPorps = {
-  units: Unit[];
-  resources: {
-    gold: number;
-    energy: number;
-    hp: number;
-  };
-  cards: Card[];
-  time: string;
-  addUnit: (newUnit: Unit) => void;
-  addCard: (newCard: Card) => void;
-  decrementCard: (cardId: number) => void;
-  decrementGold: (gold: number) => void;
-  incrementGold: (gold: number) => void;
-  decrementEnergy: (energy: number) => void;
-  incrementEnergy: (energy: number) => void;
-  decrementHp: (hp: number) => void;
-  incrementHp: (hp: number) => void;
-  setTime: (time: string) => void;
-};
 type BattleHudprops = {
   children: ReactNode;
   setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
-  unitsList: Unit[];
   selectedCard: Card | null;
   setSelectedCard: React.Dispatch<React.SetStateAction<Card | null>>;
 };
 
 export const BattleHud: FC<BattleHudprops> = ({
   children,
-  unitsList,
   setUnitActions,
   selectedCard,
   setSelectedCard,
 }) => {
   const cards = useUser((state) => state.cards);
   const { gold } = useUser((state) => state.resources);
+  const unitsList = useUser((state) => state.units);
   const { bottomPanel, sidePanelLeft, topPanel, windowSize, map, homeButton, surrenderButton } =
     useSizes();
   const { openModal } = useModalContext();

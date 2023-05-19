@@ -59,7 +59,6 @@ type CreateGameObjectProperties = {
 } & Coordinates;
 
 type BattleMap = {
-  gameUnits: Unit[];
   actions: UnitAction[];
   selectedUnit: Unit | null;
   setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
@@ -348,7 +347,6 @@ export const CreateUnit = ({
 };
 
 export const BattleMap: FC<BattleMap> = ({
-  gameUnits,
   actions,
   setUnitActions,
   setSelectedUnit,
@@ -359,6 +357,7 @@ export const BattleMap: FC<BattleMap> = ({
   const decrementCard = useUser((state) => state.decrementCard);
   const decrementEnergy = useUser((state) => state.decrementEnergy);
   const decrementGold = useUser((state) => state.decrementGold);
+  const gameUnits = useUser((state) => state.units);
   const { mapTile, unit: unitSizes } = useSizes();
 
   const unitActions = {
