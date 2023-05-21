@@ -14,6 +14,23 @@ const redisKeys = {
   userActiveGame: (userId: string) => `${userId}-active-game`,
 };
 
+const redisUtilsGenerator =
+  <T>() =>
+  <K>(keyExtractor: (key: K) => string) => ({
+    get: async (key: K) => {
+      const response = await redisClient.get(keyExtractor(key));
+      return response ? (JSON.parse(response) as T) : null;
+    },
+    set: async (key: K, value: T) => await redisClient.set(keyExtractor(key), JSON.stringify(value)),
+    del: async (key: K) => await redisClient.del(keyExtractor(key)),
+  });
+
+const redisUtils = {
+  gameRoom: redisUtilsGenerator<Game>()(redisKeys.gameRoom),
+  gameSearch: redisUtilsGenerator<{ userId: string }>()(redisKeys.gameSearch),
+  userActiveGame: redisUtilsGenerator<string>()(redisKeys.userActiveGame),
+};
+
 const socketKeys = {
   gameRoom: (roomId: string) => `game-room:${roomId}`,
 };
@@ -156,18 +173,19 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
   await socket.join(userId);
 
-  const userActiveGameId = await redisClient.get(redisKeys.userActiveGame(userId));
+  const userActiveGameId = await redisUtils.userActiveGame.get(userId);
 
   if (userActiveGameId) {
     await socket.join(userActiveGameId);
   }
 
   socket.on(IoEvent.TURN_TO_SERVER, async (turnToServer) => {
-    const playerActiveGame = await redisClient.get(redisKeys.userActiveGame(turnToServer.player.userId));
+    const playerActiveGame = await redisUtils.userActiveGame.get(turnToServer.player.userId);
     if (!playerActiveGame) return;
-    const gameStringified = await redisClient.get(`game-room:${playerActiveGame}`);
-    if (!gameStringified) return;
-    const game = JSON.parse(gameStringified) as Game;
+
+    const game = await redisUtils.gameRoom.get(playerActiveGame);
+    if (!game) return;
+
     if (
       !game.players.some(
         (player) => player.userId === turnToServer.player.userId && player.team === turnToServer.player.team,
@@ -199,17 +217,17 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
     game.turns.push(turnFromServer);
 
-    await redisClient.set(redisKeys.gameRoom(turnToServer.game.id), JSON.stringify(game));
+    await redisUtils.gameRoom.set(turnToServer.game.id, game);
 
     socket.to(socketKeys.gameRoom(turnToServer.game.id)).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
   });
 
   socket.on(IoEvent.SEARCH_GAME, async () => {
-    const isUserHaveSearchRequest = await redisClient.get(redisKeys.gameSearch(userId));
+    const isUserHaveSearchRequest = await redisUtils.gameSearch.get(userId);
 
     if (userActiveGameId) return;
     if (isUserHaveSearchRequest) {
-      await redisClient.del(redisKeys.gameSearch(userId));
+      await redisUtils.gameSearch.del(userId);
     }
 
     const scan = redisClient.scanStream({
@@ -220,26 +238,31 @@ io.on(IoEvent.CONNECT, async (socket) => {
     scan.on('data', async (gameSearchesList: string[]) => {
       if (gameSearchesList.length === 0) return;
       for (const gameSearch of gameSearchesList) {
-        const gameSearchDataStringified = await redisClient.get(gameSearch);
+        const gameSearchDataStringified = await redisUtils.gameSearch() redisClient.get(gameSearch);
+
         if (!gameSearchDataStringified) {
           return;
         }
+
         const gameSearchData = JSON.parse(gameSearchDataStringified) as { userId: string };
-        const gameId = redisKeys.gameRoom(randomUUID());
-        await redisClient.set(gameId, JSON.stringify({ players: [userId, gameSearchData.userId] }));
-        await redisClient.set(redisKeys.userActiveGame(userId), gameId);
-        await redisClient.set(redisKeys.userActiveGame(gameSearchData.userId), gameId);
-        await redisClient.del(gameSearch);
+        const gameId = randomUUID();
+
+        await redisUtils.gameRoom.set(gameId, {} as Game);
+        await redisUtils.userActiveGame.set(userId, gameId);
+        await redisUtils.userActiveGame.set(gameSearchData.userId, gameId);
+        await redisUtils.gameSearch.del(gameSearch);
+
         io.to(userId)
           .to(gameSearchData.userId)
           .emit(IoEvent.GAME_FOUND, {} as Game);
+
         scan.destroy();
         break;
       }
     });
 
     scan.on('end', async () => {
-      await redisClient.set(redisKeys.gameSearch(userId), JSON.stringify({ userId }));
+      await redisUtils.gameSearch.set(userId, { userId });
     });
 
     // const scan21 = redisClient.scanStream({
@@ -266,7 +289,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
   });
 
   socket.on(IoEvent.GAME_LOADED, async () => {
-    const userActiveGame = await redisClient.get(redisKeys.userActiveGame(userId));
+    const userActiveGame = await redisUtils.userActiveGame.get(userId);
     if (!userActiveGame) return;
     await socket.join(socketKeys.gameRoom(userActiveGame));
   });
