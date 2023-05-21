@@ -9,7 +9,7 @@ RUN npm install -g turbo
 
 COPY . .
 
-RUN turbo prune --scope=api --docker
+RUN turbo prune --scope=@kol/api --docker
 
 
 
@@ -29,7 +29,7 @@ COPY .gitignore .gitignore
 COPY .api.env .api.env
 
 RUN pnpm install
-RUN pnpm build --filter=api...
+RUN pnpm build --filter=@kol/api...
 
 WORKDIR /app/apps/api
 RUN npm run generateDB

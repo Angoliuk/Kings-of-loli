@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { useSocket } from './hooks/use-socket';
 import { AppRouter } from './routes/app-router';
 import { trpc } from './trpc';
-
 export function App() {
   useSocket();
   const [queryClient] = useState(() => new QueryClient());

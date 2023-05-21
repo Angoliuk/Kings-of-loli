@@ -18,6 +18,6 @@
       "@api/interfaces": ["./src/interfaces"]
     }
   },
-  "include": ["./", ".eslintrc.js"],
+  "include": ["./", ".eslintrc.js", "../../packages/shared-game/src/interfaces/game.ts"],
   "exclude": ["node_modules"]
 }

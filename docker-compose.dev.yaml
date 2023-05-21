@@ -12,8 +12,7 @@ services:
     restart: always
     volumes:
       - ./:/app
-      - ./node_modules/eslint-config-base:/app/node_modules/eslint-config-base
-      - ./node_modules/tsconfig:/app/node_modules/tsconfig
+      - ./node_modules/@kol:/app/node_modules/@kol
       - /app/node_modules
       - /app/apps/api/node_modules
       - /app/packages/eslint/node_modules

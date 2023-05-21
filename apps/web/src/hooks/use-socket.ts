@@ -1,5 +1,6 @@
+import { IoEvent, type TurnToServer } from '@web/interfaces';
 import { useAuthStore } from '@web/store/auth-store/auth-store';
-import { connectToSocket, IoEvent, type TurnToServer } from '@web/utils';
+import { connectToSocket } from '@web/utils';
 import { useEffect } from 'react';
 
 export const useSocket = () => {
