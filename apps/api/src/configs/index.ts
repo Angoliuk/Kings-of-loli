@@ -1,2 +1,3 @@
 export { accessTokenCookieOptions, cookieOptions, refreshTokenCookieOptions } from './cookies';
-export * from './environment';
+export { type EnvironmentVariablesKeys } from './environment';
+export * from './sockets';
