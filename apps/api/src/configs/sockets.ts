@@ -238,7 +238,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
     scan.on('data', async (gameSearchesList: string[]) => {
       if (gameSearchesList.length === 0) return;
       for (const gameSearch of gameSearchesList) {
-        const gameSearchDataStringified = await redisUtils.gameSearch() redisClient.get(gameSearch);
+        const gameSearchDataStringified = await redisClient.get(gameSearch);
 
         if (!gameSearchDataStringified) {
           return;
