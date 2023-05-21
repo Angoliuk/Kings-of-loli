@@ -8,6 +8,11 @@ export enum GameObjectTypes {
   BUILDING = 'buildings',
 }
 
+export enum Teams {
+  BLUE = 'blue',
+  GREEN = 'green',
+}
+
 export type Player = {
   coins: number;
   energy: number;
@@ -32,7 +37,7 @@ export type Game = {
   players: [Player, Player];
   gameObjects: GameObjects;
   isFinished: boolean;
-  winnedUserId: string;
+  winnedUserId?: string;
   turnsCount: number;
   turns: TurnFromServer[];
 };
