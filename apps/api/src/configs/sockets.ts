@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { randomUUID } from 'node:crypto';
 
+import { createBaseGame } from '@api/services';
 import { Server, type Socket } from 'socket.io';
 
 import { redisClient } from '../database/redis';
@@ -114,7 +115,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
         io.to(userId)
           .to(gameSearchData.userId)
-          .emit(IoEvent.GAME_FOUND, {} as Game);
+          .emit(IoEvent.GAME_FOUND, createBaseGame([userId, gameId]));
 
         scan.destroy();
         break;
