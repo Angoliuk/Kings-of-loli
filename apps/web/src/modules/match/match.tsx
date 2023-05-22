@@ -1,15 +1,15 @@
+import { type CardObject, type UnitObject } from '@kol/shared-game/game-objects';
 import { useSocket } from '@web/hooks/use-socket';
 import { useState } from 'react';
 
-import { GameObjectTypes } from '../../../../api/src/interfaces/game';
 import { type UnitAction } from './actions/actions';
 import { BattleHud, useUser } from './match-hud';
-import { BattleMap, type Card, Teams, type Unit, UnitTypes } from './match-map';
+import { BattleMap } from './match-map';
 
 export const Match = () => {
   const [unitActions, setUnitActions] = useState<UnitAction[]>([]);
-  const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const [selectedUnit, setSelectedUnit] = useState<UnitObject.Unit | null>(null);
+  const [selectedCard, setSelectedCard] = useState<CardObject.Card | null>(null);
   const { gameLoaded, startSearch, turn } = useSocket();
 
   const updatesData = [{ id: 1, update: true }];

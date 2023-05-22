@@ -1,14 +1,9 @@
-export type Card = { id: string };
-export type Building = { id: string };
-export type Unit = { id: string };
+import { Building } from '../game-objects/buildings';
+import { Card } from '../game-objects/cards';
+import { Unit } from '../game-objects/units';
+import { GameObjectType } from './game-objects';
 
-export enum GameObjectTypes {
-  CARD = 'cards',
-  UNIT = 'units',
-  BUILDING = 'buildings',
-}
-
-export enum Teams {
+export enum Team {
   BLUE = 'blue',
   GREEN = 'green',
 }
@@ -21,15 +16,15 @@ export type Player = {
 };
 
 export type GameObjects = {
-  [GameObjectTypes.CARD]: Card[];
-  [GameObjectTypes.BUILDING]: Building[];
-  [GameObjectTypes.UNIT]: Unit[];
+  [GameObjectType.CARD]: Card[];
+  [GameObjectType.BUILDING]: Building[];
+  [GameObjectType.UNIT]: Unit[];
 };
 
 export type RemovedGameObjects = {
-  [GameObjectTypes.CARD]: string[];
-  [GameObjectTypes.BUILDING]: string[];
-  [GameObjectTypes.UNIT]: string[];
+  [GameObjectType.CARD]: string[];
+  [GameObjectType.BUILDING]: string[];
+  [GameObjectType.UNIT]: string[];
 };
 
 export type Game = {

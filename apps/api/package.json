@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "main": "./server.ts",
+  "type": "module",
   "tsup": {
     "entry": [
       "src/server.ts"
@@ -11,7 +12,7 @@
     "sourcemap": true,
     "clean": true,
     "format": [
-      "cjs"
+      "esm"
     ]
   },
   "scripts": {
@@ -39,6 +40,7 @@
   },
   "dependencies": {
     "eslint-config-base": "workspace:^",
+    "@kol/shared-game": "workspace:^",
     "tsconfig": "workspace:^",
     "@prisma/client": "^4.11.0",
     "@trpc/server": "^10.14.1",

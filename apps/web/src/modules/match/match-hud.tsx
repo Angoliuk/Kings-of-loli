@@ -1,3 +1,5 @@
+import { BuildingObject, CardObject, UnitObject } from '@kol/shared-game/game-objects';
+import { BuildingType, CardType, Team, UnitType } from '@kol/shared-game/interfaces';
 import { Container, Sprite, Stage } from '@pixi/react';
 import { CoinBar } from '@web/components/hud/coin-bar/coin-bar';
 import { EnergyBar } from '@web/components/hud/energy-bar/energy-bar';
@@ -10,70 +12,21 @@ import { create } from 'zustand';
 
 import { type UnitAction } from './actions/actions';
 import { Cards } from './cards/cards';
-import { Build, Card, GameObjectTypes, Teams, Unit, UnitTypes } from './match-map';
 import { SidePanel } from './side-panel/side-panel';
 import { useSizes } from './utils/sprite-sizes';
-type Card = unknown;
-type Unit = unknown;
-type Building = unknown;
-
-type Player = {
-  coins: number;
-  energy: number;
-  userId: string;
-  team: string;
-};
-
-type GameCompact = {
-  turnsCount: number;
-  id: string;
-  isFinished: boolean;
-  winnedUserId: string;
-};
-
-type Game = {
-  id: string;
-  players: [Player, Player];
-  gameObjects: {
-    cards: Card;
-    buildings: Building;
-    units: Unit[];
-  };
-  isFinished: boolean;
-  winnedUserId: string;
-  turnsCount: number;
-  turns: Turn[];
-};
-type Turn = {
-  turn: number;
-
-  game: GameCompact;
-
-  player: Player;
-
-  newObjects?: {
-    cards?: Card[];
-    units?: Unit[];
-    building?: Building[];
-  };
-  removedObjects?: {
-    cards?: string[];
-    units?: string[];
-    building?: string[];
-  };
-  updatedObjects?: {
-    cards?: Card[];
-    units?: Unit[];
-    building?: Building[];
-  };
-};
 
 type TurnProperties = {
   updateTurn: (updatedTurn: Turn) => void;
   setPlayerResources: (resources: number, field: Resources) => void;
-  updateNewObjects: (object: Card | Unit | Build, field: TurnObjects) => void;
-  updateRemovedObjects: (object: Card | Unit | Build, field: TurnObjects) => void;
-  updateUpdatedObjects: (object: Card | Unit | Build, field: TurnObjects) => void;
+  updateNewObjects: (object: CardObject.Card | UnitObject.Unit | BuildingObject.Building, field: TurnObjects) => void;
+  updateRemovedObjects: (
+    object: CardObject.Card | UnitObject.Unit | BuildingObject.Building,
+    field: TurnObjects,
+  ) => void;
+  updateUpdatedObjects: (
+    object: CardObject.Card | UnitObject.Unit | BuildingObject.Building,
+    field: TurnObjects,
+  ) => void;
 } & Turn;
 export enum Resources {
   COINS = 'coins',
@@ -86,22 +39,22 @@ export enum TurnObjects {
   UNITS = 'units',
 }
 type useUserPorps = {
-  userId: number;
-  units: Unit[];
-  builds: Build[];
-  playerTeam: Teams;
+  userId: string;
+  units: UnitObject.Unit[];
+  builds: BuildingObject.Building[];
+  playerTeam: Team;
   resources: {
     coins: number;
     energy: number;
     hp: number;
   };
-  cards: Card[];
+  cards: CardObject.Card[];
   time: string;
 
-  addUnit: (newObject: Unit[]) => void;
-  updatedUnit: (updatedUnit: Unit) => void;
-  killUnit: (unitId: number[]) => void;
-  addnCard: (newCard: Card[]) => void;
+  addUnit: (newObject: UnitObject.Unit[]) => void;
+  updatedUnit: (updatedUnit: UnitObject.Unit) => void;
+  killUnit: (unitId: string[]) => void;
+  addnCard: (newCard: CardObject.Card[]) => void;
   removeCard: (cardId: number[]) => void;
   decremenResources: (value: number, resource: Resources) => void;
   incrementResources: (value: number, resource: Resources) => void;
@@ -119,15 +72,15 @@ export const GameUnitPossibleStats = {
     damage: [1, 4],
     hp: [1, 6],
     radius: [1, 2],
-    team: Teams,
-    type: UnitTypes,
+    team: Team,
+    type: UnitType,
     price: [2, 6],
     energy: [1, 4],
   },
   build: {
     hp: [2, 6],
-    team: Teams,
-    type: UnitTypes, // enum for Build
+    team: Team,
+    type: UnitType, // enum for BuildingObject.Building
     price: [1, 5],
   },
 };
@@ -135,56 +88,52 @@ export const GameUnitPossibleStats = {
 export const randomIntFromInterval = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
 
 export const useUser = create<useUserPorps>((set, get) => ({
-  userId: Math.random() * 10,
-  playerTeam: Teams.GREEN,
+  userId: (Math.random() * 10).toString(),
+  playerTeam: Team.GREEN,
   units: [
-    new Unit({
+    new UnitObject.Unit({
       coords: { x: 1, y: 1 },
       damage: randomIntFromInterval(GameUnitPossibleStats.unit.damage[0], GameUnitPossibleStats.unit.damage[1]),
       hp: randomIntFromInterval(GameUnitPossibleStats.unit.hp[0], GameUnitPossibleStats.unit.hp[1]),
       radius: randomIntFromInterval(GameUnitPossibleStats.unit.radius[0], GameUnitPossibleStats.unit.radius[1]),
       source: 'resources/img/map/units/Worker_green.png',
-      type: UnitTypes.WARRIOR,
-      team: Teams.GREEN,
+      team: Team.GREEN,
       energy: randomIntFromInterval(GameUnitPossibleStats.unit.energy[0], GameUnitPossibleStats.unit.energy[1]),
+      unitType: UnitType.WARRIOR,
       possibleMoves: 3,
-      unitType: GameObjectTypes.UNIT,
     }),
-    new Unit({
+    new UnitObject.Unit({
       coords: { x: 2, y: 2 },
       damage: randomIntFromInterval(GameUnitPossibleStats.unit.damage[0], GameUnitPossibleStats.unit.damage[1]),
       hp: randomIntFromInterval(GameUnitPossibleStats.unit.hp[0], GameUnitPossibleStats.unit.hp[1]),
       radius: randomIntFromInterval(GameUnitPossibleStats.unit.radius[0], GameUnitPossibleStats.unit.radius[1]),
       source: 'resources/img/map/units/Worker_blue.png',
-      type: UnitTypes.WARRIOR,
-      team: Teams.BLUE,
+      unitType: UnitType.WARRIOR,
+      team: Team.BLUE,
       energy: randomIntFromInterval(GameUnitPossibleStats.unit.energy[0], GameUnitPossibleStats.unit.energy[1]),
       possibleMoves: 1,
-      unitType: GameObjectTypes.UNIT,
     }),
   ],
   builds: [
-    new Build({
+    new BuildingObject.Building({
       coords: [
         { x: 0, y: 1 },
         { x: 0, y: 2 },
       ],
       hp: 6,
       source: 'resources/img/map/units/mill-hd.png',
-      team: Teams.BLUE,
-      type: UnitTypes.BUILD,
-      unitType: GameObjectTypes.BUILD,
+      team: Team.BLUE,
+      buildingType: BuildingType.CASTLE,
     }),
-    new Build({
+    new BuildingObject.Building({
       coords: [
         { x: 0, y: 4 },
         { x: 0, y: 5 },
       ],
       hp: 6,
       source: 'resources/img/map/units/mill-hd.png',
-      team: Teams.BLUE,
-      type: UnitTypes.BUILD,
-      unitType: GameObjectTypes.BUILD,
+      team: Team.BLUE,
+      buildingType: BuildingType.CASTLE,
     }),
   ],
   resources: {
@@ -193,44 +142,41 @@ export const useUser = create<useUserPorps>((set, get) => ({
     hp: 0,
   },
   cards: [
-    new Card({
-      team: Teams.GREEN,
+    new CardObject.Card({
+      team: Team.GREEN,
       radius: randomIntFromInterval(GameUnitPossibleStats.card.radius[0], GameUnitPossibleStats.card.radius[1]),
       damage: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
       hp: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
       source: 'resources/img/cards/peasant-card.png',
       unitSource: 'resources/img/map/units/Worker_blue.png',
-      type: UnitTypes.WARRIOR,
       price: randomIntFromInterval(GameUnitPossibleStats.card.price[0], GameUnitPossibleStats.card.price[1]),
       energy: randomIntFromInterval(GameUnitPossibleStats.card.energy[0], GameUnitPossibleStats.card.energy[1]),
       possibleMoves: 2,
-      unitType: GameObjectTypes.CARD,
+      cardType: CardType.UNIT,
     }),
-    new Card({
-      team: Teams.BLUE,
+    new CardObject.Card({
+      team: Team.BLUE,
       radius: randomIntFromInterval(GameUnitPossibleStats.card.radius[0], GameUnitPossibleStats.card.radius[1]),
       damage: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
       hp: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
       source: 'resources/img/cards/peasant-card.png',
       unitSource: 'resources/img/map/units/Worker_blue.png',
-      type: UnitTypes.WARRIOR,
       price: randomIntFromInterval(GameUnitPossibleStats.card.price[0], GameUnitPossibleStats.card.price[1]),
       energy: randomIntFromInterval(GameUnitPossibleStats.card.energy[0], GameUnitPossibleStats.card.energy[1]),
       possibleMoves: 1,
-      unitType: GameObjectTypes.CARD,
+      cardType: CardType.UNIT,
     }),
-    new Card({
-      team: Teams.BLUE,
+    new CardObject.Card({
+      team: Team.BLUE,
       radius: randomIntFromInterval(GameUnitPossibleStats.card.radius[0], GameUnitPossibleStats.card.radius[1]),
       damage: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
       hp: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
       source: 'resources/img/cards/peasant-card.png',
       unitSource: 'resources/img/map/units/Worker_blue.png',
-      type: UnitTypes.WARRIOR,
       price: randomIntFromInterval(GameUnitPossibleStats.card.price[0], GameUnitPossibleStats.card.price[1]),
       energy: randomIntFromInterval(GameUnitPossibleStats.card.energy[0], GameUnitPossibleStats.card.energy[1]),
       possibleMoves: 1,
-      unitType: GameObjectTypes.CARD,
+      cardType: CardType.UNIT,
     }),
   ],
 
@@ -340,8 +286,8 @@ export const useTurn = create<TurnProperties>((set, get) => ({
 type BattleHudprops = {
   children: ReactNode;
   setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
-  selectedCard: Card | null;
-  setSelectedCard: React.Dispatch<React.SetStateAction<Card | null>>;
+  selectedCard: CardObject.Card | null;
+  setSelectedCard: React.Dispatch<React.SetStateAction<CardObject.Card | null>>;
 };
 
 export const BattleHud: FC<BattleHudprops> = ({ children, setUnitActions, selectedCard, setSelectedCard }) => {
@@ -360,14 +306,14 @@ export const BattleHud: FC<BattleHudprops> = ({ children, setUnitActions, select
   };
 
   const cardHandler = useCallback(
-    (card: Card) => {
+    (card: CardObject.Card) => {
       if (selectedCard?.id === card.id) {
         setSelectedCard(null);
         setUnitActions([]);
         return;
       }
       setSelectedCard(card);
-      setUnitActions(card.getPossibleCardActions(unitsList, buildsList));
+      setUnitActions(card.getPossibleCardActions([...unitsList, ...buildsList]));
     },
     [selectedCard],
   );
@@ -414,17 +360,16 @@ export const BattleHud: FC<BattleHudprops> = ({ children, setUnitActions, select
               interactive={true}
               click={() => {
                 test([
-                  new Unit({
+                  new UnitObject.Unit({
                     coords: { x: 3, y: 3 },
                     damage: 1,
                     hp: 1,
                     radius: 1,
                     source: 'resources/img/map/units/Worker_blue.png',
-                    type: UnitTypes.WARRIOR,
-                    team: Teams.BLUE,
+                    unitType: UnitType.WARRIOR,
+                    team: Team.BLUE,
                     energy: 2,
                     possibleMoves: 1,
-                    unitType: GameObjectTypes.UNIT,
                   }),
                 ]);
               }}

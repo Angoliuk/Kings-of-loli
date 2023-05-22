@@ -1,6 +1,8 @@
 import './configs/environment';
 import './database/redis';
 
+// import { a } from '@kol/shared-game';
+// console.log(a);
 import http from 'node:http';
 
 import type { PrismaClient, User } from '@prisma/client';
@@ -34,4 +36,6 @@ app.use(
 );
 const server = http.createServer(app);
 io.attach(server);
-server.listen(process.env.API_PORT, () => console.log(`Server started on port ${process.env.API_PORT}`));
+server.listen(process.env.API_PORT, () => {
+  console.log(`Server started on port ${process.env.API_PORT}`);
+});

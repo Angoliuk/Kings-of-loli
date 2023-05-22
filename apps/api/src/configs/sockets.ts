@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { randomUUID } from 'node:crypto';
 
-import { createBaseGame } from '@api/services';
 import { Server, type Socket } from 'socket.io';
 
 import { redisClient } from '../database/redis';
 import {
-  type Game,
-  GameObjectTypes,
-  type IoClientToServerEvents,
-  type IoData,
+  IoClientToServerEvents,
+  IoServerToClientEvents,
+  IoData,
   IoEvent,
-  type IoServerToClientEvents,
-} from '../interfaces';
-import { redisKeys, redisUtils, socketKeys, updateGameObjectsGroup } from '../services/redis';
+  GameObjectTypes,
+  Game,
+} from '@kol/shared-game/interfaces';
+import { createBaseGame } from '@kol/shared-game/utils';
+import { redisUtils, updateGameObjectsGroup, socketKeys, redisKeys } from '../services/redis';
 export const io = new Server<IoClientToServerEvents, IoServerToClientEvents, never, IoData>({
   transports: ['websocket'],
   cors: {

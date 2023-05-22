@@ -1,0 +1,11 @@
+{
+  "*.{js,jsx,ts,tsx}": [
+    "tsc-files --noEmit",
+    "eslint --max-warnings=0",
+    "prettier --check"
+  ],
+  "*.css": [
+    "stylelint",
+    "prettier --check"
+  ]
+}

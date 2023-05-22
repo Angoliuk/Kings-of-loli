@@ -1,15 +1,10 @@
+import { type ActionType, type Coordinates } from '@kol/shared-game/interfaces';
 import { type FC, memo } from 'react';
 
-import { type Coordinates } from '../match-map';
 import { GameObjectAction } from './action';
 
-export enum UnitActionsTypes {
-  ATTACK = 'attack',
-  MOVE = 'move',
-}
-
 export type UnitAction = {
-  type: UnitActionsTypes;
+  type: ActionType;
   src: string;
 } & Coordinates;
 

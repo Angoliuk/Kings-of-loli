@@ -1,62 +1,13 @@
+import { type CardObject, type UnitObject } from '@kol/shared-game/game-objects';
+import { ActionType, type Coordinates } from '@kol/shared-game/interfaces';
 import { Container, Sprite } from '@pixi/react';
 import { type FC } from 'react';
 
-import { GameObjectActions, type UnitAction, UnitActionsTypes } from './actions/actions';
-import { GAME_FIELD, HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from './constants';
+import { GameObjectActions, type UnitAction } from './actions/actions';
+import { HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from './constants';
 import { GameField } from './field/field';
 import { Resources, TurnObjects, useTurn, useUser } from './match-hud';
 import { useSizes } from './utils/sprite-sizes';
-
-enum PatternTypes {
-  STAR = 'star',
-}
-export enum Teams {
-  BLUE = 'blue',
-  GREEN = 'green',
-}
-export enum UnitTypes {
-  ARCHER = 'archer',
-  WARRIOR = 'warrior',
-  BUILD = 'build',
-}
-export enum GameObjectTypes {
-  BUILD = 'builds',
-  UNIT = ' units',
-  CARD = 'cards',
-}
-export type Coordinates = {
-  x: number;
-  y: number;
-};
-
-type GameUnitsProperties = {
-  source: string;
-  hp: number;
-  type: UnitTypes;
-  team: Teams;
-  id?: number;
-  unitType: GameObjectTypes;
-};
-
-export type UnitProperties = {
-  damage: number;
-  radius: number;
-  pattern?: PatternTypes;
-  coords: Coordinates;
-  energy: number;
-  possibleMoves: number;
-} & GameUnitsProperties;
-
-type BuildProperties = { coords: Coordinates[] } & GameUnitsProperties;
-
-type CardProperties = {
-  damage: number;
-  radius: number;
-  unitSource: string;
-  energy: number;
-  possibleMoves: number;
-  price: number;
-} & GameUnitsProperties;
 
 type CreateGameObjectProperties = {
   handleClick?: React.MouseEventHandler;
@@ -70,259 +21,11 @@ type CreateGameObjectProperties = {
 
 type BattleMap = {
   actions: UnitAction[];
-  selectedUnit: Unit | null;
+  selectedUnit: UnitObject.Unit | null;
   setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
-  setSelectedUnit: React.Dispatch<React.SetStateAction<Unit | null>>;
-  selectedCard: Card | null;
-  setSelectedCard: React.Dispatch<React.SetStateAction<Card | null>>;
-};
-
-class GameUnits {
-  #source;
-  #hp;
-  #type;
-  #team;
-  #id = Math.random();
-  #unitType;
-  constructor({ source, hp, type, team, unitType }: GameUnitsProperties) {
-    this.#source = source;
-    this.#unitType = unitType;
-    this.#hp = hp;
-    this.#type = type;
-    this.#team = team;
-  }
-  get unitType() {
-    return this.#unitType;
-  }
-  get id() {
-    return this.#id;
-  }
-
-  get source() {
-    return this.#source;
-  }
-
-  get hp() {
-    return this.#hp;
-  }
-
-  get team() {
-    return this.#team;
-  }
-  get type() {
-    return this.#type;
-  }
-  receiveDamage(damage: number, units: Unit[] | Build[]) {
-    this.#hp -= damage;
-    if (this.#hp < 2) {
-      return this.killUnit(units);
-    }
-  }
-  killUnit(units: Unit[] | Build[]) {
-    units.map((unit, index) => unit.id === this.#id && units.splice(index, 1));
-    return true;
-  }
-}
-export class Unit extends GameUnits {
-  #pattern;
-  #radius;
-  #damage;
-  #coords;
-  #energy;
-  #possibleMoves;
-
-  constructor({
-    source,
-    hp,
-    coords,
-    damage,
-    radius,
-    type,
-    pattern,
-    team,
-    energy,
-    possibleMoves,
-    unitType,
-  }: UnitProperties) {
-    super({
-      unitType: unitType,
-      hp: hp,
-      source: source,
-      team: team,
-      type: type,
-    });
-    this.#possibleMoves = possibleMoves;
-    this.#energy = energy;
-    this.#coords = coords;
-    this.#damage = damage;
-    this.#radius = radius;
-    this.#pattern = pattern ?? PatternTypes.STAR;
-  }
-  get damage() {
-    return this.#damage;
-  }
-  get coords() {
-    return this.#coords;
-  }
-  get energy() {
-    return this.#energy;
-  }
-  getPossibleActions(units: Unit[], builds: Build[]) {
-    if (this.#possibleMoves === 0) return [];
-    const possibleActions = patterns[this.#pattern](this.#coords).filter((action) =>
-      (action.x === this.#coords.x && action.y === this.#coords.y) ||
-      action.x > GAME_FIELD.x ||
-      action.x < 0 ||
-      action.y >= GAME_FIELD.y ||
-      action.y < 0 ||
-      units.some((unit) => unit.coords.x === action.x && unit.coords.y === action.y && unit.team === this.team)
-        ? false
-        : true,
-    );
-
-    return possibleActions.map((action) => ({
-      ...action,
-      src: 'resources/img/map/tiles/point.png',
-      type:
-        units.some((unit) => unit.coords.x === action.x && unit.coords.y === action.y) ||
-        builds.some((build) =>
-          build.coords.some((buildCoords) => buildCoords.x === action.x && buildCoords.y === action.y),
-        )
-          ? UnitActionsTypes.ATTACK
-          : UnitActionsTypes.MOVE,
-      unitType: units.some((unit) => unit.coords.x === action.x && unit.coords.y === action.y)
-        ? UnitTypes.WARRIOR
-        : UnitTypes.BUILD,
-    }));
-  }
-  move(coords: Coordinates) {
-    this.#coords = coords;
-    this.#possibleMoves -= 0;
-  }
-  killUnit(units: Unit[]) {
-    units.map((unit, index) => unit.id === this.id && units.splice(index, 1));
-    return true;
-  }
-}
-
-export class Card extends GameUnits {
-  #radius;
-  #damage;
-  #unitSource;
-  #price;
-  #energy;
-  #possibleMoves;
-  constructor({
-    unitType,
-    damage,
-    hp,
-    source,
-    type,
-    radius,
-    team,
-    unitSource,
-    price,
-    energy,
-    possibleMoves,
-  }: CardProperties) {
-    super({
-      unitType: unitType,
-      hp: hp,
-      source: source,
-      team: team,
-      type: type,
-    });
-    this.#possibleMoves = possibleMoves;
-    this.#unitSource = unitSource;
-    this.#damage = damage;
-    this.#radius = radius;
-    this.#price = price;
-    this.#energy = energy;
-  }
-  get price() {
-    return this.#price;
-  }
-  get energy() {
-    return this.#energy;
-  }
-  get damage() {
-    return this.#damage;
-  }
-  getPossibleCardActions(units: Unit[], builds: Build[]) {
-    const possibleMoves: UnitAction[] = [];
-    for (let y = 0; y < GAME_FIELD.y; y++) {
-      for (let x = 0; x < Math.floor(GAME_FIELD.x / 2); x++) {
-        possibleMoves.push({
-          x: x,
-          y: y,
-          type: UnitActionsTypes.MOVE,
-          src: 'resources/img/map/tiles/point.png',
-        });
-      }
-    }
-    return possibleMoves.filter(
-      (move) =>
-        !units.some((unit) => move.x === unit.coords.x && move.y === unit.coords.y) &&
-        !builds.some((build) =>
-          build.coords.some((buildCoords) => buildCoords.x === move.x && buildCoords.y === move.y),
-        ),
-    );
-  }
-  move(coords: Coordinates, units: Unit[]) {
-    console.log(units, 'Card');
-    units.push(
-      new Unit({
-        coords: coords,
-        damage: this.#damage,
-        hp: this.hp,
-        radius: this.#radius,
-        source: this.#unitSource,
-        team: this.team,
-        type: this.type,
-        energy: this.#energy,
-        possibleMoves: this.#possibleMoves,
-        unitType: GameObjectTypes.UNIT,
-      }),
-    );
-  }
-}
-
-export class Build extends GameUnits {
-  #coords;
-  constructor({ source, hp, coords, type, team, unitType }: BuildProperties) {
-    super({
-      unitType: unitType,
-      source: source,
-      hp: hp,
-      type: type,
-      team: team,
-    });
-    this.#coords = coords;
-  }
-  get coords() {
-    return this.#coords;
-  }
-}
-
-const patterns = {
-  star: ({ x, y }: Coordinates) => {
-    const radius = 1;
-    const unit_moves = [];
-    for (let indexY = -radius; indexY <= radius; indexY++) {
-      for (let indexX = -radius; indexX <= radius; indexX++) {
-        const xCoord = x + indexX;
-        const yCoord = y + indexY;
-        if (indexX === -radius && indexY === -radius) {
-          unit_moves.push({ x: xCoord - 1, y: yCoord - 1 }, { x: xCoord - 1, y: yCoord + 3 });
-        } else if (indexX === radius && indexY === radius) {
-          unit_moves.push({ x: xCoord + 1, y: yCoord + 1 }, { x: xCoord + 1, y: yCoord - 3 });
-        }
-        unit_moves.push({ x: xCoord, y: yCoord });
-      }
-    }
-
-    return unit_moves;
-  },
+  setSelectedUnit: React.Dispatch<React.SetStateAction<UnitObject.Unit | null>>;
+  selectedCard: CardObject.Card | null;
+  setSelectedCard: React.Dispatch<React.SetStateAction<CardObject.Card | null>>;
 };
 
 const CreateGameObjectHealth = ({ x, y, hp }: { hp: number } & Coordinates) => {
@@ -455,7 +158,7 @@ export const BattleMap: FC<BattleMap> = ({
       ),
   };
 
-  const unitClick = (unit: Unit) => {
+  const unitClick = (unit: UnitObject.Unit) => {
     console.log('1    double click');
     setSelectedUnit(unit);
     setUnitActions(unit.getPossibleActions(gameUnits, builds));
@@ -485,7 +188,7 @@ export const BattleMap: FC<BattleMap> = ({
       : unitActions[coords.type](coords);
 
   const handleMoveClick = (coords: UnitAction) => {
-    selectedCard && coords.type === UnitActionsTypes.MOVE
+    selectedCard && coords.type === ActionType.MOVE
       ? handleCardAction(coords)
       : selectedUnit
       ? handleUnitAction(coords)

@@ -1,10 +1,8 @@
-import { randomUUID } from 'node:crypto';
-
-import { type Game, Teams } from '../interfaces';
+import { type Game, Team } from '../interfaces';
 
 export const createBaseGame = (players: [string, string]): Game => {
   return {
-    id: randomUUID(),
+    id: '12',
     isFinished: false,
     turns: [],
     turnsCount: 0,
@@ -18,13 +16,13 @@ export const createBaseGame = (players: [string, string]): Game => {
       {
         coins: 7,
         energy: 8,
-        team: Teams.BLUE,
+        team: Team.BLUE,
         userId: players[0],
       },
       {
         coins: 7,
         energy: 8,
-        team: Teams.GREEN,
+        team: Team.GREEN,
         userId: players[1],
       },
     ],

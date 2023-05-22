@@ -5,7 +5,7 @@
     "target": "ES2022",
     "rootDir": "./",
     "allowJs": true,
-    "module": "Node16",
+    "moduleResolution": "bundler",
     "strict": true,
     "paths": {
       "@api/middlewares": ["./src/middlewares"],
@@ -18,6 +18,6 @@
       "@api/interfaces": ["./src/interfaces"]
     }
   },
-  "include": ["./", ".eslintrc.js", "../../packages/shared-game/src/interfaces/game.ts"],
+  "include": ["./", ".eslintrc.js"],
   "exclude": ["node_modules"]
 }

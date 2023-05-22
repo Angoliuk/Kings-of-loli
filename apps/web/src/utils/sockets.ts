@@ -1,6 +1,5 @@
+import { type IoClientToServerEvents, type IoServerToClientEvents } from '@kol/shared-game/interfaces';
 import { io, type Socket } from 'socket.io-client';
-
-import { type IoClientToServerEvents, type IoServerToClientEvents } from '../../../api/src/interfaces/sockets';
 
 declare global {
   interface Window {

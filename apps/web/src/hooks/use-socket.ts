@@ -1,4 +1,4 @@
-import { IoEvent, type TurnToServer } from '@web/interfaces';
+import { IoEvent, type TurnToServer } from '@kol/shared-game/interfaces';
 import { useTurn, useUser } from '@web/modules/match/match-hud';
 import { AppRoutes } from '@web/routes/app-router-enum';
 import { useAuthStore } from '@web/store/auth-store/auth-store';

@@ -1,6 +1,5 @@
 import { redisClient } from '@api/database';
-
-import { type Game, type GameObjects, type GameObjectTypes, type TurnToServer } from '../interfaces';
+import { type Game, type GameObjects, type GameObjectTypes, type TurnToServer } from '@kol/shared-game/interfaces';
 
 export const redisKeys = {
   gameRoom: (roomId: string) => `game-room:${roomId}`,
