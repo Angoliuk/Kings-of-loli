@@ -46,7 +46,7 @@
   background-position-y: -2px;
   background-size: 15% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .nicknameInput {
@@ -55,7 +55,7 @@
   background-position-y: -2px;
   background-size: 15% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .submit {
@@ -67,7 +67,7 @@
   background-size: 100% 100%;
   border: none;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 
   transition: all 0.12s;
 }

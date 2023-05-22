@@ -4,7 +4,7 @@ import { type FC } from 'react';
 import { GameObjectActions, type UnitAction, UnitActionsTypes } from './actions/actions';
 import { GAME_FIELD, HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from './constants';
 import { GameField } from './field/field';
-import { useUser } from './match-hud';
+import { Resources, TurnObjects, useTurn, useUser } from './match-hud';
 import { useSizes } from './utils/sprite-sizes';
 
 enum PatternTypes {
@@ -17,6 +17,12 @@ export enum Teams {
 export enum UnitTypes {
   ARCHER = 'archer',
   WARRIOR = 'warrior',
+  BUILD = 'build',
+}
+export enum GameObjectTypes {
+  BUILD = 'builds',
+  UNIT = ' units',
+  CARD = 'cards',
 }
 export type Coordinates = {
   x: number;
@@ -29,6 +35,7 @@ type GameUnitsProperties = {
   type: UnitTypes;
   team: Teams;
   id?: number;
+  unitType: GameObjectTypes;
 };
 
 export type UnitProperties = {
@@ -37,15 +44,17 @@ export type UnitProperties = {
   pattern?: PatternTypes;
   coords: Coordinates;
   energy: number;
+  possibleMoves: number;
 } & GameUnitsProperties;
 
-type BuildProperties = { coords: Coordinates } & GameUnitsProperties;
+type BuildProperties = { coords: Coordinates[] } & GameUnitsProperties;
 
 type CardProperties = {
   damage: number;
   radius: number;
   unitSource: string;
   energy: number;
+  possibleMoves: number;
   price: number;
 } & GameUnitsProperties;
 
@@ -60,7 +69,6 @@ type CreateGameObjectProperties = {
 } & Coordinates;
 
 type BattleMap = {
-  gameUnits: Unit[];
   actions: UnitAction[];
   selectedUnit: Unit | null;
   setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
@@ -75,13 +83,17 @@ class GameUnits {
   #type;
   #team;
   #id = Math.random();
-  constructor({ source, hp, type, team }: GameUnitsProperties) {
+  #unitType;
+  constructor({ source, hp, type, team, unitType }: GameUnitsProperties) {
     this.#source = source;
+    this.#unitType = unitType;
     this.#hp = hp;
     this.#type = type;
     this.#team = team;
   }
-
+  get unitType() {
+    return this.#unitType;
+  }
   get id() {
     return this.#id;
   }
@@ -100,13 +112,13 @@ class GameUnits {
   get type() {
     return this.#type;
   }
-  receiveDamage(damage: number, units: Unit[]) {
+  receiveDamage(damage: number, units: Unit[] | Build[]) {
     this.#hp -= damage;
     if (this.#hp < 2) {
       return this.killUnit(units);
     }
   }
-  killUnit(units: Unit[]) {
+  killUnit(units: Unit[] | Build[]) {
     units.map((unit, index) => unit.id === this.#id && units.splice(index, 1));
     return true;
   }
@@ -117,14 +129,29 @@ export class Unit extends GameUnits {
   #damage;
   #coords;
   #energy;
+  #possibleMoves;
 
-  constructor({ source, hp, coords, damage, radius, type, pattern, team, energy }: UnitProperties) {
+  constructor({
+    source,
+    hp,
+    coords,
+    damage,
+    radius,
+    type,
+    pattern,
+    team,
+    energy,
+    possibleMoves,
+    unitType,
+  }: UnitProperties) {
     super({
+      unitType: unitType,
       hp: hp,
       source: source,
       team: team,
       type: type,
     });
+    this.#possibleMoves = possibleMoves;
     this.#energy = energy;
     this.#coords = coords;
     this.#damage = damage;
@@ -140,14 +167,15 @@ export class Unit extends GameUnits {
   get energy() {
     return this.#energy;
   }
-  getPossibleActions(units: Unit[]) {
+  getPossibleActions(units: Unit[], builds: Build[]) {
+    if (this.#possibleMoves === 0) return [];
     const possibleActions = patterns[this.#pattern](this.#coords).filter((action) =>
       (action.x === this.#coords.x && action.y === this.#coords.y) ||
       action.x > GAME_FIELD.x ||
       action.x < 0 ||
       action.y >= GAME_FIELD.y ||
       action.y < 0 ||
-      units.some((unit) => unit.#coords.x === action.x && unit.#coords.y === action.y && unit.team === this.team)
+      units.some((unit) => unit.coords.x === action.x && unit.coords.y === action.y && unit.team === this.team)
         ? false
         : true,
     );
@@ -155,14 +183,21 @@ export class Unit extends GameUnits {
     return possibleActions.map((action) => ({
       ...action,
       src: 'resources/img/map/tiles/point.png',
-      type: units.some((unit) => unit.#coords.x === action.x && unit.#coords.y === action.y)
-        ? UnitActionsTypes.ATTACK
-        : UnitActionsTypes.MOVE,
+      type:
+        units.some((unit) => unit.coords.x === action.x && unit.coords.y === action.y) ||
+        builds.some((build) =>
+          build.coords.some((buildCoords) => buildCoords.x === action.x && buildCoords.y === action.y),
+        )
+          ? UnitActionsTypes.ATTACK
+          : UnitActionsTypes.MOVE,
+      unitType: units.some((unit) => unit.coords.x === action.x && unit.coords.y === action.y)
+        ? UnitTypes.WARRIOR
+        : UnitTypes.BUILD,
     }));
   }
   move(coords: Coordinates) {
-    console.log(1);
     this.#coords = coords;
+    this.#possibleMoves -= 0;
   }
   killUnit(units: Unit[]) {
     units.map((unit, index) => unit.id === this.id && units.splice(index, 1));
@@ -176,13 +211,28 @@ export class Card extends GameUnits {
   #unitSource;
   #price;
   #energy;
-  constructor({ damage, hp, source, type, radius, team, unitSource, price, energy }: CardProperties) {
+  #possibleMoves;
+  constructor({
+    unitType,
+    damage,
+    hp,
+    source,
+    type,
+    radius,
+    team,
+    unitSource,
+    price,
+    energy,
+    possibleMoves,
+  }: CardProperties) {
     super({
+      unitType: unitType,
       hp: hp,
       source: source,
       team: team,
       type: type,
     });
+    this.#possibleMoves = possibleMoves;
     this.#unitSource = unitSource;
     this.#damage = damage;
     this.#radius = radius;
@@ -198,7 +248,7 @@ export class Card extends GameUnits {
   get damage() {
     return this.#damage;
   }
-  getPossibleCardActions(units: Unit[]) {
+  getPossibleCardActions(units: Unit[], builds: Build[]) {
     const possibleMoves: UnitAction[] = [];
     for (let y = 0; y < GAME_FIELD.y; y++) {
       for (let x = 0; x < Math.floor(GAME_FIELD.x / 2); x++) {
@@ -211,7 +261,11 @@ export class Card extends GameUnits {
       }
     }
     return possibleMoves.filter(
-      (move) => !units.some((unit) => move.x === unit.coords.x && move.y === unit.coords.y),
+      (move) =>
+        !units.some((unit) => move.x === unit.coords.x && move.y === unit.coords.y) &&
+        !builds.some((build) =>
+          build.coords.some((buildCoords) => buildCoords.x === move.x && buildCoords.y === move.y),
+        ),
     );
   }
   move(coords: Coordinates, units: Unit[]) {
@@ -226,6 +280,8 @@ export class Card extends GameUnits {
         team: this.team,
         type: this.type,
         energy: this.#energy,
+        possibleMoves: this.#possibleMoves,
+        unitType: GameObjectTypes.UNIT,
       }),
     );
   }
@@ -233,8 +289,9 @@ export class Card extends GameUnits {
 
 export class Build extends GameUnits {
   #coords;
-  constructor({ source, hp, coords, type, team }: BuildProperties) {
+  constructor({ source, hp, coords, type, team, unitType }: BuildProperties) {
     super({
+      unitType: unitType,
       source: source,
       hp: hp,
       type: type,
@@ -342,7 +399,6 @@ export const CreateUnit = ({
 };
 
 export const BattleMap: FC<BattleMap> = ({
-  gameUnits,
   actions,
   setUnitActions,
   setSelectedUnit,
@@ -350,25 +406,59 @@ export const BattleMap: FC<BattleMap> = ({
   selectedCard,
   setSelectedCard,
 }) => {
+  const gameUnits = useUser((state) => state.units);
+  const builds = useUser((state) => state.builds);
   const removeCard = useUser((state) => state.removeCard);
-  const decrementEnergy = useUser((state) => state.decrementEnergy);
-  const decrementGold = useUser((state) => state.decrementGold);
-  const { mapTile, unit: unitSizes } = useSizes();
-
+  const decrementResources = useUser((state) => state.decremenResources);
+  const playerTeam = useUser((state) => state.playerTeam);
+  const { mapTile, unit: unitSizes, castle } = useSizes();
+  const TurnUpdateNewObjects = useTurn((state) => state.updateNewObjects);
+  const TurnUpdateRemovedObjects = useTurn((state) => state.updateRemovedObjects);
+  const TurnUpdateUpdatedObjects = useTurn((state) => state.updateUpdatedObjects);
+  const TurnPalyerResources = useTurn((state) => state.setPlayerResources);
+  const userEnergy = useUser((state) => state.resources.energy);
+  const userCoins = useUser((state) => state.resources.coins);
   const unitActions = {
     move: (coords: UnitAction) => {
-      selectedUnit?.move(coords), setUnitActions([]), setSelectedUnit(null), decrementEnergy(selectedCard?.energy);
+      selectedUnit?.move(coords);
+      setUnitActions([]);
+      setSelectedUnit(null);
+      decrementResources(2, Resources.ENERGY);
+      TurnPalyerResources(
+        useUser((state) => state.resources.energy),
+        Resources.ENERGY,
+      );
+      console.log('unitActions');
+      TurnUpdateUpdatedObjects(selectedUnit, TurnObjects.UNITS);
+    },
+    attack: (coords: UnitAction) => {
+      const unit = gameUnits.find((unit) => unit.coords.x === coords.x && unit.coords.y === coords.y);
+      unit?.receiveDamage(selectedUnit.damage, gameUnits) && TurnUpdateRemovedObjects(unit, TurnObjects.UNITS);
+    },
+  };
+
+  const buildActions = {
+    move: (coords: UnitAction) => {
+      selectedUnit?.move(coords),
+        setUnitActions([]),
+        setSelectedUnit(null),
+        decrementResources(2, Resources.ENERGY),
+        TurnPalyerResources(userEnergy, Resources.ENERGY);
+      TurnUpdateUpdatedObjects(selectedUnit, TurnObjects.UNITS);
     },
     attack: (coords: UnitAction) =>
-      gameUnits
-        .find((unit) => unit.coords.x === coords.x && unit.coords.y === coords.y)
-        .receiveDamage(selectedUnit.damage, gameUnits),
+      builds.map(
+        (build) =>
+          build.coords.some((buildCoord) => buildCoord.x === coords.x && buildCoord.y === coords.y) &&
+          build.receiveDamage(selectedUnit.damage, builds) &&
+          TurnUpdateRemovedObjects(build, TurnObjects.BUILDING),
+      ),
   };
 
   const unitClick = (unit: Unit) => {
     console.log('1    double click');
     setSelectedUnit(unit);
-    setUnitActions(unit.getPossibleActions(gameUnits));
+    setUnitActions(unit.getPossibleActions(gameUnits, builds));
 
     if (selectedUnit?.id === unit.id) {
       console.log('double click');
@@ -382,12 +472,18 @@ export const BattleMap: FC<BattleMap> = ({
     selectedCard?.move(coords, gameUnits);
     setUnitActions([]);
     setSelectedCard(null);
-    removeCard(selectedCard?.id);
-    decrementGold(selectedCard?.energy);
+    removeCard([selectedCard?.id]);
+    decrementResources(selectedCard?.energy, Resources.COINS);
+    TurnPalyerResources(userCoins, Resources.COINS);
+    TurnUpdateNewObjects(selectedCard, TurnObjects.UNITS);
     setSelectedUnit(null);
   };
 
-  const handleUnitAction = (coords: UnitAction) => unitActions[coords.type](coords);
+  const handleUnitAction = (coords: UnitAction) =>
+    actions.some((action) => coords.x === action.x && coords.y === action.y && coords.unitType === UnitTypes.BUILD)
+      ? buildActions[coords.type](coords)
+      : unitActions[coords.type](coords);
+
   const handleMoveClick = (coords: UnitAction) => {
     selectedCard && coords.type === UnitActionsTypes.MOVE
       ? handleCardAction(coords)
@@ -397,19 +493,30 @@ export const BattleMap: FC<BattleMap> = ({
 
     setUnitActions([]);
   };
-
+  console.log(gameUnits, 'game');
   return (
     <>
       <GameField />
 
       {gameUnits.map((unit) => (
         <CreateUnit
-          handleClick={() => unitClick(unit)}
+          handleClick={() => unit.team === playerTeam && unitClick(unit)}
           scale={unitSizes.scale}
           key={`${unit.coords.x}-${unit.coords.y}-unit`}
           x={unit.coords.x * mapTile.desiredSize.width + mapTile.desiredSize.width * 0.2}
           y={unit.coords.y * mapTile.desiredSize.height + mapTile.desiredSize.height * 0.3}
           size={unitSizes.desiredSize}
+          source={unit.source}
+          hp={unit.hp}
+        />
+      ))}
+      {useUser((state) => state.builds).map((unit) => (
+        <CreateUnit
+          scale={castle.scale}
+          key={`${unit.coords[0].x}-${unit.coords[0].y}-build`}
+          x={unit.coords[0].x * mapTile.desiredSize.width + mapTile.desiredSize.width * 0.2}
+          y={unit.coords[0].y * mapTile.desiredSize.height + mapTile.desiredSize.height * 0.3}
+          size={castle.desiredSize}
           source={unit.source}
           hp={unit.hp}
         />

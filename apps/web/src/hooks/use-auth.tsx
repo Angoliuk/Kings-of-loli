@@ -17,6 +17,9 @@ export const useAuth = () => {
     },
     onError: (error) => {
       tokenRefreshed = true;
+
+      userLogout();
+
       throw new Error(error.message);
     },
   });
@@ -27,14 +30,19 @@ export const useAuth = () => {
     onError: (error) => {
       if (error.data?.httpStatus === 401) {
         if (tokenRefreshed) {
+          
           tokenRefreshed = false;
           throw new Error('Unlogined');
         }
+
         refreshToken();
+
         logout();
+
       }
     },
   });
+
   const { mutate: signUp } = trpc.auth.register.useMutation({
     onSuccess: () => navigate(`${AppRoutes.SignIn}`),
     onError: (error) => new Error(error.message),

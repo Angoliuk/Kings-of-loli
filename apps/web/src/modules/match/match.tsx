@@ -1,33 +1,29 @@
+import { useSocket } from '@web/hooks/use-socket';
 import { useState } from 'react';
 
+import { GameObjectTypes } from '../../../../api/src/interfaces/game';
 import { type UnitAction } from './actions/actions';
-import { BattleHud } from './match-hud';
-import { BattleMap, type Card, Teams, Unit, UnitTypes } from './match-map';
+import { BattleHud, useUser } from './match-hud';
+import { BattleMap, type Card, Teams, type Unit, UnitTypes } from './match-map';
 
 export const Match = () => {
   const [unitActions, setUnitActions] = useState<UnitAction[]>([]);
   const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-  const [gameUnits, setGameUnits] = useState<Unit[]>([
-    new Unit({
-      coords: { x: 1, y: 1 },
-      damage: 1,
-      hp: 5,
-      radius: 1,
-      source: 'resources/img/map/units/Worker_green.png',
-      type: UnitTypes.WARRIOR,
-      team: Teams.GREEN,
-    }),
+  const { gameLoaded, startSearch, turn } = useSocket();
+
+  const updatesData = [{ id: 1, update: true }];
+  const oldData = [{ id: 1 }, { id: 2, asdaa: 'adsada' }, { id: 3 }];
+  console.log([
+    [...oldData, ...updatesData].reduce((map, object) => {
+      map[object.id] = object;
+      return map;
+    }, {}),
   ]);
+  console.log(useUser((state) => state.units));
   return (
-    <BattleHud
-      unitsList={gameUnits}
-      setUnitActions={setUnitActions}
-      selectedCard={selectedCard}
-      setSelectedCard={setSelectedCard}
-    >
+    <BattleHud setUnitActions={setUnitActions} selectedCard={selectedCard} setSelectedCard={setSelectedCard}>
       <BattleMap
-        gameUnits={gameUnits}
         actions={unitActions}
         setUnitActions={setUnitActions}
         setSelectedUnit={setSelectedUnit}

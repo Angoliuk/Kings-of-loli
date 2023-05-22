@@ -82,7 +82,10 @@ io.on(IoEvent.CONNECT, async (socket) => {
   socket.on(IoEvent.SEARCH_GAME, async () => {
     const isUserHaveSearchRequest = await redisUtils.gameSearch.get(userId);
 
-    if (userActiveGameId) return;
+    if (userActiveGameId) {
+      io.to(userId).emit(IoEvent.GAME_FOUND, await redisUtils.gameRoom.get(userActiveGameId));
+      return;
+    }
     if (isUserHaveSearchRequest) {
       await redisUtils.gameSearch.del(userId);
     }

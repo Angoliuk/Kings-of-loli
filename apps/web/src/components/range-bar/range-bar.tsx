@@ -13,6 +13,8 @@ const SLIDER_STEP_VALUE = 10 as const;
 
 export const RangeBar: FC<RangeBarProperties> = ({ value = SLIDER_MAX_VALUE, tabIndex }) => {
   const [progress, setProgress] = useState(value);
+  const [clicked, setClicked] = useState(false);
+
   const RangeReference = useRef<HTMLInputElement>(null);
   const moveThumb = (event: MouseEvent) => {
     if (!RangeReference.current) return;
@@ -34,10 +36,15 @@ export const RangeBar: FC<RangeBarProperties> = ({ value = SLIDER_MAX_VALUE, tab
       setProgress(newValue);
     }
   };
-  const progressHandler = ({ target }: React.MouseEvent<HTMLDivElement>): void => {
-    target.addEventListener('mousemove', moveThumb);
-    target.addEventListener('mouseup', () => target.removeEventListener('mousemove', moveThumb));
-  };
+
+  if (clicked) {
+    window.addEventListener('mousemove', moveThumb);
+    window.addEventListener('mouseup', () => {
+      setClicked(false);
+      window.removeEventListener('mousemove', moveThumb);
+    });
+  }
+
   return (
     <div
       role="slider"
@@ -46,8 +53,9 @@ export const RangeBar: FC<RangeBarProperties> = ({ value = SLIDER_MAX_VALUE, tab
       aria-valuemax={SLIDER_MAX_VALUE}
       aria-valuenow={progress}
       className={styles.rangeBar}
-      onMouseDown={progressHandler}
+      onMouseDown={() => setClicked(true)}
       onKeyDown={handleKeyPress}
+      onClick={moveThumb}
       ref={RangeReference}
     >
       <div className={styles.rangeProgress}>

@@ -1,7 +1,7 @@
+import { NavigationPageWrapper } from '@web/components/navigation-page-wrapper/navigation-page-wrapper';
+import { useAuth } from '@web/hooks/use-auth';
 import { type FC } from 'react';
 
-import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
-import { useAuth } from '../../hooks/use-auth';
 import styles from './profile-page.module.css';
 
 export const ProfilePage: FC = () => {
@@ -20,10 +20,8 @@ export const ProfilePage: FC = () => {
             <div className={styles.rating}>rating</div>
           </div>
           <div className={styles.buttons}>
-            <button className={styles.logoutButton} onClick={() => logout()}>
-              Logout
-            </button>
-            <div className={styles.logoutButtonActive} />
+            <div className={styles.logoutButton}>Logout</div>
+            <button className={styles.logoutButtonActive} onClick={() => logout()} />
           </div>
         </div>
       </div>

@@ -8,8 +8,14 @@ const timerBar = new SpriteSizes({
 });
 export const TimerBar = ({ time }: { time: string }) => {
   return (
-    <Sprite anchor={[-2.8, 0]} scale={timerBar.scale} {...timerBar} image={`resources/img/map/hud/timer-bg-hd.png`}>
-      <Text text={time} y={0} x={950} style={new TextStyle({ fontSize: 69, fill: 'black' })} resolution={1.5} />
+    <Sprite anchor={[-4, 0]} scale={timerBar.scale} {...timerBar} image={`resources/img/map/hud/timer-bg-hd.png`}>
+      <Text
+        text={time}
+        y={0}
+        anchor={[-7.6, 0]}
+        style={new TextStyle({ fontSize: 69, fill: 'black' })}
+        resolution={1.5}
+      />
     </Sprite>
   );
 };

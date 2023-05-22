@@ -2,12 +2,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getFetch, httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 import { useSocket } from './hooks/use-socket';
 import { AppRouter } from './routes/app-router';
 import { trpc } from './trpc';
 export function App() {
-  useSocket();
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -32,10 +32,12 @@ export function App() {
     }),
   );
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <AppRouter />
-      </QueryClientProvider>
-    </trpc.Provider>
+    <BrowserRouter>
+      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <AppRouter />
+        </QueryClientProvider>
+      </trpc.Provider>
+    </BrowserRouter>
   );
 }

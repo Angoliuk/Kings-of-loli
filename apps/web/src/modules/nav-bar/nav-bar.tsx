@@ -11,9 +11,26 @@ export const NavBar: FC = () => {
       <NavButton link={AppRoutes.Home} className={[styles.navButtons]}>
         <LeftBattleMenu />
       </NavButton>
-      <NavButton link={AppRoutes.Profile} className={[styles.navButtons, styles.profileButton]}></NavButton>
-      <NavButton link={AppRoutes.Stats} className={[styles.leaderboardButton, styles.navButtons]}></NavButton>
-      <NavButton link={AppRoutes.Settings} className={[styles.settingsButton, styles.navButtons]}></NavButton>
+      <NavButton
+        link={AppRoutes.Profile}
+        className={[styles.navButtons, styles.profileButton]}
+        src="../../../resources/img/menu/left-menu-profile-icon.png"
+        alt="profile"
+      />
+
+      <NavButton
+        link={AppRoutes.Stats}
+        className={[styles.leaderboardButton, styles.navButtons]}
+        src="../../../resources/img/menu/left-menu-leaderboard-icon.png"
+        alt="leaderboard"
+      />
+
+      <NavButton
+        link={AppRoutes.Settings}
+        className={[styles.settingsButton, styles.navButtons]}
+        src="../../../resources/img/menu/left-menu-settings-icon.png"
+        alt="settings"
+      />
     </nav>
   );
 };

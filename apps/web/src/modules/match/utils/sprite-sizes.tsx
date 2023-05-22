@@ -129,6 +129,32 @@ export const useSizes = () => {
     width: 191,
     height: 86,
   });
+  const energyBar = new SpriteSizes(
+    {
+      width: 653,
+      height: 86,
+    },
+    { width: innerWidth / 3.23, height: innerHeight / 86 },
+  );
+  const energySize = new SpriteSizes(
+    {
+      width: 40,
+      height: 32,
+    },
+    { width: innerWidth / 37.7, height: innerHeight / 32 },
+  );
+
+  const castle = new SpriteSizes(
+    { width: 96, height: 186 },
+    { height: 1.8 * mapTile.desiredSize.height, width: 0.6 * mapTile.desiredSize.width },
+  );
+  const playButton = new SpriteSizes(
+    {
+      width: 180,
+      height: 174,
+    },
+    { width: innerWidth * 0.15, height: innerHeight / 174 },
+  );
 
   return {
     hpBarContainer,
@@ -146,5 +172,9 @@ export const useSizes = () => {
     homeButton,
     surrenderButton,
     coinBar,
+    energyBar,
+    energySize,
+    castle,
+    playButton,
   };
 };
