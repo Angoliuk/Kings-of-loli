@@ -9,11 +9,11 @@ import {
   IoServerToClientEvents,
   IoData,
   IoEvent,
-  GameObjectTypes,
   Game,
+  GameObjectType,
 } from '@kol/shared-game/interfaces';
-import { createBaseGame } from '@kol/shared-game/utils';
-import { redisUtils, updateGameObjectsGroup, socketKeys, redisKeys } from '../services/redis';
+import { createBaseGame, updateGameObjectsGroup } from '@kol/shared-game/utils';
+import { redisUtils, socketKeys, redisKeys } from '../services/redis';
 export const io = new Server<IoClientToServerEvents, IoServerToClientEvents, never, IoData>({
   transports: ['websocket'],
   cors: {
@@ -55,9 +55,9 @@ io.on(IoEvent.CONNECT, async (socket) => {
     game.turnsCount++;
 
     game.gameObjects = {
-      buildings: updateGameObjectsGroup(game.gameObjects, GameObjectTypes.BUILDING, turnToServer),
-      units: updateGameObjectsGroup(game.gameObjects, GameObjectTypes.UNIT, turnToServer),
-      cards: updateGameObjectsGroup(game.gameObjects, GameObjectTypes.CARD, turnToServer),
+      [GameObjectType.BUILDING]: updateGameObjectsGroup(game.gameObjects[GameObjectType.BUILDING], turnToServer),
+      [GameObjectType.UNIT]: updateGameObjectsGroup(game.gameObjects[GameObjectType.UNIT], turnToServer),
+      [GameObjectType.CARD]: updateGameObjectsGroup(game.gameObjects[GameObjectType.CARD], turnToServer),
     };
     game.players[game.players.findIndex((player) => player.userId === turnToServer.player.userId)] =
       turnToServer.player;

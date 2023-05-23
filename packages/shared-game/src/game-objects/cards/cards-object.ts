@@ -1,5 +1,6 @@
 import { GAME_FIELD } from '../../constants';
-import { CardType, GameObjectType, Coordinates } from '../../interfaces';
+import { CardType, GameObjectType, Coordinates, ActionType } from '../../interfaces';
+import { isCrossingObstacleCoordinates } from '../../utils';
 import { BaseGameObject, BaseGameObjectProps } from '../base/base-object';
 import { Unit } from '../units/unit-object';
 
@@ -69,14 +70,14 @@ export class Card extends BaseGameObject {
         possibleMoves.push({
           x: x,
           y: y,
-          type: UnitActionsTypes.MOVE,
+          type: ActionType.MOVE,
           src: 'resources/img/map/tiles/point.png',
         });
       }
     }
 
     // TODO: do we really want have coords as array or single object
-    return possibleMoves.filter((move) => obstacles.some((obstacle) => obstacleCoordinatesCheck(mpve, obstacle)));
+    return possibleMoves.filter((move) => obstacles.some((obstacle) => isCrossingObstacleCoordinates(move, obstacle)));
   }
 
   move<T extends any[]>(coords: Coordinates, objectsList: T) {

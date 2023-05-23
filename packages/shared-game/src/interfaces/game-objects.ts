@@ -19,6 +19,6 @@ export enum ActionType {
 
 export enum GameObjectType {
   BUILDING = 'building',
-  UNIT = ' unit',
+  UNIT = 'unit',
   CARD = 'card',
 }

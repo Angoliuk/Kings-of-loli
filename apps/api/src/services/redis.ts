@@ -1,5 +1,5 @@
 import { redisClient } from '@api/database';
-import { type Game, type GameObjects, type GameObjectTypes, type TurnToServer } from '@kol/shared-game/interfaces';
+import { type Game } from '@kol/shared-game/interfaces';
 
 export const redisKeys = {
   gameRoom: (roomId: string) => `game-room:${roomId}`,
@@ -26,22 +26,4 @@ export const redisUtils = {
 
 export const socketKeys = {
   gameRoom: (roomId: string) => `game-room:${roomId}`,
-};
-
-export const updateGameObjectsGroup = <T extends GameObjects, K extends GameObjectTypes>(
-  initialValue: T,
-  gameObjectsType: K,
-  turn: TurnToServer,
-): T[K] => {
-  return [
-    ...initialValue[gameObjectsType]
-
-      .map(
-        (object) =>
-          turn.updatedObjects[gameObjectsType].find((updatedObject: typeof object) => updatedObject.id === object.id) ??
-          object,
-      )
-      .filter((object) => !turn.removedObjects?.[gameObjectsType]?.includes(object.id)),
-    ...(turn.newObjects?.[gameObjectsType] ?? []),
-  ];
 };
