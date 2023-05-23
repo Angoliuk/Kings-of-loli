@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 
 import { BackgroundPicker } from '../../components/background-picker/background-picker';
 import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
-import { RouterOutputs } from '../../trpc';
+import { type RouterOutputs } from '../../trpc';
 import styles from './leaderboard.module.css';
 import { LeaderboardItem } from './leaderboard-item';
 

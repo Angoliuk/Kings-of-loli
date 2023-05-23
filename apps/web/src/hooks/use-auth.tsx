@@ -30,7 +30,6 @@ export const useAuth = () => {
     onError: (error) => {
       if (error.data?.httpStatus === 401) {
         if (tokenRefreshed) {
-          
           tokenRefreshed = false;
           throw new Error('Unlogined');
         }
@@ -38,7 +37,6 @@ export const useAuth = () => {
         refreshToken();
 
         logout();
-
       }
     },
   });

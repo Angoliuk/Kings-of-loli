@@ -15,6 +15,7 @@ const gameField = Array.from<never, GameFieldTile[]>({ length: GAME_FIELD.y }, (
     source: `resources/img/map/tiles/${yIndex}/${xIndex + 1}.gif`,
   })),
 );
+
 export const GameField = memo(() => {
   return <>{gameField.map((row) => row.map((tile) => <Tile key={`sprite-${tile.y}-${tile.x}`} {...tile} />))}</>;
 });

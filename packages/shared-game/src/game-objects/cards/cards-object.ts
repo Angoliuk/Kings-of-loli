@@ -6,7 +6,7 @@ import { Unit } from '../units/unit-object';
 type CardProperties = {
   damage: number;
   radius: number;
-  // For what this variable???
+  // TODO: For what this variable???
   unitSource: string;
   energy: number;
   possibleMoves: number;

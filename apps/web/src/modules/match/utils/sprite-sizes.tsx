@@ -1,6 +1,7 @@
+import { GAME_FIELD } from '@kol/shared-game/constants';
 import { useEffect, useState } from 'react';
 
-import { GAME_FIELD, HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from '../constants';
+import { HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from '../constants';
 
 type SpriteSizesProperties = {
   originalSize: { width: number; height: number };

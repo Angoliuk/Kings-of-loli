@@ -9,7 +9,7 @@ import { SignIn } from '@web/modules/sign-in-page/sign-in-page';
 import { SignUp } from '@web/modules/sign-up-page/sign-up-page';
 import { useAuthStore } from '@web/store/auth-store/auth-store';
 import { type FC } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import styles from './app-router.module.css';
 import { AppRoutes } from './app-router-enum';

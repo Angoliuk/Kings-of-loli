@@ -4,7 +4,6 @@ import { getFetch, httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { useSocket } from './hooks/use-socket';
 import { AppRouter } from './routes/app-router';
 import { trpc } from './trpc';
 export function App() {

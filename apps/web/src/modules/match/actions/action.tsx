@@ -1,8 +1,9 @@
+import { ActionType } from '@kol/shared-game/interfaces';
 import { Sprite } from '@pixi/react';
 import { type FC, memo } from 'react';
 
 import { useSizes } from '../utils/sprite-sizes';
-import { type UnitAction, UnitActionsTypes } from './actions';
+import { type UnitAction } from './actions';
 
 export type GameObjectActionProperties = {
   action: UnitAction;
@@ -20,9 +21,7 @@ export const GameObjectAction: FC<GameObjectActionProperties> = memo(({ onClick,
       y={action.y * mapTile.desiredSize.height + mapTile.desiredSize.height * (0.25 / 2)}
       {...unitAction.desiredSize}
       source={
-        action.type === UnitActionsTypes.ATTACK
-          ? 'resources/img/map/units/shield.png'
-          : 'resources/img/map/tiles/point.png'
+        action.type === ActionType.ATTACK ? 'resources/img/map/units/shield.png' : 'resources/img/map/tiles/point.png'
       }
     />
   );
