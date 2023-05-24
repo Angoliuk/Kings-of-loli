@@ -43,9 +43,7 @@ export class BaseGameObject {
 
   receiveDamage<T extends { id: string }>(damage: number, objectsList: T[]) {
     this.#hp -= damage;
-    if (this.#hp < 2) {
-      return this.killUnit(objectsList);
-    }
+    return this.#hp < 2 ? this.killUnit(objectsList) : false;
   }
 
   killUnit<T extends { id: string }>(units: T[]) {

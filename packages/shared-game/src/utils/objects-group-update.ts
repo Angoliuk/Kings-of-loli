@@ -1,10 +1,10 @@
 import { BaseObject } from '../game-objects';
 import { BaseGameObject } from '../game-objects/base';
-import { GameObjectType, GameObjects, TurnToServer } from '../interfaces';
+import { GameObjectType, GameObjects, GameObjectsLists, TurnFromServer, TurnToServer } from '../interfaces';
 
-export const updateGameObjectsGroup = <T extends GameObjects[GameObjectType]>(
+export const updateGameObjectsGroup = <T extends GameObjectsLists[keyof GameObjects]>(
   initialObjects: T,
-  turn: TurnToServer,
+  turn: TurnToServer | TurnFromServer,
 ) => {
   const objectsType = initialObjects[0].objectType;
   return (

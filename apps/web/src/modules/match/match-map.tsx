@@ -1,12 +1,14 @@
-import { type CardObject, type UnitObject } from '@kol/shared-game/game-objects';
-import { ActionType, type Coordinates } from '@kol/shared-game/interfaces';
+import { type ActionObject, type CardObject, type UnitObject } from '@kol/shared-game/game-objects';
+import { ActionType, type Coordinates, GameObjectType } from '@kol/shared-game/interfaces';
+import { isCrossingObstacleCoordinates, updateGameObjectsGroup } from '@kol/shared-game/utils';
 import { Container, Sprite } from '@pixi/react';
 import { type FC } from 'react';
 
-import { GameObjectActions, type UnitAction } from './actions/actions';
+import { GameObjectActions } from './actions/actions';
 import { HP_ROW_LIMIT, hpBarContainerPadding, hpBarPadding } from './constants';
 import { GameField } from './field/field';
-import { Resources, TurnObjects, useTurn, useUser } from './match-hud';
+import { useGameStore } from './match-store/game-store';
+import { useTurnStore } from './match-store/turn-store';
 import { useSizes } from './utils/sprite-sizes';
 
 type CreateGameObjectProperties = {
@@ -20,9 +22,9 @@ type CreateGameObjectProperties = {
 } & Coordinates;
 
 type BattleMap = {
-  actions: UnitAction[];
+  actions: ActionObject.Action[] | null;
   selectedUnit: UnitObject.Unit | null;
-  setUnitActions: React.Dispatch<React.SetStateAction<UnitAction[]>>;
+  setUnitActions: React.Dispatch<React.SetStateAction<ActionObject.Action[]>>;
   setSelectedUnit: React.Dispatch<React.SetStateAction<UnitObject.Unit | null>>;
   selectedCard: CardObject.Card | null;
   setSelectedCard: React.Dispatch<React.SetStateAction<CardObject.Card | null>>;
@@ -109,59 +111,83 @@ export const BattleMap: FC<BattleMap> = ({
   selectedCard,
   setSelectedCard,
 }) => {
-  const gameUnits = useUser((state) => state.units);
-  const builds = useUser((state) => state.builds);
-  const removeCard = useUser((state) => state.removeCard);
-  const decrementResources = useUser((state) => state.decremenResources);
-  const playerTeam = useUser((state) => state.playerTeam);
+  const [turnAddNewObject, turnAddRemovedObject, turnAddUpdatedObject, updateCurrentPlayerResourcesBy] = useTurnStore(
+    (state) => [
+      state.addNewObject,
+      state.addRemovedObject,
+      state.addUpdatedObject,
+      state.updateCurrentPlayerResourcesBy,
+    ],
+  );
+  const [{ building: buildings, unit: units }, getCurrentPlayer] = useGameStore((state) => [
+    state.gameObjects,
+    state.getCurrentPlayer,
+  ]);
+  const player = getCurrentPlayer();
+  // const gameUnits = useUser((state) => state.units);
+  // const builds = useUser((state) => state.builds);
+  // const removeCard = useUser((state) => state.removeCard);
+  // const decrementResources = useUser((state) => state.decremenResources);
+  // const playerTeam = useUser((state) => state.playerTeam);
   const { mapTile, unit: unitSizes, castle } = useSizes();
-  const TurnUpdateNewObjects = useTurn((state) => state.updateNewObjects);
-  const TurnUpdateRemovedObjects = useTurn((state) => state.updateRemovedObjects);
-  const TurnUpdateUpdatedObjects = useTurn((state) => state.updateUpdatedObjects);
-  const TurnPalyerResources = useTurn((state) => state.setPlayerResources);
-  const userEnergy = useUser((state) => state.resources.energy);
-  const userCoins = useUser((state) => state.resources.coins);
+  // const TurnUpdateNewObjects = useTurn((state) => state.updateNewObjects);
+  // const TurnUpdateRemovedObjects = useTurn((state) => state.updateRemovedObjects);
+  // const TurnUpdateUpdatedObjects = useTurn((state) => state.updateUpdatedObjects);
+  // const TurnPalyerResources = useTurn((state) => state.setPlayerResources);
+  // const userEnergy = useUser((state) => state.resources.energy);
+  // const userCoins = useUser((state) => state.resources.coins);
   const unitActions = {
-    move: (coords: UnitAction) => {
-      selectedUnit?.move(coords);
+    move: (action: ActionObject.Action) => {
+      if (!selectedUnit) return;
+      selectedUnit.move(action.coords);
       setUnitActions([]);
       setSelectedUnit(null);
-      decrementResources(2, Resources.ENERGY);
-      TurnPalyerResources(
-        useUser((state) => state.resources.energy),
-        Resources.ENERGY,
-      );
+      updateCurrentPlayerResourcesBy({
+        energy: -2,
+      });
+      // decrementResources(2, Resources.ENERGY);
+      // TurnPalyerResources(
+      //   useUser((state) => state.resources.energy),
+      //   Resources.ENERGY,
+      // );
       console.log('unitActions');
-      TurnUpdateUpdatedObjects(selectedUnit, TurnObjects.UNITS);
+      turnAddUpdatedObject(selectedUnit);
     },
-    attack: (coords: UnitAction) => {
-      const unit = gameUnits.find((unit) => unit.coords.x === coords.x && unit.coords.y === coords.y);
-      unit?.receiveDamage(selectedUnit.damage, gameUnits) && TurnUpdateRemovedObjects(unit, TurnObjects.UNITS);
+    attack: (action: ActionObject.Action) => {
+      if (!selectedUnit) return;
+      const unit = units.find((unit) => unit.coords.x === action.coords.x && unit.coords.y === action.coords.y);
+      unit?.receiveDamage(selectedUnit.damage, units) && turnAddRemovedObject(unit);
     },
   };
 
   const buildActions = {
-    move: (coords: UnitAction) => {
-      selectedUnit?.move(coords),
+    move: (action: ActionObject.Action) => {
+      if (!selectedUnit) return;
+      selectedUnit.move(action.coords),
         setUnitActions([]),
         setSelectedUnit(null),
-        decrementResources(2, Resources.ENERGY),
-        TurnPalyerResources(userEnergy, Resources.ENERGY);
-      TurnUpdateUpdatedObjects(selectedUnit, TurnObjects.UNITS);
+        updateCurrentPlayerResourcesBy({
+          energy: -2,
+        });
+      // decrementResources(2, Resources.ENERGY),
+      // TurnPalyerResources(userEnergy, Resources.ENERGY);
+      turnAddUpdatedObject(selectedUnit);
     },
-    attack: (coords: UnitAction) =>
-      builds.map(
-        (build) =>
-          build.coords.some((buildCoord) => buildCoord.x === coords.x && buildCoord.y === coords.y) &&
-          build.receiveDamage(selectedUnit.damage, builds) &&
-          TurnUpdateRemovedObjects(build, TurnObjects.BUILDING),
-      ),
+    attack: (action: ActionObject.Action) => {
+      if (!selectedUnit) return;
+      return buildings.map(
+        (building) =>
+          isCrossingObstacleCoordinates(building, action) &&
+          building.receiveDamage(selectedUnit.damage, buildings) &&
+          turnAddRemovedObject(building),
+      );
+    },
   };
 
   const unitClick = (unit: UnitObject.Unit) => {
     console.log('1    double click');
     setSelectedUnit(unit);
-    setUnitActions(unit.getPossibleActions(gameUnits, builds));
+    setUnitActions(unit.getPossibleActions([units, buildings]));
 
     if (selectedUnit?.id === unit.id) {
       console.log('double click');
@@ -171,39 +197,56 @@ export const BattleMap: FC<BattleMap> = ({
     }
   };
 
-  const handleCardAction = (coords: UnitAction) => {
-    selectedCard?.move(coords, gameUnits);
+  const handleCardAction = (action: ActionObject.Action) => {
+    if (!selectedCard) return;
+    selectedCard.move(action.coords, units);
     setUnitActions([]);
     setSelectedCard(null);
-    removeCard([selectedCard?.id]);
-    decrementResources(selectedCard?.energy, Resources.COINS);
-    TurnPalyerResources(userCoins, Resources.COINS);
+    turnAddRemovedObject(selectedCard);
+    // removeCard([selectedCard?.id]);
+    updateCurrentPlayerResourcesBy({
+      coins: selectedCard.price,
+      energy: selectedCard.energy,
+    });
+    // decrementResources(selectedCard.energy, Resources.COINS);
+    // TurnPalyerResources(userCoins, Resources.COINS);
+    // SHIIIIT
     TurnUpdateNewObjects(selectedCard, TurnObjects.UNITS);
     setSelectedUnit(null);
   };
 
-  const handleUnitAction = (coords: UnitAction) =>
-    actions.some((action) => coords.x === action.x && coords.y === action.y && coords.unitType === UnitTypes.BUILD)
-      ? buildActions[coords.type](coords)
-      : unitActions[coords.type](coords);
+  // PISZDEC1
+  // eslint-disable-next-line unicorn/prevent-abbreviations
+  const handleUnitAction = (actionTemp: ActionObject.Action) => {
+    if (!actions) return;
+    actions.some(
+      (action) =>
+        action.coords.x === actionTemp.coords.x &&
+        action.coords.y === actionTemp.coords.y &&
+        action.unitType === GameObjectType.BUILDING,
+    )
+      ? buildActions[actionTemp.actionType](actionTemp)
+      : unitActions[actionTemp.actionType](actionTemp);
+  };
 
-  const handleMoveClick = (coords: UnitAction) => {
-    selectedCard && coords.type === ActionType.MOVE
-      ? handleCardAction(coords)
+  // PISZDEC2
+  const handleMoveClick = (action: ActionObject.Action) => {
+    selectedCard && action.actionType === ActionType.MOVE
+      ? handleCardAction(action)
       : selectedUnit
-      ? handleUnitAction(coords)
+      ? handleUnitAction(action)
       : null;
 
     setUnitActions([]);
   };
-  console.log(gameUnits, 'game');
+  console.log(units, 'game');
   return (
     <>
       <GameField />
 
-      {gameUnits.map((unit) => (
+      {units.map((unit) => (
         <CreateUnit
-          handleClick={() => unit.team === playerTeam && unitClick(unit)}
+          handleClick={() => unit.team === player?.team && unitClick(unit)}
           scale={unitSizes.scale}
           key={`${unit.coords.x}-${unit.coords.y}-unit`}
           x={unit.coords.x * mapTile.desiredSize.width + mapTile.desiredSize.width * 0.2}
@@ -213,7 +256,7 @@ export const BattleMap: FC<BattleMap> = ({
           hp={unit.hp}
         />
       ))}
-      {useUser((state) => state.builds).map((unit) => (
+      {buildings.map((unit) => (
         <CreateUnit
           scale={castle.scale}
           key={`${unit.coords[0].x}-${unit.coords[0].y}-build`}
@@ -225,7 +268,7 @@ export const BattleMap: FC<BattleMap> = ({
         />
       ))}
 
-      <GameObjectActions actions={actions} onClick={handleMoveClick} />
+      {actions && <GameObjectActions actions={actions} onClick={handleMoveClick} />}
     </>
   );
 };

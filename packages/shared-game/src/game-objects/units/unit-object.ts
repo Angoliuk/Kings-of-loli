@@ -1,5 +1,5 @@
 import { GAME_FIELD } from '../../constants';
-import { PatternTypes, Coordinates, UnitType, GameObjectType, Team } from '../../interfaces';
+import { PatternTypes, Coordinates, UnitType, GameObjectType, Team, ActionType } from '../../interfaces';
 import { isCrossingObstacleCoordinates, movePatterns } from '../../utils';
 import { BaseGameObject, BaseGameObjectProps } from '../base/base-object';
 
@@ -15,7 +15,6 @@ export type UnitProperties = {
 
 export class Unit extends BaseGameObject {
   #pattern;
-  #radius;
   #unitType;
   #damage;
   #coords;
@@ -33,7 +32,6 @@ export class Unit extends BaseGameObject {
     this.#energy = energy;
     this.#coords = coords;
     this.#damage = damage;
-    this.#radius = radius;
     this.#unitType = unitType;
     this.#pattern = pattern ?? PatternTypes.STAR;
   }
@@ -46,6 +44,7 @@ export class Unit extends BaseGameObject {
   get energy() {
     return this.#energy;
   }
+
   getPossibleActions<T extends BaseGameObject & { team: Team } & ({ coords: Coordinates } | { coords: Coordinates[] })>(
     obstacles: T[],
   ) {
@@ -70,7 +69,7 @@ export class Unit extends BaseGameObject {
         return {
           ...action,
           src: 'resources/img/map/tiles/point.png',
-          type: gameObjectOnActionCoordinates ? UnitActionsTypes.ATTACK : UnitActionsTypes.MOVE,
+          type: gameObjectOnActionCoordinates ? ActionType.ATTACK : ActionType.MOVE,
           objectTargetType: gameObjectOnActionCoordinates?.objectType,
         };
       });
