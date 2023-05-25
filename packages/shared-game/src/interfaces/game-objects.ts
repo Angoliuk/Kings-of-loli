@@ -1,7 +1,6 @@
 export enum UnitType {
   ARCHER = 'archer',
   WARRIOR = 'warrior',
-  BUILD = 'build',
 }
 
 export enum BuildingType {

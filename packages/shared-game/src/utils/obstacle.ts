@@ -1,15 +1,11 @@
 import { BaseGameObject } from '../game-objects/base/base-object';
 import { Coordinates } from '../interfaces';
 
-export type IsCrossingObstacleCoordinatesObject = BaseGameObject &
-  ({ coords: Coordinates } | { coords: Coordinates[] });
+export type IsCrossingObstacleCoordinatesObject = { coords: Coordinates } | { coords: Coordinates[] };
 
-export const isCrossingObstacleCoordinates = <
-  T extends IsCrossingObstacleCoordinatesObject,
-  K extends IsCrossingObstacleCoordinatesObject,
->(
-  object: T,
-  obstacle: K,
+export const isCrossingObstacleCoordinates = (
+  object: IsCrossingObstacleCoordinatesObject,
+  obstacle: IsCrossingObstacleCoordinatesObject,
 ) => {
   if (Array.isArray(obstacle.coords) && !Array.isArray(object.coords)) {
     return obstacle.coords.some(

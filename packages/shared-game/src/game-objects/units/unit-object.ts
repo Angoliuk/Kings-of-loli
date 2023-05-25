@@ -1,11 +1,11 @@
 import { GAME_FIELD } from '../../constants';
 import { PatternTypes, Coordinates, UnitType, GameObjectType, Team, ActionType } from '../../interfaces';
 import { isCrossingObstacleCoordinates, movePatterns } from '../../utils';
+import { Action } from '../actions';
 import { BaseGameObject, BaseGameObjectProps } from '../base/base-object';
 
 export type UnitProperties = {
   damage: number;
-  radius: number;
   pattern?: PatternTypes;
   coords: Coordinates;
   energy: number;
@@ -21,7 +21,7 @@ export class Unit extends BaseGameObject {
   #energy;
   #possibleMoves;
 
-  constructor({ source, hp, coords, damage, radius, pattern, team, energy, possibleMoves, unitType }: UnitProperties) {
+  constructor({ source, hp, coords, damage, pattern, team, energy, possibleMoves, unitType }: UnitProperties) {
     super({
       hp: hp,
       source: source,
@@ -51,27 +51,35 @@ export class Unit extends BaseGameObject {
     if (this.#possibleMoves === 0) return [];
 
     return movePatterns[this.#pattern](this.#coords)
-      .filter((action) =>
-        (action.x === this.#coords.x && action.y === this.#coords.y) ||
-        action.x > GAME_FIELD.x ||
-        action.x < 0 ||
-        action.y >= GAME_FIELD.y ||
-        action.y < 0 ||
-        obstacles.some((obstacle) => isCrossingObstacleCoordinates(action, obstacle) && obstacle.team === this.team)
+      .filter((actionTemplate) =>
+        (actionTemplate.coords.x === this.#coords.x && actionTemplate.coords.y === this.#coords.y) ||
+        actionTemplate.coords.x > GAME_FIELD.x ||
+        actionTemplate.coords.x < 0 ||
+        actionTemplate.coords.y >= GAME_FIELD.y ||
+        actionTemplate.coords.y < 0 ||
+        obstacles.some(
+          (obstacle) => isCrossingObstacleCoordinates(actionTemplate, obstacle) && obstacle.team === this.team,
+        )
           ? false
           : true,
       )
-      .map((action) => {
+      .map((actionTemplate) => {
         const gameObjectOnActionCoordinates = obstacles.find((obstacle) =>
-          isCrossingObstacleCoordinates(action, obstacle),
+          isCrossingObstacleCoordinates(actionTemplate, obstacle),
         );
 
-        return {
-          ...action,
-          src: 'resources/img/map/tiles/point.png',
-          type: gameObjectOnActionCoordinates ? ActionType.ATTACK : ActionType.MOVE,
-          objectTargetType: gameObjectOnActionCoordinates?.objectType,
-        };
+        return new Action({
+          ...actionTemplate,
+          actionType: gameObjectOnActionCoordinates ? ActionType.ATTACK : ActionType.MOVE,
+          source: 'resources/img/map/tiles/point.png',
+        });
+
+        // return {
+        //   ...actionTemplate,
+        //   src: 'resources/img/map/tiles/point.png',
+        //   type: gameObjectOnActionCoordinates ? ActionType.ATTACK : ActionType.MOVE,
+        //   objectTargetType: gameObjectOnActionCoordinates?.objectType,
+        // };
       });
   }
   move(coords: Coordinates) {

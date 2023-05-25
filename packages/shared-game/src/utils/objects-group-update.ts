@@ -7,19 +7,12 @@ export const updateGameObjectsGroup = <T extends GameObjectsLists[keyof GameObje
   turn: TurnToServer | TurnFromServer,
 ) => {
   const objectsType = initialObjects[0].objectType;
-  return (
-    [
-      // @ts-expect-error
-      ...initialObjects.filter(
-        (object: (typeof initialObjects)[0]) => !turn.removedObjects?.[objectsType]?.includes(object.id),
-      ),
-
-      ...(turn.newObjects?.[objectsType] ?? []),
-    ] as T
-  ).map(
-    (object) =>
-      // @ts-expect-error
-
-      turn.updatedObjects[objectsType].find((updatedObject: typeof object) => updatedObject.id === object.id) ?? object,
-  ) as T;
+  return ([...initialObjects, ...(turn.newObjects?.[objectsType] ?? [])] as T)
+    .map(
+      (object) =>
+        // @ts-expect-error
+        turn.updatedObjects[objectsType].find((updatedObject: typeof object) => updatedObject.id === object.id) ??
+        object,
+    )
+    .filter((object: T[0]) => !turn.removedObjects?.[objectsType]?.includes(object.id)) as T;
 };

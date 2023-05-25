@@ -9,11 +9,11 @@ export const movePatterns = {
         const xCoord = x + indexX;
         const yCoord = y + indexY;
         if (indexX === -radius && indexY === -radius) {
-          moves.push({ x: xCoord - 1, y: yCoord - 1 }, { x: xCoord - 1, y: yCoord + 3 });
+          moves.push({ coords: { x: xCoord - 1, y: yCoord - 1 } }, { coords: { x: xCoord - 1, y: yCoord + 3 } });
         } else if (indexX === radius && indexY === radius) {
-          moves.push({ x: xCoord + 1, y: yCoord + 1 }, { x: xCoord + 1, y: yCoord - 3 });
+          moves.push({ coords: { x: xCoord + 1, y: yCoord + 1 } }, { coords: { x: xCoord + 1, y: yCoord - 3 } });
         }
-        moves.push({ x: xCoord, y: yCoord });
+        moves.push({ coords: { x: xCoord, y: yCoord } });
       }
     }
 

@@ -1,24 +1,29 @@
 import { ActionType, Coordinates, GameObjectType } from '../../interfaces';
 import { BaseGameObject, BaseGameObjectProps } from '../base';
 
-type ActionProperties = { coords: Coordinates; actionType: ActionType } & Omit<BaseGameObjectProps, 'objectType'>;
+type ActionProperties = { coords: Coordinates; actionType: ActionType; source: string };
 
-export class Action extends BaseGameObject {
+export class Action {
   #coords;
   #actionType;
-  constructor({ source, hp, team, coords, actionType }: ActionProperties) {
-    super({
-      source: source,
-      hp: hp,
-      team: team,
-      objectType: GameObjectType.ACTION,
-    });
+  #source;
+  #id = Math.random().toString();
+  constructor({ coords, actionType, source }: ActionProperties) {
+    this.#source = source;
     this.#coords = coords;
     this.#actionType = actionType;
   }
 
   get coords() {
     return this.#coords;
+  }
+
+  get source() {
+    return this.#source;
+  }
+
+  get id() {
+    return this.#id;
   }
 
   get actionType() {

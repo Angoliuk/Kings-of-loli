@@ -33,17 +33,12 @@ export const useTurnStore = create(
       } as TurnToServer,
       (set, get) =>
         bindObject({
-          setCurrentPlayer: ({ coins, energy }: { coins?: number; energy?: number }) => {
-            const player = get().player;
-            return set({
-              player: { ...player, coins: coins ?? player.coins, energy: energy ?? player.energy },
-            });
-          },
           updateCurrentPlayerResourcesBy: ({ coins, energy }: { coins?: number; energy?: number }) => {
             const player = get().player;
-            return set({
+            set({
               player: { ...player, coins: player.coins + (coins ?? 0), energy: player.energy + (energy ?? 0) },
             });
+            useGameStore.getState().setPlayer(get().player);
           },
           addRemovedObject: <T extends GameObjects[keyof GameObjects]>(removedObject: T) => {
             set({
@@ -66,6 +61,7 @@ export const useTurnStore = create(
                 ) as T[],
               },
             });
+            useGameStore.getState().removeGameObject(removedObject);
           },
           addNewObject: <T extends GameObjects[keyof GameObjects]>(newObject: T) => {
             set({
@@ -74,6 +70,7 @@ export const useTurnStore = create(
                 [newObject.objectType]: [...get().newObjects[newObject.objectType], newObject],
               },
             });
+            useGameStore.getState().addGameObject(newObject);
           },
           addUpdatedObject: <T extends GameObjects[keyof GameObjects]>(updatedObject: T) => {
             const previousUpdatedObjects = get().updatedObjects[updatedObject.objectType];
@@ -95,6 +92,7 @@ export const useTurnStore = create(
                   : [...previousUpdatedObjects, updatedObject],
               },
             });
+            useGameStore.getState().updateGameObject(updatedObject);
           },
           createNewTurnTemplate: () => {
             set({

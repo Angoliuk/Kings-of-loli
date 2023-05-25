@@ -1,6 +1,6 @@
 import { type ActionObject, type CardObject, type UnitObject } from '@kol/shared-game/game-objects';
 import { ActionType, type Coordinates, GameObjectType } from '@kol/shared-game/interfaces';
-import { isCrossingObstacleCoordinates, updateGameObjectsGroup } from '@kol/shared-game/utils';
+import { isCrossingObstacleCoordinates } from '@kol/shared-game/utils';
 import { Container, Sprite } from '@pixi/react';
 import { type FC } from 'react';
 
@@ -185,16 +185,16 @@ export const BattleMap: FC<BattleMap> = ({
   };
 
   const unitClick = (unit: UnitObject.Unit) => {
-    console.log('1    double click');
-    setSelectedUnit(unit);
-    setUnitActions(unit.getPossibleActions([units, buildings]));
-
+    // console.log('1    double click');
     if (selectedUnit?.id === unit.id) {
-      console.log('double click');
-
+      // console.log('double click');
       setSelectedUnit(null);
       setUnitActions([]);
+      return;
     }
+
+    setSelectedUnit(unit);
+    setUnitActions(unit.getPossibleActions([...units, ...buildings]));
   };
 
   const handleCardAction = (action: ActionObject.Action) => {
@@ -239,7 +239,7 @@ export const BattleMap: FC<BattleMap> = ({
 
     setUnitActions([]);
   };
-  console.log(units, 'game');
+  // console.log(units, 'game');
   return (
     <>
       <GameField />

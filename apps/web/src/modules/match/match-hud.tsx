@@ -90,17 +90,17 @@ import { useSizes } from './utils/sprite-sizes';
 //   userId: (Math.random() * 10).toString(),
 //   playerTeam: Team.GREEN,
 //   units: [
-//     new UnitObject.Unit({
-//       coords: { x: 1, y: 1 },
-//       damage: randomIntFromInterval(GameUnitPossibleStats.unit.damage[0], GameUnitPossibleStats.unit.damage[1]),
-//       hp: randomIntFromInterval(GameUnitPossibleStats.unit.hp[0], GameUnitPossibleStats.unit.hp[1]),
-//       radius: randomIntFromInterval(GameUnitPossibleStats.unit.radius[0], GameUnitPossibleStats.unit.radius[1]),
-//       source: 'resources/img/map/units/Worker_green.png',
-//       team: Team.GREEN,
-//       energy: randomIntFromInterval(GameUnitPossibleStats.unit.energy[0], GameUnitPossibleStats.unit.energy[1]),
-//       unitType: UnitType.WARRIOR,
-//       possibleMoves: 3,
-//     }),
+// new UnitObject.Unit({
+//   coords: { x: 1, y: 1 },
+//   damage: randomIntFromInterval(GameUnitPossibleStats.unit.damage[0], GameUnitPossibleStats.unit.damage[1]),
+//   hp: randomIntFromInterval(GameUnitPossibleStats.unit.hp[0], GameUnitPossibleStats.unit.hp[1]),
+//   radius: randomIntFromInterval(GameUnitPossibleStats.unit.radius[0], GameUnitPossibleStats.unit.radius[1]),
+//   source: 'resources/img/map/units/Worker_green.png',
+//   team: Team.GREEN,
+//   energy: randomIntFromInterval(GameUnitPossibleStats.unit.energy[0], GameUnitPossibleStats.unit.energy[1]),
+//   unitType: UnitType.WARRIOR,
+//   possibleMoves: 3,
+// }),
 //     new UnitObject.Unit({
 //       coords: { x: 2, y: 2 },
 //       damage: randomIntFromInterval(GameUnitPossibleStats.unit.damage[0], GameUnitPossibleStats.unit.damage[1]),
@@ -114,15 +114,15 @@ import { useSizes } from './utils/sprite-sizes';
 //     }),
 //   ],
 //   builds: [
-//     new BuildingObject.Building({
-//       coords: [
-//         { x: 0, y: 1 },
-//         { x: 0, y: 2 },
-//       ],
-//       hp: 6,
-//       source: 'resources/img/map/units/mill-hd.png',
-//       team: Team.BLUE,
-//       buildingType: BuildingType.CASTLE,
+// new BuildingObject.Building({
+//   coords: [
+//     { x: 0, y: 1 },
+//     { x: 0, y: 2 },
+//   ],
+//   hp: 6,
+//   source: 'resources/img/map/units/mill-hd.png',
+//   team: Team.BLUE,
+//   buildingType: BuildingType.CASTLE,
 //     }),
 //     new BuildingObject.Building({
 //       coords: [
@@ -165,18 +165,18 @@ import { useSizes } from './utils/sprite-sizes';
 //       possibleMoves: 1,
 //       cardType: CardType.UNIT,
 //     }),
-//     new CardObject.Card({
-//       team: Team.BLUE,
-//       radius: randomIntFromInterval(GameUnitPossibleStats.card.radius[0], GameUnitPossibleStats.card.radius[1]),
-//       damage: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
-//       hp: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
-//       source: 'resources/img/cards/peasant-card.png',
-//       unitSource: 'resources/img/map/units/Worker_blue.png',
-//       price: randomIntFromInterval(GameUnitPossibleStats.card.price[0], GameUnitPossibleStats.card.price[1]),
-//       energy: randomIntFromInterval(GameUnitPossibleStats.card.energy[0], GameUnitPossibleStats.card.energy[1]),
-//       possibleMoves: 1,
-//       cardType: CardType.UNIT,
-//     }),
+// new CardObject.Card({
+//   team: Team.BLUE,
+//   radius: randomIntFromInterval(GameUnitPossibleStats.card.radius[0], GameUnitPossibleStats.card.radius[1]),
+//   damage: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
+//   hp: randomIntFromInterval(GameUnitPossibleStats.card.damage[0], GameUnitPossibleStats.card.damage[1]),
+//   source: 'resources/img/cards/peasant-card.png',
+//   unitSource: 'resources/img/map/units/Worker_blue.png',
+//   price: randomIntFromInterval(GameUnitPossibleStats.card.price[0], GameUnitPossibleStats.card.price[1]),
+//   energy: randomIntFromInterval(GameUnitPossibleStats.card.energy[0], GameUnitPossibleStats.card.energy[1]),
+//   possibleMoves: 1,
+//   cardType: CardType.UNIT,
+// }),
 //   ],
 
 //   time: '00:00',
@@ -310,8 +310,7 @@ export const BattleHud: FC<BattleHudprops> = ({ children, setUnitActions, select
   // const { turn } = useSocket();
   // const test = useUser((state) => state.updatedUnit);
   const handleOpenModal = () => {
-    const content = <LeaveWindowPIXI />;
-    openModal(content);
+    openModal(<LeaveWindowPIXI />);
   };
 
   const cardHandler = useCallback(
@@ -373,7 +372,6 @@ export const BattleHud: FC<BattleHudprops> = ({ children, setUnitActions, select
                     coords: { x: 3, y: 3 },
                     damage: 1,
                     hp: 1,
-                    radius: 1,
                     source: 'resources/img/map/units/Worker_blue.png',
                     unitType: UnitType.WARRIOR,
                     team: Team.BLUE,

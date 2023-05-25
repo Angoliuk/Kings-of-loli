@@ -11,9 +11,11 @@ import {
   IoEvent,
   Game,
   GameObjectType,
+  TurnFromServer,
 } from '@kol/shared-game/interfaces';
 import { createBaseGame, updateGameObjectsGroup } from '@kol/shared-game/utils';
 import { redisUtils, socketKeys, redisKeys } from '../services/redis';
+
 export const io = new Server<IoClientToServerEvents, IoServerToClientEvents, never, IoData>({
   transports: ['websocket'],
   cors: {
@@ -59,11 +61,14 @@ io.on(IoEvent.CONNECT, async (socket) => {
       [GameObjectType.UNIT]: updateGameObjectsGroup(game.gameObjects[GameObjectType.UNIT], turnToServer),
       [GameObjectType.CARD]: updateGameObjectsGroup(game.gameObjects[GameObjectType.CARD], turnToServer),
     };
-    game.players[game.players.findIndex((player) => player.userId === turnToServer.player.userId)] =
-      turnToServer.player;
+    game.players[game.players.findIndex((player) => player.userId === turnToServer.player.userId)] = {
+      ...turnToServer.player,
+      energy: turnToServer.player.energy + 2,
+      coins: turnToServer.player.coins + 2,
+    };
 
     // TODO: change isFinished and winnedUserId
-    const turnFromServer = {
+    const turnFromServer: TurnFromServer = {
       ...turnToServer,
       game: {
         id: game.id,
@@ -71,6 +76,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
         turnsCount: game.turnsCount,
         winnedUserId: game.winnedUserId,
       },
+      players: game.players,
     };
 
     game.turns.push(turnFromServer);

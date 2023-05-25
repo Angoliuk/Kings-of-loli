@@ -1,12 +1,12 @@
 import { GAME_FIELD } from '../../constants';
-import { CardType, GameObjectType, Coordinates, ActionType } from '../../interfaces';
+import { CardType, GameObjectType, Coordinates, ActionType, UnitType } from '../../interfaces';
 import { isCrossingObstacleCoordinates } from '../../utils';
+import { Action } from '../actions';
 import { BaseGameObject, BaseGameObjectProps } from '../base/base-object';
 import { Unit } from '../units/unit-object';
 
 type CardProperties = {
   damage: number;
-  radius: number;
   // TODO: For what this variable???
   unitSource: string;
   energy: number;
@@ -16,7 +16,6 @@ type CardProperties = {
 } & Omit<BaseGameObjectProps, 'objectType'>;
 
 export class Card extends BaseGameObject {
-  #radius;
   #damage;
   #unitSource;
   #cardType;
@@ -24,28 +23,17 @@ export class Card extends BaseGameObject {
   #energy;
   #possibleMoves;
 
-  constructor({
-    damage,
-    hp,
-    source,
-    radius,
-    team,
-    unitSource,
-    price,
-    energy,
-    possibleMoves,
-    cardType,
-  }: CardProperties) {
+  constructor({ damage, hp, source, team, unitSource, price, energy, possibleMoves, cardType }: CardProperties) {
     super({
       objectType: GameObjectType.CARD,
       hp: hp,
       source: source,
       team: team,
     });
+    // its like a count of moves per turn
     this.#possibleMoves = possibleMoves;
     this.#unitSource = unitSource;
     this.#damage = damage;
-    this.#radius = radius;
     this.#price = price;
     this.#energy = energy;
     this.#cardType = cardType;
@@ -64,20 +52,20 @@ export class Card extends BaseGameObject {
   getPossibleCardActions<T extends BaseGameObject & ({ coords: Coordinates } | { coords: Coordinates[] })>(
     obstacles: T[],
   ) {
-    const possibleMoves: UnitAction[] = [];
+    const possibleMoves: Action[] = [];
     for (let y = 0; y < GAME_FIELD.y; y++) {
       for (let x = 0; x < Math.floor(GAME_FIELD.x / 2); x++) {
-        possibleMoves.push({
-          x: x,
-          y: y,
-          type: ActionType.MOVE,
-          src: 'resources/img/map/tiles/point.png',
+        const action = new Action({
+          actionType: ActionType.MOVE,
+          source: 'resources/img/map/tiles/point.png',
+          coords: { x, y },
         });
+        // TODO: do we really want have coords as array or single object
+        obstacles.some((obstacle) => !isCrossingObstacleCoordinates(action, obstacle)) && possibleMoves.push(action);
       }
     }
 
-    // TODO: do we really want have coords as array or single object
-    return possibleMoves.filter((move) => obstacles.some((obstacle) => isCrossingObstacleCoordinates(move, obstacle)));
+    return possibleMoves;
   }
 
   move<T extends any[]>(coords: Coordinates, objectsList: T) {
@@ -87,11 +75,11 @@ export class Card extends BaseGameObject {
         coords,
         damage: this.#damage,
         hp: this.hp,
-        radius: this.#radius,
         source: this.#unitSource,
         team: this.team,
         energy: this.#energy,
         possibleMoves: this.#possibleMoves,
+        unitType: UnitType.WARRIOR,
       }),
     );
   }
