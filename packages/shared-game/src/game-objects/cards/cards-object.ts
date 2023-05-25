@@ -2,10 +2,10 @@ import { GAME_FIELD } from '../../constants';
 import { CardType, GameObjectType, Coordinates, ActionType, UnitType } from '../../interfaces';
 import { isCrossingObstacleCoordinates } from '../../utils';
 import { Action } from '../actions';
-import { BaseGameObject, BaseGameObjectProps } from '../base/base-object';
+import { BaseGameObject, BaseGameObjectProperties } from '../base/base-object';
 import { Unit } from '../units/unit-object';
 
-type CardProperties = {
+export type CardOwnProperties = {
   damage: number;
   // TODO: For what this variable???
   unitSource: string;
@@ -13,15 +13,17 @@ type CardProperties = {
   possibleMoves: number;
   price: number;
   cardType: CardType;
-} & Omit<BaseGameObjectProps, 'objectType'>;
+};
+
+export type CardProperties = CardOwnProperties & Omit<BaseGameObjectProperties, 'objectType'>;
 
 export class Card extends BaseGameObject {
-  #damage;
-  #unitSource;
-  #cardType;
-  #price;
-  #energy;
-  #possibleMoves;
+  damage;
+  unitSource;
+  cardType;
+  price;
+  energy;
+  possibleMoves;
 
   constructor({ damage, hp, source, team, unitSource, price, energy, possibleMoves, cardType }: CardProperties) {
     super({
@@ -31,22 +33,12 @@ export class Card extends BaseGameObject {
       team: team,
     });
     // its like a count of moves per turn
-    this.#possibleMoves = possibleMoves;
-    this.#unitSource = unitSource;
-    this.#damage = damage;
-    this.#price = price;
-    this.#energy = energy;
-    this.#cardType = cardType;
-  }
-
-  get price() {
-    return this.#price;
-  }
-  get energy() {
-    return this.#energy;
-  }
-  get damage() {
-    return this.#damage;
+    this.possibleMoves = possibleMoves;
+    this.unitSource = unitSource;
+    this.damage = damage;
+    this.price = price;
+    this.energy = energy;
+    this.cardType = cardType;
   }
 
   getPossibleCardActions<T extends BaseGameObject & ({ coords: Coordinates } | { coords: Coordinates[] })>(
@@ -73,12 +65,12 @@ export class Card extends BaseGameObject {
     objectsList.push(
       new Unit({
         coords,
-        damage: this.#damage,
+        damage: this.damage,
         hp: this.hp,
-        source: this.#unitSource,
+        source: this.unitSource,
         team: this.team,
-        energy: this.#energy,
-        possibleMoves: this.#possibleMoves,
+        energy: this.energy,
+        possibleMoves: this.possibleMoves,
         unitType: UnitType.WARRIOR,
       }),
     );

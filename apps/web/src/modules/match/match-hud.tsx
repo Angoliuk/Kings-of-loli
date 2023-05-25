@@ -367,18 +367,18 @@ export const BattleHud: FC<BattleHudprops> = ({ children, setUnitActions, select
               {...playButton}
               interactive={true}
               click={() => {
-                test([
-                  new UnitObject.Unit({
-                    coords: { x: 3, y: 3 },
-                    damage: 1,
-                    hp: 1,
-                    source: 'resources/img/map/units/Worker_blue.png',
-                    unitType: UnitType.WARRIOR,
-                    team: Team.BLUE,
-                    energy: 2,
-                    possibleMoves: 1,
-                  }),
-                ]);
+                // test([
+                //   new UnitObject.Unit({
+                //     coords: { x: 3, y: 3 },
+                //     damage: 1,
+                //     hp: 1,
+                //     source: 'resources/img/map/units/Worker_blue.png',
+                //     unitType: UnitType.WARRIOR,
+                //     team: Team.BLUE,
+                //     energy: 2,
+                //     possibleMoves: 1,
+                //   }),
+                // ]);
               }}
             />
           </Container>

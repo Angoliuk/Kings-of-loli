@@ -1,7 +1,7 @@
 import { ActionType, Coordinates, GameObjectType } from '../../interfaces';
-import { BaseGameObject, BaseGameObjectProps } from '../base';
+import { BaseGameObject, BaseGameObjectProperties } from '../base';
 
-type ActionProperties = { coords: Coordinates; actionType: ActionType; source: string };
+export type ActionProperties = { coords: Coordinates; actionType: ActionType; source: string };
 
 export class Action {
   #coords;

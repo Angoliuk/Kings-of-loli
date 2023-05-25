@@ -1,8 +1,6 @@
-import { BaseObject } from '../game-objects';
-import { BaseGameObject } from '../game-objects/base';
-import { GameObjectType, GameObjects, GameObjectsLists, TurnFromServer, TurnToServer } from '../interfaces';
+import { TurnGameObjects, TurnGameObjectsLists, TurnFromServer, TurnToServer } from '../interfaces';
 
-export const updateGameObjectsGroup = <T extends GameObjectsLists[keyof GameObjects]>(
+export const updateGameObjectsGroup = <T extends TurnGameObjectsLists[keyof TurnGameObjects]>(
   initialObjects: T,
   turn: TurnToServer | TurnFromServer,
 ) => {

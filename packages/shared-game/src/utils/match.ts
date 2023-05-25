@@ -1,10 +1,11 @@
-import { Building } from '../game-objects/buildings';
+import { v4 as id } from 'uuid';
+import { type Game, Team, CardType, BuildingType, GameObjectType } from '../interfaces';
 import { Card } from '../game-objects/cards';
-import { type Game, Team, CardType, BuildingType } from '../interfaces';
+import { Building } from '../game-objects/buildings';
 
 export const createBaseGame = (playersIds: [string, string]): Game => {
   return {
-    id: '12',
+    id: id(),
     isFinished: false,
     turns: [],
     turnsCount: 0,
@@ -114,6 +115,35 @@ export const createBaseGame = (playersIds: [string, string]): Game => {
         energy: 8,
         team: Team.GREEN,
         userId: playersIds[1],
+      },
+    ],
+  };
+};
+
+export const createEmptyGame = (): Game => {
+  return {
+    id: 'empty',
+    isFinished: false,
+    turns: [],
+    turnsCount: 0,
+    winnedUserId: undefined,
+    gameObjects: {
+      card: [],
+      unit: [],
+      building: [],
+    },
+    players: [
+      {
+        coins: 0,
+        energy: 0,
+        team: Team.BLUE,
+        userId: 'template1',
+      },
+      {
+        coins: 0,
+        energy: 0,
+        team: Team.GREEN,
+        userId: 'template2',
       },
     ],
   };

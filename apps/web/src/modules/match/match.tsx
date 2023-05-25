@@ -1,5 +1,4 @@
 import { type ActionObject, type CardObject, type UnitObject } from '@kol/shared-game/game-objects';
-import { useSocket } from '@web/hooks/use-socket';
 import { useState } from 'react';
 
 import { BattleHud } from './match-hud';

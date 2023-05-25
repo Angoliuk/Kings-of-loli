@@ -15,19 +15,19 @@ export type Player = {
   team: string;
 };
 
-export type GameObjects = {
+export type TurnGameObjects = {
   [GameObjectType.CARD]: Card;
   [GameObjectType.BUILDING]: Building;
   [GameObjectType.UNIT]: Unit;
 };
 
-export type GameObjectsLists = {
+export type TurnGameObjectsLists = {
   [GameObjectType.CARD]: Card[];
   [GameObjectType.BUILDING]: Building[];
   [GameObjectType.UNIT]: Unit[];
 };
 
-export type RemovedGameObjects = {
+export type TurnRemovedGameObjects = {
   [GameObjectType.CARD]: string[];
   [GameObjectType.BUILDING]: string[];
   [GameObjectType.UNIT]: string[];
@@ -36,7 +36,7 @@ export type RemovedGameObjects = {
 export type Game = {
   id: string;
   players: [Player, Player];
-  gameObjects: GameObjectsLists;
+  gameObjects: TurnGameObjectsLists;
   isFinished: boolean;
   winnedUserId?: string;
   turnsCount: number;
@@ -61,9 +61,9 @@ export type TurnToServer = {
 
   player: Player;
 
-  newObjects: GameObjectsLists;
-  removedObjects: RemovedGameObjects;
-  updatedObjects: GameObjectsLists;
+  newObjects: TurnGameObjectsLists;
+  removedObjects: TurnRemovedGameObjects;
+  updatedObjects: TurnGameObjectsLists;
 };
 
 export type TurnFromServer = {
@@ -73,7 +73,7 @@ export type TurnFromServer = {
 
   players: [Player, Player];
 
-  newObjects: GameObjectsLists;
-  removedObjects: RemovedGameObjects;
-  updatedObjects: GameObjectsLists;
+  newObjects: TurnGameObjectsLists;
+  removedObjects: TurnRemovedGameObjects;
+  updatedObjects: TurnGameObjectsLists;
 };

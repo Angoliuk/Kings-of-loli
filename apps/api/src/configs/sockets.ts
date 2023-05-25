@@ -90,8 +90,13 @@ io.on(IoEvent.CONNECT, async (socket) => {
     const isUserHaveSearchRequest = await redisUtils.gameSearch.get(userId);
 
     if (userActiveGameId) {
-      io.to(userId).emit(IoEvent.GAME_FOUND, await redisUtils.gameRoom.get(userActiveGameId));
-      return;
+      // REPLACE AFTER TESTS
+      const a = await redisUtils.gameRoom.get(userActiveGameId);
+      await redisUtils.gameRoom.del(a?.id);
+      await redisUtils.userActiveGame.del(a?.players[0].userId);
+      await redisUtils.userActiveGame.del(a?.players[1].userId);
+      // io.to(userId).emit(IoEvent.GAME_FOUND, await redisUtils.gameRoom.get(userActiveGameId));
+      // return;
     }
     if (isUserHaveSearchRequest) {
       await redisUtils.gameSearch.del(userId);

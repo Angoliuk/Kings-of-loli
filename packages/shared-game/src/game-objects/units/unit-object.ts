@@ -2,24 +2,26 @@ import { GAME_FIELD } from '../../constants';
 import { PatternTypes, Coordinates, UnitType, GameObjectType, Team, ActionType } from '../../interfaces';
 import { isCrossingObstacleCoordinates, movePatterns } from '../../utils';
 import { Action } from '../actions';
-import { BaseGameObject, BaseGameObjectProps } from '../base/base-object';
+import { BaseGameObject, BaseGameObjectProperties } from '../base/base-object';
 
-export type UnitProperties = {
+export type UnitOwnProperties = {
   damage: number;
   pattern?: PatternTypes;
   coords: Coordinates;
   energy: number;
   unitType: UnitType;
   possibleMoves: number;
-} & Omit<BaseGameObjectProps, 'objectType'>;
+};
+
+export type UnitProperties = UnitOwnProperties & Omit<BaseGameObjectProperties, 'objectType'>;
 
 export class Unit extends BaseGameObject {
-  #pattern;
-  #unitType;
-  #damage;
-  #coords;
-  #energy;
-  #possibleMoves;
+  pattern;
+  unitType;
+  damage;
+  coords;
+  energy;
+  possibleMoves;
 
   constructor({ source, hp, coords, damage, pattern, team, energy, possibleMoves, unitType }: UnitProperties) {
     super({
@@ -28,31 +30,22 @@ export class Unit extends BaseGameObject {
       team: team,
       objectType: GameObjectType.UNIT,
     });
-    this.#possibleMoves = possibleMoves;
-    this.#energy = energy;
-    this.#coords = coords;
-    this.#damage = damage;
-    this.#unitType = unitType;
-    this.#pattern = pattern ?? PatternTypes.STAR;
-  }
-  get damage() {
-    return this.#damage;
-  }
-  get coords() {
-    return this.#coords;
-  }
-  get energy() {
-    return this.#energy;
+    this.possibleMoves = possibleMoves;
+    this.energy = energy;
+    this.coords = coords;
+    this.damage = damage;
+    this.unitType = unitType;
+    this.pattern = pattern ?? PatternTypes.STAR;
   }
 
   getPossibleActions<T extends BaseGameObject & { team: Team } & ({ coords: Coordinates } | { coords: Coordinates[] })>(
     obstacles: T[],
   ) {
-    if (this.#possibleMoves === 0) return [];
+    if (this.possibleMoves === 0) return [];
 
-    return movePatterns[this.#pattern](this.#coords)
+    return movePatterns[this.pattern](this.coords)
       .filter((actionTemplate) =>
-        (actionTemplate.coords.x === this.#coords.x && actionTemplate.coords.y === this.#coords.y) ||
+        (actionTemplate.coords.x === this.coords.x && actionTemplate.coords.y === this.coords.y) ||
         actionTemplate.coords.x > GAME_FIELD.x ||
         actionTemplate.coords.x < 0 ||
         actionTemplate.coords.y >= GAME_FIELD.y ||
@@ -83,7 +76,7 @@ export class Unit extends BaseGameObject {
       });
   }
   move(coords: Coordinates) {
-    this.#coords = coords;
-    this.#possibleMoves -= 0;
+    this.coords = coords;
+    this.possibleMoves -= 0;
   }
 }
