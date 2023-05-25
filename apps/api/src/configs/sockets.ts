@@ -114,14 +114,14 @@ io.on(IoEvent.CONNECT, async (socket) => {
         const gameSearchData = JSON.parse(gameSearchDataStringified) as { userId: string };
         const gameId = randomUUID();
 
-        await redisUtils.gameRoom.set(gameId, {} as Game);
+        const createdGame = createBaseGame([userId, gameId]);
+
+        await redisUtils.gameRoom.set(gameId, createdGame);
         await redisUtils.userActiveGame.set(userId, gameId);
         await redisUtils.userActiveGame.set(gameSearchData.userId, gameId);
         await redisUtils.gameSearch.del(gameSearch);
 
-        io.to(userId)
-          .to(gameSearchData.userId)
-          .emit(IoEvent.GAME_FOUND, createBaseGame([userId, gameId]));
+        io.to(userId).to(gameSearchData.userId).emit(IoEvent.GAME_FOUND, createdGame);
 
         scan.destroy();
         break;
