@@ -1,13 +1,13 @@
-import { type ActionObject, type CardObject, type UnitObject } from '@kol/shared-game/game-objects';
+import { type GameObjects } from '@kol/shared-game/game-objects';
 import { useState } from 'react';
 
 import { BattleHud } from './match-hud';
 import { BattleMap } from './match-map';
 
 export const Match = () => {
-  const [unitActions, setUnitActions] = useState<ActionObject.Action[]>([]);
-  const [selectedUnit, setSelectedUnit] = useState<UnitObject.Unit | null>(null);
-  const [selectedCard, setSelectedCard] = useState<CardObject.Card | null>(null);
+  const [actions, setActions] = useState<GameObjects.Action[]>([]);
+  const [selectedUnit, setSelectedUnit] = useState<GameObjects.Unit | null>(null);
+  const [selectedCard, setSelectedCard] = useState<GameObjects.Card | null>(null);
   // const { gameLoaded, startSearch, turn } = useSocket();
 
   // const updatesData = [{ id: 1, update: true }];
@@ -20,10 +20,15 @@ export const Match = () => {
   // ]);
   // console.log(useUser((state) => state.units));
   return (
-    <BattleHud setUnitActions={setUnitActions} selectedCard={selectedCard} setSelectedCard={setSelectedCard}>
+    <BattleHud
+      setActions={setActions}
+      selectedCard={selectedCard}
+      setSelectedCard={setSelectedCard}
+      setSelectedUnit={setSelectedUnit}
+    >
       <BattleMap
-        actions={unitActions}
-        setUnitActions={setUnitActions}
+        actions={actions}
+        setActions={setActions}
         setSelectedUnit={setSelectedUnit}
         selectedUnit={selectedUnit}
         selectedCard={selectedCard}

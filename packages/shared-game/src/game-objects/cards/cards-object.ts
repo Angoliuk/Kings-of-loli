@@ -1,44 +1,36 @@
+import { GameObjects } from '..';
 import { GAME_FIELD } from '../../constants';
-import { CardType, GameObjectType, Coordinates, ActionType, UnitType } from '../../interfaces';
+import { GameObjectType, Coordinates, ActionType, GameObjectsList } from '../../interfaces';
 import { isCrossingObstacleCoordinates } from '../../utils';
 import { Action } from '../actions';
 import { BaseGameObject, BaseGameObjectProperties } from '../base/base-object';
-import { Unit } from '../units/unit-object';
 
-export type CardOwnProperties = {
-  damage: number;
-  // TODO: For what this variable???
-  unitSource: string;
+type GameObjectsListOmitCard = Omit<GameObjectsList, 'card'>;
+
+export type CardOwnProperties<T extends keyof GameObjectsListOmitCard> = {
+  objectToCreate: Omit<GameObjectsListOmitCard[T]['object'], 'coords'>;
   energy: number;
-  possibleMoves: number;
   price: number;
-  cardType: CardType;
 };
 
-export type CardProperties = CardOwnProperties & Omit<BaseGameObjectProperties, 'objectType'>;
+export type CardProperties<T extends keyof GameObjectsListOmitCard> = CardOwnProperties<T> &
+  Omit<BaseGameObjectProperties, 'objectType'>;
 
-export class Card extends BaseGameObject {
-  damage;
-  unitSource;
-  cardType;
+export class Card<T extends keyof GameObjectsListOmitCard = any> extends BaseGameObject {
   price;
   energy;
-  possibleMoves;
+  objectToCreate;
 
-  constructor({ damage, hp, source, team, unitSource, price, energy, possibleMoves, cardType }: CardProperties) {
+  constructor({ hp, source, team, price, energy, objectToCreate }: CardProperties<T>) {
     super({
       objectType: GameObjectType.CARD,
       hp: hp,
       source: source,
       team: team,
     });
-    // its like a count of moves per turn
-    this.possibleMoves = possibleMoves;
-    this.unitSource = unitSource;
-    this.damage = damage;
+    this.objectToCreate = objectToCreate;
     this.price = price;
     this.energy = energy;
-    this.cardType = cardType;
   }
 
   getPossibleCardActions<T extends BaseGameObject & ({ coords: Coordinates } | { coords: Coordinates[] })>(
@@ -61,18 +53,8 @@ export class Card extends BaseGameObject {
   }
 
   move<T extends any[]>(coords: Coordinates, objectsList: T) {
-    // TODO: card can create not only unit
-    objectsList.push(
-      new Unit({
-        coords,
-        damage: this.damage,
-        hp: this.hp,
-        source: this.unitSource,
-        team: this.team,
-        energy: this.energy,
-        possibleMoves: this.possibleMoves,
-        unitType: UnitType.WARRIOR,
-      }),
-    );
+    const newObject = new GameObjects[this.objectToCreate.objectType]({ ...this.objectToCreate, coords });
+    objectsList.push(newObject);
+    return newObject;
   }
 }

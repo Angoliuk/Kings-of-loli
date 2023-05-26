@@ -1,7 +1,13 @@
-import { BuildingObject, CardObject, UnitObject } from '@kol/shared-game/game-objects';
-import { type Game, type Player, type TurnFromServer, type TurnGameObjects } from '@kol/shared-game/interfaces';
+import { GameObjects } from '@kol/shared-game/game-objects';
+import {
+  type GameObjectsList,
+  type GameWithObjects,
+  type Player,
+  type TurnFromServer,
+} from '@kol/shared-game/interfaces';
 import { createEmptyGame, updateGameObjectsGroup } from '@kol/shared-game/utils';
 import { useAuthStore } from '@web/store/auth-store/auth-store';
+import { plainToInstance } from 'class-transformer';
 import { create } from 'zustand';
 import { combine } from 'zustand/middleware';
 
@@ -10,19 +16,23 @@ import { bindObject } from './temporary';
 export const useGameStore = create(
   combine(createEmptyGame(), (set, get) =>
     bindObject({
-      setGame: (game: Game) => {
-        game.gameObjects.building.map((building) => new BuildingObject.Building(building));
-        game.gameObjects.card.map((card) => new CardObject.Card(card));
-        game.gameObjects.unit.map((unit) => new UnitObject.Unit(unit));
-        set(game);
+      setGame: (game: GameWithObjects) => {
+        set({
+          ...game,
+          gameObjects: {
+            building: plainToInstance(GameObjects.Building, game.gameObjects.building),
+            card: game.gameObjects.card.map((card) => plainToInstance(GameObjects.Card, card)),
+            unit: plainToInstance(GameObjects.Unit, game.gameObjects.unit),
+          },
+        });
       },
       parseTurn: (turn: TurnFromServer) => {
-        turn.newObjects.building.map((building) => new BuildingObject.Building(building));
-        turn.newObjects.card.map((card) => new CardObject.Card(card));
-        turn.newObjects.unit.map((unit) => new UnitObject.Unit(unit));
-        turn.updatedObjects.building.map((building) => new BuildingObject.Building(building));
-        turn.updatedObjects.card.map((card) => new CardObject.Card(card));
-        turn.updatedObjects.unit.map((unit) => new UnitObject.Unit(unit));
+        turn.newObjects.building = plainToInstance(GameObjects.Building, turn.newObjects.building);
+        turn.newObjects.card = plainToInstance(GameObjects.Card, turn.newObjects.card);
+        turn.newObjects.unit = plainToInstance(GameObjects.Unit, turn.newObjects.unit);
+        turn.updatedObjects.building = plainToInstance(GameObjects.Building, turn.updatedObjects.building);
+        turn.updatedObjects.card = plainToInstance(GameObjects.Card, turn.updatedObjects.card);
+        turn.updatedObjects.unit = plainToInstance(GameObjects.Unit, turn.updatedObjects.unit);
 
         set({
           turnsCount: turn.game.turnsCount,
@@ -48,7 +58,7 @@ export const useGameStore = create(
           ) as [Player, Player],
         });
       },
-      removeGameObject: (removedObject: TurnGameObjects[keyof TurnGameObjects]) => {
+      removeGameObject: (removedObject: GameObjectsList[keyof GameObjectsList]['instance']) => {
         set({
           gameObjects: {
             ...get().gameObjects,
@@ -59,7 +69,7 @@ export const useGameStore = create(
           },
         });
       },
-      addGameObject: (newObject: TurnGameObjects[keyof TurnGameObjects]) => {
+      addGameObject: (newObject: GameObjectsList[keyof GameObjectsList]['instance']) => {
         set({
           gameObjects: {
             ...get().gameObjects,
@@ -67,7 +77,7 @@ export const useGameStore = create(
           },
         });
       },
-      updateGameObject: (updatedObject: TurnGameObjects[keyof TurnGameObjects]) => {
+      updateGameObject: (updatedObject: GameObjectsList[keyof GameObjectsList]['instance']) => {
         set({
           gameObjects: {
             ...get().gameObjects,

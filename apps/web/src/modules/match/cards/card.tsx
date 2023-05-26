@@ -1,17 +1,17 @@
-import { type CardObject } from '@kol/shared-game/game-objects';
+import { type GameObjects } from '@kol/shared-game/game-objects';
 import { Sprite } from '@pixi/react';
 import { type FederatedEvent } from 'pixi.js';
 import { type FC, memo } from 'react';
 
 import { useSizes } from '../utils/sprite-sizes';
 export type CardItemProperties = {
-  card: CardObject.Card;
+  card: GameObjects.Card;
   cardsLength: number;
   cardIndex: number;
   y?: number;
-  onClick: (card: CardObject.Card, event: FederatedEvent) => void;
-  onHover: (card: CardObject.Card, event: FederatedEvent) => void;
-  onHoverOut: (card: CardObject.Card, event: FederatedEvent) => void;
+  onClick: (card: GameObjects.Card, event: FederatedEvent) => void;
+  onHover: (card: GameObjects.Card, event: FederatedEvent) => void;
+  onHoverOut: (card: GameObjects.Card, event: FederatedEvent) => void;
 };
 
 export const CardItem: FC<CardItemProperties> = memo(

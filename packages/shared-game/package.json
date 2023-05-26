@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@types/uuid": "^9.0.1",
+    "class-transformer": "^0.5.1",
     "eslint-config-base": "workspace:^",
     "tsconfig": "workspace:^",
     "tsup": "^6.6.3",

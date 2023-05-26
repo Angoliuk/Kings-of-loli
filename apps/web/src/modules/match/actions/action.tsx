@@ -1,4 +1,4 @@
-import { type ActionObject } from '@kol/shared-game/game-objects';
+import { type GameObjects } from '@kol/shared-game/game-objects';
 import { ActionType } from '@kol/shared-game/interfaces';
 import { Sprite } from '@pixi/react';
 import { type FC, memo } from 'react';
@@ -6,8 +6,8 @@ import { type FC, memo } from 'react';
 import { useSizes } from '../utils/sprite-sizes';
 
 export type GameObjectActionProperties = {
-  action: ActionObject.Action;
-  onClick: (action: ActionObject.Action) => void;
+  action: GameObjects.Action;
+  onClick: (action: GameObjects.Action) => void;
 };
 
 export const GameObjectAction: FC<GameObjectActionProperties> = memo(({ onClick, action }) => {

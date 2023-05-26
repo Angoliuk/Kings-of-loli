@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { randomUUID } from 'node:crypto';
 
 import { Server, type Socket } from 'socket.io';
@@ -14,7 +13,7 @@ import {
   TurnFromServer,
 } from '@kol/shared-game/interfaces';
 import { createBaseGame, updateGameObjectsGroup } from '@kol/shared-game/utils';
-import { redisUtils, socketKeys, redisKeys } from '../services/redis';
+import { redisUtils, socketKeys } from '../services/redis';
 
 export const io = new Server<IoClientToServerEvents, IoServerToClientEvents, never, IoData>({
   transports: ['websocket'],
@@ -92,9 +91,9 @@ io.on(IoEvent.CONNECT, async (socket) => {
     if (userActiveGameId) {
       // REPLACE AFTER TESTS
       const a = await redisUtils.gameRoom.get(userActiveGameId);
-      await redisUtils.gameRoom.del(a?.id);
-      await redisUtils.userActiveGame.del(a?.players[0].userId);
-      await redisUtils.userActiveGame.del(a?.players[1].userId);
+      await redisUtils.gameRoom.del(a!.id);
+      await redisUtils.userActiveGame.del(a!.players[0].userId);
+      await redisUtils.userActiveGame.del(a!.players[1].userId);
       // io.to(userId).emit(IoEvent.GAME_FOUND, await redisUtils.gameRoom.get(userActiveGameId));
       // return;
     }
@@ -103,7 +102,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
     }
 
     const scan = redisClient.scanStream({
-      match: redisKeys.gameSearch('*'),
+      match: redisUtils.gameSearch.key('*'),
       count: 1,
     });
 

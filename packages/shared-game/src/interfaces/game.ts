@@ -1,7 +1,4 @@
-import { Building } from '../game-objects/buildings';
-import { Card } from '../game-objects/cards';
-import { Unit } from '../game-objects/units';
-import { GameObjectType } from './game-objects';
+import { GameObjectType, GameObjectsList } from './game-objects';
 
 export enum Team {
   BLUE = 'blue',
@@ -15,28 +12,32 @@ export type Player = {
   team: string;
 };
 
-export type TurnGameObjects = {
-  [GameObjectType.CARD]: Card;
-  [GameObjectType.BUILDING]: Building;
-  [GameObjectType.UNIT]: Unit;
+export type GameObjectsListsObjects = {
+  [GameObjectType.CARD]: GameObjectsList['card']['object'][];
+  [GameObjectType.BUILDING]: GameObjectsList['building']['object'][];
+  [GameObjectType.UNIT]: GameObjectsList['unit']['object'][];
 };
 
-export type TurnGameObjectsLists = {
-  [GameObjectType.CARD]: Card[];
-  [GameObjectType.BUILDING]: Building[];
-  [GameObjectType.UNIT]: Unit[];
+export type GameObjectsLists = {
+  [GameObjectType.CARD]: GameObjectsList['card']['instance'][];
+  [GameObjectType.BUILDING]: GameObjectsList['building']['instance'][];
+  [GameObjectType.UNIT]: GameObjectsList['unit']['instance'][];
 };
 
-export type TurnRemovedGameObjects = {
-  [GameObjectType.CARD]: string[];
-  [GameObjectType.BUILDING]: string[];
-  [GameObjectType.UNIT]: string[];
+export type GameWithObjects = {
+  id: string;
+  players: [Player, Player];
+  gameObjects: GameObjectsListsObjects;
+  isFinished: boolean;
+  winnedUserId?: string;
+  turnsCount: number;
+  turns: TurnFromServer[];
 };
 
 export type Game = {
   id: string;
   players: [Player, Player];
-  gameObjects: TurnGameObjectsLists;
+  gameObjects: GameObjectsLists;
   isFinished: boolean;
   winnedUserId?: string;
   turnsCount: number;
@@ -54,26 +55,26 @@ export type GameCompactToServer = {
   id: string;
 };
 
-export type TurnToServer = {
+export type TurnBase = {
   turn: number;
 
-  game: GameCompactToServer;
-
-  player: Player;
-
-  newObjects: TurnGameObjectsLists;
-  removedObjects: TurnRemovedGameObjects;
-  updatedObjects: TurnGameObjectsLists;
+  newObjects: GameObjectsListsObjects;
+  updatedObjects: GameObjectsListsObjects;
+  removedObjects: {
+    [GameObjectType.CARD]: string[];
+    [GameObjectType.BUILDING]: string[];
+    [GameObjectType.UNIT]: string[];
+  };
 };
 
-export type TurnFromServer = {
-  turn: number;
+export type TurnToServer = TurnBase & {
+  player: Player;
 
-  game: GameCompactFromServer;
+  game: GameCompactToServer;
+};
 
+export type TurnFromServer = TurnBase & {
   players: [Player, Player];
 
-  newObjects: TurnGameObjectsLists;
-  removedObjects: TurnRemovedGameObjects;
-  updatedObjects: TurnGameObjectsLists;
+  game: GameCompactFromServer;
 };

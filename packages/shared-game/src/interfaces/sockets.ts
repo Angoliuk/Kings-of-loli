@@ -1,4 +1,4 @@
-import { type Game, type TurnFromServer, type TurnToServer } from './game';
+import { GameWithObjects, type Game, type TurnFromServer, type TurnToServer } from './game';
 
 export enum IoEvent {
   TURN_TO_SERVER = 'turn-to-server',
@@ -18,7 +18,7 @@ export type IoClientToServerEvents = {
 
 export type IoServerToClientEvents = {
   [IoEvent.TURN_FROM_SERVER]: (data: TurnFromServer) => void;
-  [IoEvent.GAME_FOUND]: (data: Game) => void;
+  [IoEvent.GAME_FOUND]: (data: GameWithObjects) => void;
 };
 
 export type IoData = {

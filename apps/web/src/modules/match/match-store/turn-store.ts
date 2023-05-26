@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { type TurnGameObjects, type TurnToServer } from '@kol/shared-game/interfaces';
+import { type GameObjectsList, type TurnToServer } from '@kol/shared-game/interfaces';
 import { create } from 'zustand';
 import { combine } from 'zustand/middleware';
 
@@ -37,7 +37,7 @@ export const useTurnStore = create(
           });
           useGameStore.getState().setPlayer(get().player);
         },
-        addRemovedObject: <T extends TurnGameObjects[keyof TurnGameObjects]>(removedObject: T) => {
+        addRemovedObject: <T extends GameObjectsList[keyof GameObjectsList]['instance']>(removedObject: T) => {
           set({
             removedObjects: {
               ...get().removedObjects,
@@ -60,7 +60,7 @@ export const useTurnStore = create(
           });
           useGameStore.getState().removeGameObject(removedObject);
         },
-        addNewObject: <T extends TurnGameObjects[keyof TurnGameObjects]>(newObject: T) => {
+        addNewObject: <T extends GameObjectsList[keyof GameObjectsList]['instance']>(newObject: T) => {
           set({
             newObjects: {
               ...get().newObjects,
@@ -69,7 +69,7 @@ export const useTurnStore = create(
           });
           useGameStore.getState().addGameObject(newObject);
         },
-        addUpdatedObject: <T extends TurnGameObjects[keyof TurnGameObjects]>(updatedObject: T) => {
+        addUpdatedObject: <T extends GameObjectsList[keyof GameObjectsList]['instance']>(updatedObject: T) => {
           const previousUpdatedObjects = get().updatedObjects[updatedObject.objectType];
           let isUpdatedObjectDuplicate = false;
           // TODO: update recently added unit
