@@ -8,6 +8,7 @@ export type GameFieldTile = {
   source: string;
 } & Coordinates;
 
+// Try to use Array.fill()
 const gameField = Array.from<never, GameFieldTile[]>({ length: GAME_FIELD.y }, (_, yIndex) =>
   Array.from<never, GameFieldTile>({ length: GAME_FIELD.x }, (_, xIndex) => ({
     x: xIndex,

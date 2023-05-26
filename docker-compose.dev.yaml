@@ -9,7 +9,7 @@ services:
       - postgres
     ports:
       - '5520:5520'
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./:/app
       - ./node_modules/@kol:/app/node_modules/@kol
@@ -20,7 +20,7 @@ services:
   redis:
     image: redis:7.0.0-alpine
     read_only: true
-    restart: always
+    restart: unless-stopped
     ports:
       - '6666:6379'
     volumes:
@@ -42,7 +42,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    restart: always
+    restart: unless-stopped
     deploy:
       resources:
         limits:

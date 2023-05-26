@@ -34,8 +34,10 @@ app.use(
     createContext: createTRPCContext,
   }),
 );
+
 const server = http.createServer(app);
 io.attach(server);
+
 server.listen(process.env.API_PORT, () => {
   console.log(`Server started on port ${process.env.API_PORT}`);
 });
