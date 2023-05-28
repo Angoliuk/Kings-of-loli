@@ -91,6 +91,9 @@ export const useTurnStore = create(
           });
           useGameStore.getState().updateGameObject(updatedObject);
         },
+        getTurn: () => {
+          return get();
+        },
         createNewTurnTemplate: () => {
           set({
             game: { id: useGameStore.getState().id },

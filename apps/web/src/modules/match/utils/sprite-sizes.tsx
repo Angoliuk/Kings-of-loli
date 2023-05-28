@@ -43,6 +43,7 @@ export const useSizes = () => {
       height: window.innerHeight,
     });
   };
+
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -66,19 +67,29 @@ export const useSizes = () => {
     { width: windowSize.width, height: windowSize.height / 8 },
   );
 
+  const topPanelHeightWithoutCorner = topPanel.desiredSize.height / 1.67;
+  const bottomPanelHeightWithoutCorner = bottomPanel.desiredSize.height / 1.3;
+  const topPanelHeightCornerWidth = topPanel.desiredSize.width / 33.6;
+
   const sidePanelRight = new SpriteSizes(
     { width: 57, height: 695 },
-    { width: -windowSize.width / 33.6, height: windowSize.height / 1.4 },
+    {
+      width: -topPanelHeightCornerWidth,
+      height: innerHeight - (topPanelHeightWithoutCorner + bottomPanelHeightWithoutCorner),
+    },
   );
 
   const sidePanelLeft = new SpriteSizes(
     { width: 57, height: 695 },
-    { width: windowSize.width / 33.6, height: windowSize.height / 1.4 },
+    {
+      width: topPanelHeightCornerWidth,
+      height: innerHeight - (topPanelHeightWithoutCorner + bottomPanelHeightWithoutCorner),
+    },
   );
 
   const map = new SpriteSizes({
     width: innerWidth - (Math.abs(sidePanelRight.desiredSize.width) + sidePanelLeft.desiredSize.width),
-    height: innerHeight - (topPanel.desiredSize.height + bottomPanel.desiredSize.height) + 100,
+    height: innerHeight - (topPanelHeightWithoutCorner + bottomPanelHeightWithoutCorner),
   });
 
   const mapTile = new SpriteSizes(
@@ -119,6 +130,7 @@ export const useSizes = () => {
     },
     { height: innerHeight / 9, width: innerWidth / 9 },
   );
+
   const surrenderButton = new SpriteSizes(
     {
       width: 9,
@@ -126,17 +138,31 @@ export const useSizes = () => {
     },
     { height: innerHeight / 9, width: innerWidth / 9 },
   );
-  const coinBar = new SpriteSizes({
-    width: 191,
-    height: 86,
-  });
+
+  const coinBar = new SpriteSizes(
+    {
+      width: 191,
+      height: 86,
+    },
+    { height: topPanelHeightWithoutCorner, width: topPanel.desiredSize.width / 10 },
+  );
+
+  const coin = new SpriteSizes(
+    {
+      width: 48,
+      height: 55,
+    },
+    { width: coinBar.desiredSize.height * 0.6, height: coinBar.desiredSize.height * 0.7 },
+  );
+
   const energyBar = new SpriteSizes(
     {
       width: 653,
       height: 86,
     },
-    { width: innerWidth / 3.23, height: innerHeight / 86 },
+    { width: topPanel.desiredSize.width / 3, height: topPanelHeightWithoutCorner },
   );
+
   const energySize = new SpriteSizes(
     {
       width: 40,
@@ -149,12 +175,16 @@ export const useSizes = () => {
     { width: 96, height: 186 },
     { height: 1.8 * mapTile.desiredSize.height, width: 0.6 * mapTile.desiredSize.width },
   );
-  const playButton = new SpriteSizes(
+
+  const moveButton = new SpriteSizes(
     {
       width: 180,
       height: 174,
     },
-    { width: innerWidth * 0.15, height: innerHeight / 174 },
+    {
+      width: bottomPanel.desiredSize.width / 10,
+      height: bottomPanelHeightWithoutCorner,
+    },
   );
 
   return {
@@ -170,12 +200,15 @@ export const useSizes = () => {
     hpBar,
     map,
     unit,
+    coin,
     homeButton,
+    topPanelHeightWithoutCorner,
+    bottomPanelHeightWithoutCorner,
     surrenderButton,
     coinBar,
     energyBar,
     energySize,
     castle,
-    playButton,
+    moveButton,
   };
 };

@@ -11,7 +11,7 @@ export const useSocket = () => {
   const navigate = useNavigate();
   const [setGame, parseTurn] = useGameStore((state) => [state.setGame, state.parseTurn]);
 
-  const turn = (turn: TurnToServer) => {
+  const makeTurn = (turn: TurnToServer) => {
     window.socketIO?.emit(IoEvent.TURN_TO_SERVER, turn);
   };
 
@@ -60,5 +60,5 @@ export const useSocket = () => {
     };
   }, [window.socketIO]);
 
-  return { turn, startSearch, gameLoaded };
+  return { makeTurn, startSearch, gameLoaded };
 };

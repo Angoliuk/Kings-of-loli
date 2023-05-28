@@ -26,11 +26,11 @@ export class BaseGameObject {
 
   receiveDamage<T extends { id: string }>(damage: number, objectsList: T[]) {
     this.hp -= damage;
-    return this.hp < 2 ? this.killUnit(objectsList) : false;
+    return this.hp < 2 ? this.kill(objectsList) : false;
   }
 
-  killUnit<T extends { id: string }>(units: T[]) {
-    units.map((unit, index) => unit.id === this.id && units.splice(index, 1));
+  kill<T extends { id: string }>(objectsList: T[]) {
+    objectsList.map((unit, index) => unit.id === this.id && objectsList.splice(index, 1));
     return true;
   }
 }

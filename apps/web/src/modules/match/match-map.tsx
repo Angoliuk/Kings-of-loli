@@ -126,46 +126,6 @@ export const BattleMap: FC<BattleMap> = ({
   const player = getCurrentPlayer();
   const { mapTile, unit: unitSizes, castle } = useSizes();
 
-  const unitActions = {
-    move: (action: GameObjects.Action) => {
-      if (!selectedUnit) return;
-      selectedUnit.move(action.coords);
-      setActions([]);
-      setSelectedUnit(null);
-      updateCurrentPlayerResourcesBy({
-        energy: -2,
-      });
-      turnAddUpdatedObject(selectedUnit);
-    },
-    attack: (action: GameObjects.Action) => {
-      if (!selectedUnit) return;
-      const unit = units.find((unit) => unit.coords.x === action.coords.x && unit.coords.y === action.coords.y);
-      unit?.receiveDamage(selectedUnit.damage, units) && turnAddRemovedObject(unit);
-    },
-  };
-
-  const buildActions = {
-    move: (action: GameObjects.Action) => {
-      if (!selectedUnit) return;
-      selectedUnit.move(action.coords),
-        setActions([]),
-        setSelectedUnit(null),
-        updateCurrentPlayerResourcesBy({
-          energy: -2,
-        });
-      turnAddUpdatedObject(selectedUnit);
-    },
-    attack: (action: GameObjects.Action) => {
-      if (!selectedUnit) return;
-      return buildings.map(
-        (building) =>
-          isCrossingObstacleCoordinates(building, action) &&
-          building.receiveDamage(selectedUnit.damage, buildings) &&
-          turnAddRemovedObject(building),
-      );
-    },
-  };
-
   const handleUnitClick = (unit: GameObjects.Unit) => {
     setSelectedCard(null);
 
@@ -181,44 +141,115 @@ export const BattleMap: FC<BattleMap> = ({
     setActions(unit.getPossibleActions([...units, ...buildings]));
   };
 
-  const handlePutCard = (action: GameObjects.Action) => {
-    if (!selectedCard) return;
-    const createdObject = selectedCard.move(action.coords, units);
+  const handleActionClick = (action: GameObjects.Action) => {
     setActions([]);
     setSelectedCard(null);
-    turnAddRemovedObject(selectedCard);
-    updateCurrentPlayerResourcesBy({
-      coins: selectedCard.price,
-      energy: selectedCard.energy,
-    });
-    turnAddNewObject(createdObject);
     setSelectedUnit(null);
+
+    if (selectedCard) {
+      const createdObject = selectedCard.move(action.coords, units);
+      turnAddRemovedObject(selectedCard);
+      updateCurrentPlayerResourcesBy({
+        coins: -selectedCard.price,
+        energy: -selectedCard.energy,
+      });
+      turnAddNewObject(createdObject);
+    }
+
+    if (selectedUnit) {
+      updateCurrentPlayerResourcesBy({
+        energy: -selectedUnit.energy,
+      });
+      if (action.actionType === ActionType.MOVE) {
+        selectedUnit.move(action.coords);
+        turnAddUpdatedObject(selectedUnit);
+      } else {
+        const actionTarget = [...units, ...buildings].find((target) => isCrossingObstacleCoordinates(target, action));
+        if (!actionTarget) return;
+        selectedUnit.attack(actionTarget, actionTarget.objectType === GameObjectType.BUILDING ? buildings : units) &&
+          turnAddRemovedObject(actionTarget);
+      }
+    }
   };
+
+  // const unitActions = {
+  //   move: (action: GameObjects.Action) => {
+  //     if (!selectedUnit) return;
+  //     selectedUnit.move(action.coords);
+  //     setActions([]);
+  //     setSelectedUnit(null);
+  //     updateCurrentPlayerResourcesBy({
+  //       energy: -2,
+  //     });
+  //     turnAddUpdatedObject(selectedUnit);
+  //   },
+  //   attack: (action: GameObjects.Action) => {
+  //     if (!selectedUnit) return;
+  //     const unit = units.find((unit) => unit.coords.x === action.coords.x && unit.coords.y === action.coords.y);
+  //     unit?.receiveDamage(selectedUnit.damage, units) && turnAddRemovedObject(unit);
+  //   },
+  // };
+
+  // const buildActions = {
+  //   move: (action: GameObjects.Action) => {
+  //     if (!selectedUnit) return;
+  //     selectedUnit.move(action.coords),
+  //       setActions([]),
+  //       setSelectedUnit(null),
+  //       updateCurrentPlayerResourcesBy({
+  //         energy: -2,
+  //       });
+  //     turnAddUpdatedObject(selectedUnit);
+  //   },
+  //   attack: (action: GameObjects.Action) => {
+  //     if (!selectedUnit) return;
+  //     return buildings.map(
+  //       (building) =>
+  //         isCrossingObstacleCoordinates(building, action) &&
+  //         building.receiveDamage(selectedUnit.damage, buildings) &&
+  //         turnAddRemovedObject(building),
+  //     );
+  //   },
+  // };
+
+  // const handlePutCard = (action: GameObjects.Action) => {
+  //   if (!selectedCard) return;
+  //   const createdObject = selectedCard.move(action.coords, units);
+  //   setActions([]);
+  //   setSelectedCard(null);
+  //   turnAddRemovedObject(selectedCard);
+  //   updateCurrentPlayerResourcesBy({
+  //     coins: selectedCard.price,
+  //     energy: selectedCard.energy,
+  //   });
+  //   turnAddNewObject(createdObject);
+  //   setSelectedUnit(null);
+  // };
 
   // PISZDEC1
   // eslint-disable-next-line unicorn/prevent-abbreviations
-  const handleUnitAction = (actionTemp: GameObjects.Action) => {
-    if (!actions) return;
-    actions.some(
-      (action) =>
-        action.coords.x === actionTemp.coords.x &&
-        action.coords.y === actionTemp.coords.y &&
-        action.unitType === GameObjectType.BUILDING,
-    )
-      ? buildActions[actionTemp.actionType](actionTemp)
-      : unitActions[actionTemp.actionType](actionTemp);
-  };
+  // const handleUnitAction = (actionTemp: GameObjects.Action) => {
+  //   if (!actions) return;
+  //   actions.some(
+  //     (action) =>
+  //       action.coords.x === actionTemp.coords.x &&
+  //       action.coords.y === actionTemp.coords.y &&
+  //       action.unitType === GameObjectType.BUILDING,
+  //   )
+  //     ? buildActions[actionTemp.actionType](actionTemp)
+  //     : unitActions[actionTemp.actionType](actionTemp);
+  // };
 
   // PISZDEC2
-  const handleActionClick = (action: GameObjects.Action) => {
-    selectedCard && action.actionType === ActionType.MOVE
-      ? handlePutCard(action)
-      : selectedUnit
-      ? handleUnitAction(action)
-      : null;
+  // const handleActionClick = (action: GameObjects.Action) => {
+  //   selectedCard && action.actionType === ActionType.MOVE
+  //     ? handlePutCard(action)
+  //     : selectedUnit
+  //     ? handleUnitAction(action)
+  //     : null;
 
-    setActions([]);
-  };
+  //   setActions([]);
+  // };
 
   return (
     <>

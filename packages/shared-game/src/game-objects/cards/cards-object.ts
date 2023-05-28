@@ -44,7 +44,7 @@ export class Card<T extends keyof GameObjectsListOmitCard = any> extends BaseGam
           source: 'resources/img/map/tiles/point.png',
           coords: { x, y },
         });
-        // TODO: do we really want have coords as array or single object
+        // TODO: do we really want to have coords as an array or a single object
         obstacles.some((obstacle) => !isCrossingObstacleCoordinates(action, obstacle)) && possibleMoves.push(action);
       }
     }
@@ -52,8 +52,14 @@ export class Card<T extends keyof GameObjectsListOmitCard = any> extends BaseGam
     return possibleMoves;
   }
 
-  move<T extends any[]>(coords: Coordinates, objectsList: T) {
-    const newObject = new GameObjects[this.objectToCreate.objectType]({ ...this.objectToCreate, coords });
+  move<T extends keyof GameObjectsListOmitCard>(
+    coords: Coordinates,
+    objectsList: GameObjectsListOmitCard[T]['instance'][],
+  ) {
+    const newObject = new GameObjects[this.objectToCreate.objectType]({
+      ...this.objectToCreate,
+      coords,
+    }) as GameObjectsListOmitCard[T]['instance'];
     objectsList.push(newObject);
     return newObject;
   }

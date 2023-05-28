@@ -5,10 +5,12 @@ import { EnergyBar } from '@web/components/hud/energy-bar/energy-bar';
 import { LeaveWindowPIXI } from '@web/components/hud/leave-window/leave-window';
 import { TimerBar } from '@web/components/hud/timer-bar/timer-bar';
 import { useModalContext } from '@web/hooks/use-modal';
+import { useSocket } from '@web/hooks/use-socket';
 import { type FC, type ReactNode, useCallback } from 'react';
 
 import { Cards } from './cards/cards';
 import { useGameStore } from './match-store/game-store';
+import { useTurnStore } from './match-store/turn-store';
 import { SidePanel } from './side-panel/side-panel';
 import { useSizes } from './utils/sprite-sizes';
 
@@ -27,17 +29,25 @@ export const BattleHud: FC<BattleHudProperties> = ({
   setSelectedCard,
   setSelectedUnit,
 }) => {
-  // const [turnAddNewObject, turnAddRemovedObject, turnAddUpdatedObject] = useTurnStore((state) => [
-  //   state.addNewObject,
-  //   state.addRemovedObject,
-  //   state.addUpdatedObject,
-  // ]);
+  const getTurn = useTurnStore((state) => state.getTurn);
+  const { makeTurn } = useSocket();
   const [{ card: cards, building: buildings, unit: units }, getCurrentPlayer] = useGameStore((state) => [
     state.gameObjects,
     state.getCurrentPlayer,
   ]);
   const currentPlayer = getCurrentPlayer();
-  const { bottomPanel, sidePanelLeft, topPanel, windowSize, map, homeButton, surrenderButton, playButton } = useSizes();
+  const {
+    bottomPanel,
+    sidePanelLeft,
+    topPanel,
+    windowSize,
+    map,
+    homeButton,
+    surrenderButton,
+    moveButton,
+    topPanelHeightWithoutCorner,
+    bottomPanelHeightWithoutCorner,
+  } = useSizes();
   const { openModal } = useModalContext();
 
   const handleOpenModal = () => {
@@ -62,7 +72,7 @@ export const BattleHud: FC<BattleHudProperties> = ({
     <Stage width={windowSize.width} height={windowSize.height}>
       <Container
         x={sidePanelLeft.desiredSize.width}
-        y={topPanel.desiredSize.height / 1.67}
+        y={topPanelHeightWithoutCorner}
         {...map.desiredSize}
         scale={map.scale}
       >
@@ -73,45 +83,24 @@ export const BattleHud: FC<BattleHudProperties> = ({
       <Container>
         <Sprite image={`resources/img/map/hud/top-panel.png`} scale={topPanel.scale} {...topPanel.desiredSize}>
           <CoinBar coins={currentPlayer?.coins ?? 0} />
-          <Container>
-            <EnergyBar energy={currentPlayer?.energy ?? 0} />
-            {/* <Sprite anchor={[-0.87, 0]} image={`resources/img/map/hud/energy-bar-hd.png`} {...energyBar}></Sprite> */}
-          </Container>
+          <EnergyBar energy={currentPlayer?.energy ?? 0} />
           <TimerBar time={'42:13'} />
           <Container>
             <Sprite
               interactive={true}
               pointerdown={() => handleOpenModal()}
               x={innerWidth - homeButton.desiredSize.width}
-              {...homeButton}
+              {...homeButton.desiredSize}
+              scale={homeButton.scale}
               image={`resources/img/map/hud/home.png`}
             />
             <Sprite
               interactive={true}
               pointerdown={() => handleOpenModal()}
               x={innerWidth - homeButton.desiredSize.width - surrenderButton.desiredSize.width - 100}
-              {...surrenderButton}
+              {...surrenderButton.desiredSize}
+              scale={surrenderButton.scale}
               image={`resources/img/map/hud/surrender.png`}
-            />
-            <Sprite
-              image={'resources/img/map/hud/play-button-hd.png'}
-              x={innerWidth - playButton.desiredSize.width}
-              {...playButton}
-              interactive={true}
-              click={() => {
-                // test([
-                //   new GameObjects.Unit({
-                //     coords: { x: 3, y: 3 },
-                //     damage: 1,
-                //     hp: 1,
-                //     source: 'resources/img/map/units/Worker_blue.png',
-                //     unitType: UnitType.WARRIOR,
-                //     team: Team.BLUE,
-                //     energy: 2,
-                //     possibleMoves: 1,
-                //   }),
-                // ]);
-              }}
             />
           </Container>
         </Sprite>
@@ -119,7 +108,6 @@ export const BattleHud: FC<BattleHudProperties> = ({
       <Container>
         <Sprite
           roundPixels={true}
-          x={0}
           y={windowSize.height - bottomPanel.desiredSize.height}
           image={`resources/img/map/background/bottom-panel-hd.png`}
           scale={bottomPanel.scale}
@@ -129,6 +117,17 @@ export const BattleHud: FC<BattleHudProperties> = ({
             selectedCard={selectedCard}
             cards={cards.filter((card) => card.team === currentPlayer?.team)}
             onClick={handleCardClick}
+          />
+          <Sprite
+            image={'resources/img/map/hud/play-button-hd.png'}
+            x={bottomPanel.desiredSize.width - moveButton.desiredSize.width / 2}
+            y={bottomPanel.desiredSize.height - bottomPanelHeightWithoutCorner}
+            {...moveButton.desiredSize}
+            scale={moveButton.scale}
+            interactive={true}
+            click={() => {
+              makeTurn(getTurn());
+            }}
           />
         </Sprite>
       </Container>

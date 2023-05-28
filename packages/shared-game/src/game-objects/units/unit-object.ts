@@ -66,15 +66,13 @@ export class Unit extends BaseGameObject {
           actionType: gameObjectOnActionCoordinates ? ActionType.ATTACK : ActionType.MOVE,
           source: 'resources/img/map/tiles/point.png',
         });
-
-        // return {
-        //   ...actionTemplate,
-        //   src: 'resources/img/map/tiles/point.png',
-        //   type: gameObjectOnActionCoordinates ? ActionType.ATTACK : ActionType.MOVE,
-        //   objectTargetType: gameObjectOnActionCoordinates?.objectType,
-        // };
       });
   }
+
+  attack<T extends BaseGameObject>(target: T, objectsList: T[]) {
+    return target.receiveDamage(this.damage, objectsList);
+  }
+
   move(coords: Coordinates) {
     this.coords = coords;
     this.possibleMoves -= 0;

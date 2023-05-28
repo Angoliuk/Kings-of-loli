@@ -1,5 +1,6 @@
 import { ActionType, Coordinates, GameObjectType } from '../../interfaces';
 import { BaseGameObject, BaseGameObjectProperties } from '../base';
+import { v4 as uuid } from 'uuid';
 
 export type ActionProperties = { coords: Coordinates; actionType: ActionType; source: string };
 
@@ -7,7 +8,7 @@ export class Action {
   #coords;
   #actionType;
   #source;
-  #id = Math.random().toString();
+  #id = uuid();
   constructor({ coords, actionType, source }: ActionProperties) {
     this.#source = source;
     this.#coords = coords;
