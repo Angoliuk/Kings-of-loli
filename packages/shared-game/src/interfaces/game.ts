@@ -9,7 +9,7 @@ export type Player = {
   coins: number;
   energy: number;
   userId: string;
-  team: string;
+  team: Team;
 };
 
 export type GameObjectsListsObjects = {
@@ -24,25 +24,23 @@ export type GameObjectsLists = {
   [GameObjectType.UNIT]: GameObjectsList['unit']['instance'][];
 };
 
-export type GameWithObjects = {
+export type GameBase = {
   id: string;
+  createdAt: string;
   players: [Player, Player];
-  gameObjects: GameObjectsListsObjects;
   isFinished: boolean;
   winnedUserId?: string;
   turnsCount: number;
   turns: TurnFromServer[];
 };
 
+export type GameWithObjects = {
+  gameObjects: GameObjectsListsObjects;
+} & GameBase;
+
 export type Game = {
-  id: string;
-  players: [Player, Player];
   gameObjects: GameObjectsLists;
-  isFinished: boolean;
-  winnedUserId?: string;
-  turnsCount: number;
-  turns: TurnFromServer[];
-};
+} & GameBase;
 
 export type GameCompactFromServer = {
   turnsCount: number;

@@ -2,10 +2,12 @@ import { v4 as id } from 'uuid';
 import { type Game, Team, BuildingType, GameObjectType, GameWithObjects, UnitType, PatternTypes } from '../interfaces';
 import { Card } from '../game-objects/cards';
 import { Building } from '../game-objects/buildings';
+import { DateTime } from 'luxon';
 
 export const createBaseGame = (playersIds: [string, string]): GameWithObjects => {
   return {
     id: id(),
+    createdAt: DateTime.now().toISO()!,
     isFinished: false,
     turns: [],
     turnsCount: 0,
@@ -171,6 +173,7 @@ export const createBaseGame = (playersIds: [string, string]): GameWithObjects =>
 export const createEmptyGame = (): Game => {
   return {
     id: 'empty',
+    createdAt: DateTime.now().toISO()!,
     isFinished: false,
     turns: [],
     turnsCount: 0,

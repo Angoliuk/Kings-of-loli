@@ -8,12 +8,18 @@ import {
   IoServerToClientEvents,
   IoData,
   IoEvent,
-  Game,
   GameObjectType,
   TurnFromServer,
+  BuildingType,
+  Team,
+  UnitType,
+  PatternTypes,
 } from '@kol/shared-game/interfaces';
 import { createBaseGame, updateGameObjectsGroup } from '@kol/shared-game/utils';
 import { redisUtils, socketKeys } from '../services/redis';
+import { prisma } from '../database/prisma';
+import { DateTime } from 'luxon';
+import { GameObjects } from '@kol/shared-game/game-objects';
 
 export const io = new Server<IoClientToServerEvents, IoServerToClientEvents, never, IoData>({
   transports: ['websocket'],
@@ -40,17 +46,57 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
   socket.on(IoEvent.TURN_TO_SERVER, async (turnToServer) => {
     const playerActiveGame = await redisUtils.userActiveGame.get(turnToServer.player.userId);
+
     if (!playerActiveGame) return;
 
     const game = await redisUtils.gameRoom.get(playerActiveGame);
-    if (!game) return;
 
     if (
+      !game ||
+      game.isFinished ||
       !game.players.some(
         (player) => player.userId === turnToServer.player.userId && player.team === turnToServer.player.team,
       )
-    ) {
+    )
       return;
+
+    const removedCastle = game.gameObjects.building.find(
+      (buildingObject) =>
+        buildingObject.buildingType === BuildingType.CASTLE &&
+        turnToServer.removedObjects.building.includes(buildingObject.id),
+    );
+
+    if (removedCastle) {
+      const gameWinnerId = game.players.find((player) => player.team !== removedCastle.team)?.userId;
+      const gameLoserId = game.players.find((player) => player.userId !== gameWinnerId)?.userId;
+
+      if (!gameWinnerId || !gameLoserId) return;
+
+      game.isFinished = true;
+      game.winnedUserId = gameWinnerId;
+
+      prisma.matchStats.create({
+        data: {
+          duration: DateTime.fromISO(game.createdAt).diffNow().milliseconds,
+          id: game.id,
+          playersStats: {
+            createMany: {
+              data: [
+                {
+                  isWinner: true,
+                  scoreGained: Math.floor(Math.random() * 20),
+                  userId: gameWinnerId,
+                },
+                {
+                  isWinner: false,
+                  scoreGained: -Math.floor(Math.random() * 20),
+                  userId: gameLoserId,
+                },
+              ],
+            },
+          },
+        },
+      });
     }
 
     game.turnsCount++;
@@ -60,13 +106,40 @@ io.on(IoEvent.CONNECT, async (socket) => {
       [GameObjectType.UNIT]: updateGameObjectsGroup(game.gameObjects[GameObjectType.UNIT], turnToServer),
       [GameObjectType.CARD]: updateGameObjectsGroup(game.gameObjects[GameObjectType.CARD], turnToServer),
     };
+
+    if (game.turnsCount % 3 === 0) {
+      const turnSenderEnemy = game.players.find((player) => player.userId !== turnToServer.player.userId);
+
+      turnSenderEnemy &&
+        game.gameObjects.card.push(
+          new GameObjects.Card({
+            objectToCreate: {
+              objectType: GameObjectType.UNIT,
+              source: `resources/img/map/units/Worker_${turnSenderEnemy.team}.png`,
+              damage: 2,
+              hp: 2,
+              team: turnSenderEnemy.team,
+              unitType: UnitType.WARRIOR,
+              id: randomUUID(),
+              possibleMoves: 4,
+              pattern: PatternTypes.STAR,
+              energy: 2,
+            },
+            energy: 2,
+            hp: 2,
+            price: 2,
+            team: turnSenderEnemy.team,
+            source: 'resources/img/cards/peasant-card.png',
+          }),
+        );
+    }
+
     game.players[game.players.findIndex((player) => player.userId === turnToServer.player.userId)] = {
       ...turnToServer.player,
       energy: turnToServer.player.energy + 2,
       coins: turnToServer.player.coins + 2,
     };
 
-    // TODO: change isFinished and winnedUserId
     const turnFromServer: TurnFromServer = {
       ...turnToServer,
       game: {
