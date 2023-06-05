@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { type GameObjectsList, type TurnToServer } from '@kol/shared-game/interfaces';
+import { type GameObjectsList, Team, type TurnToServer } from '@kol/shared-game/interfaces';
+import { sendTurn } from '@web/utils';
 import { create } from 'zustand';
 import { combine } from 'zustand/middleware';
 
@@ -9,9 +11,9 @@ import { bindObject } from './temporary';
 export const useTurnStore = create(
   combine(
     {
-      game: { id: useGameStore.getState().id },
-      turn: useGameStore.getState().turnsCount + 1,
-      player: useGameStore.getState().getCurrentPlayer(),
+      game: { id: '666' },
+      turn: 1,
+      player: { coins: 1, energy: 0, team: Team.BLUE, userId: 'lox' },
       updatedObjects: {
         building: [],
         card: [],
@@ -32,6 +34,7 @@ export const useTurnStore = create(
       bindObject({
         updateCurrentPlayerResourcesBy: ({ coins, energy }: { coins?: number; energy?: number }) => {
           const player = get().player;
+          if (!player) return;
           set({
             player: { ...player, coins: player.coins + (coins ?? 0), energy: player.energy + (energy ?? 0) },
           });
@@ -72,8 +75,11 @@ export const useTurnStore = create(
         addUpdatedObject: <T extends GameObjectsList[keyof GameObjectsList]['instance']>(updatedObject: T) => {
           const previousUpdatedObjects = get().updatedObjects[updatedObject.objectType];
           let isUpdatedObjectDuplicate = false;
+          console.log(get().updatedObjects, updatedObject.object, 'previousUpdatedObjects use turn store');
+          console.log(isUpdatedObjectDuplicate, 'isUpdatedObjectDuplicate use turn store');
           // TODO: update recently added unit
           previousUpdatedObjects.map((previousUpdatedObject) => {
+            console.log(previousUpdatedObject, 'previousUpdatedObject use turn store');
             if (previousUpdatedObject.id === updatedObject.id) {
               isUpdatedObjectDuplicate = true;
               return updatedObject;
@@ -91,10 +97,32 @@ export const useTurnStore = create(
           });
           useGameStore.getState().updateGameObject(updatedObject);
         },
-        getTurn: () => {
-          return get();
+        createNewTurnTemplate() {
+          set({
+            game: { id: useGameStore.getState().id },
+            turn: useGameStore.getState().turnsCount + 1,
+            player: useGameStore.getState().getCurrentPlayer(),
+
+            updatedObjects: {
+              building: [],
+              card: [],
+              unit: [],
+            },
+            removedObjects: {
+              building: [],
+              card: [],
+              unit: [],
+            },
+            newObjects: {
+              building: [],
+              card: [],
+              unit: [],
+            },
+          });
         },
-        createNewTurnTemplate: () => {
+        makeTurn() {
+          sendTurn(get());
+          console.log(get(), 'pizdec');
           set({
             game: { id: useGameStore.getState().id },
             turn: useGameStore.getState().turnsCount + 1,

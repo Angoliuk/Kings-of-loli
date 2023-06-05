@@ -5,8 +5,14 @@ export const updateGameObjectsGroup = <K extends keyof GameObjectsList, T extend
   turn: TurnToServer | TurnFromServer,
 ) => {
   const objectsType = initialObjects[0].objectType;
+  console.log(turn.newObjects,initialObjects,'updateGameObjectsGroup')
+/// створюються дублікати при ході в цьому і причина помилки
   return (
-    ([...initialObjects, ...(turn.newObjects?.[objectsType] ?? [])] as T).map(
+    (
+      [...new Set([...initialObjects, ...(turn.newObjects?.[objectsType] ?? [])].map((object) => object.id))].map(
+        (id) => [...initialObjects, ...(turn.newObjects?.[objectsType] ?? [])].find((object) => object.id === id),
+      ) as T
+    ).map(
       (object) =>
         // @ts-expect-error
         turn.updatedObjects[objectsType].find((updatedObject: typeof object) => updatedObject.id === object.id) ??

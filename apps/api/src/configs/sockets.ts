@@ -41,10 +41,13 @@ io.on(IoEvent.CONNECT, async (socket) => {
   const userActiveGameId = await redisUtils.userActiveGame.get(userId);
 
   if (userActiveGameId) {
-    await socket.join(userActiveGameId);
+    // await socket.join(userActiveGameId);
+    await socket.join(socketKeys.gameRoom(userActiveGameId));
+
   }
 
   socket.on(IoEvent.TURN_TO_SERVER, async (turnToServer) => {
+     
     const playerActiveGame = await redisUtils.userActiveGame.get(turnToServer.player.userId);
 
     if (!playerActiveGame) return;
@@ -98,13 +101,13 @@ io.on(IoEvent.CONNECT, async (socket) => {
         },
       });
     }
-
     game.turnsCount++;
 
     game.gameObjects = {
       [GameObjectType.BUILDING]: updateGameObjectsGroup(game.gameObjects[GameObjectType.BUILDING], turnToServer),
       [GameObjectType.UNIT]: updateGameObjectsGroup(game.gameObjects[GameObjectType.UNIT], turnToServer),
       [GameObjectType.CARD]: updateGameObjectsGroup(game.gameObjects[GameObjectType.CARD], turnToServer),
+      sdada:console.log('//////////////////',game.gameObjects[GameObjectType.UNIT], turnToServer.newObjects.unit,'gameObjects in sockets'),
     };
 
     if (game.turnsCount % 3 === 0) {
@@ -152,10 +155,10 @@ io.on(IoEvent.CONNECT, async (socket) => {
     };
 
     game.turns.push(turnFromServer);
-
     await redisUtils.gameRoom.set(turnToServer.game.id, game);
-
-    socket.to(socketKeys.gameRoom(turnToServer.game.id)).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
+    // await redisUtils.gameRoom.get(turnToServer.game.id);
+    // socket.to(socketKeys.gameRoom(turnToServer.game.id)).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
+    io.to(game.players.find(player=>player.userId!==userId).userId).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
   });
 
   socket.on(IoEvent.SEARCH_GAME, async () => {
@@ -163,11 +166,15 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
     if (userActiveGameId) {
       // REPLACE AFTER TESTS
-      const a = await redisUtils.gameRoom.get(userActiveGameId);
-      await redisUtils.gameRoom.del(a!.id);
-      await redisUtils.userActiveGame.del(a!.players[0].userId);
-      await redisUtils.userActiveGame.del(a!.players[1].userId);
-      // io.to(userId).emit(IoEvent.GAME_FOUND, await redisUtils.gameRoom.get(userActiveGameId));
+      // const a = await redisUtils.gameRoom.get(userActiveGameId);
+      // await redisUtils.gameRoom.del(a!.id);
+      // await redisUtils.userActiveGame.del(a!.players[0].userId);
+      // await redisUtils.userActiveGame.del(a!.players[1].userId);
+
+      
+      // const activeGame = await redisUtils.gameRoom.get(userActiveGameId)
+      // if(!activeGame)return
+      // io.to(userId).emit(IoEvent.GAME_FOUND, activeGame);
       // return;
     }
     if (isUserHaveSearchRequest) {
@@ -191,8 +198,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
         const gameSearchData = JSON.parse(gameSearchDataStringified) as { userId: string };
         const gameId = randomUUID();
 
-        const createdGame = createBaseGame([userId, gameId]);
-
+        const createdGame = createBaseGame([userId, gameSearchData.userId]);
         await redisUtils.gameRoom.set(gameId, createdGame);
         await redisUtils.userActiveGame.set(userId, gameId);
         await redisUtils.userActiveGame.set(gameSearchData.userId, gameId);
@@ -234,6 +240,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
   socket.on(IoEvent.GAME_LOADED, async () => {
     const userActiveGame = await redisUtils.userActiveGame.get(userId);
+
     if (!userActiveGame) return;
     await socket.join(socketKeys.gameRoom(userActiveGame));
   });

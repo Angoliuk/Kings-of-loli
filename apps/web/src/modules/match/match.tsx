@@ -1,5 +1,6 @@
 import { type GameObjects } from '@kol/shared-game/game-objects';
-import { useState } from 'react';
+import { startSearch } from '@web/hooks/socket-actions';
+import { useEffect, useState } from 'react';
 
 import { BattleHud } from './match-hud';
 import { BattleMap } from './match-map';
@@ -8,7 +9,7 @@ export const Match = () => {
   const [actions, setActions] = useState<GameObjects.Action[]>([]);
   const [selectedUnit, setSelectedUnit] = useState<GameObjects.Unit | null>(null);
   const [selectedCard, setSelectedCard] = useState<GameObjects.Card | null>(null);
-  // const { gameLoaded, startSearch, turn } = useSocket();
+  // const { gameLoaded, startSearch, turn } = useSocketActions();
 
   // const updatesData = [{ id: 1, update: true }];
   // const oldData = [{ id: 1 }, { id: 2, asdaa: 'adsada' }, { id: 3 }];
@@ -19,6 +20,7 @@ export const Match = () => {
   //   }, {}),
   // ]);
   // console.log(useUser((state) => state.units));
+  // useEffect(() => startSearch(), []); //прибрати
   return (
     <BattleHud
       setActions={setActions}

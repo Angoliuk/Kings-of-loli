@@ -4,8 +4,11 @@ import { getFetch, httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { ModalProvider } from './components/modal-context/modal-context';
 import { AppRouter } from './routes/app-router';
 import { trpc } from './trpc';
+// const outerHistory = () => {};
+
 export function App() {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
@@ -34,7 +37,9 @@ export function App() {
     <BrowserRouter>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          <AppRouter />
+          <ModalProvider>
+            <AppRouter />
+          </ModalProvider>
         </QueryClientProvider>
       </trpc.Provider>
     </BrowserRouter>

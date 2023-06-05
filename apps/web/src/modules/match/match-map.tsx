@@ -2,6 +2,7 @@ import { type GameObjects } from '@kol/shared-game/game-objects';
 import { ActionType, type Coordinates, GameObjectType } from '@kol/shared-game/interfaces';
 import { isCrossingObstacleCoordinates } from '@kol/shared-game/utils';
 import { Container, Sprite } from '@pixi/react';
+import { useGameObjectActions } from '@web/hooks/use-game-object-actions';
 import { type FC } from 'react';
 
 import { GameObjectActions } from './actions/actions';
@@ -111,24 +112,19 @@ export const BattleMap: FC<BattleMap> = ({
   setSelectedUnit,
   setSelectedCard,
 }) => {
-  const [turnAddNewObject, turnAddRemovedObject, turnAddUpdatedObject, updateCurrentPlayerResourcesBy] = useTurnStore(
-    (state) => [
-      state.addNewObject,
-      state.addRemovedObject,
-      state.addUpdatedObject,
-      state.updateCurrentPlayerResourcesBy,
-    ],
-  );
+  const [turnAddUpdatedObject, updateCurrentPlayerResourcesBy] = useTurnStore((state) => [
+    state.addUpdatedObject,
+    state.updateCurrentPlayerResourcesBy,
+  ]);
   const [{ building: buildings, unit: units }, getCurrentPlayer] = useGameStore((state) => [
     state.gameObjects,
     state.getCurrentPlayer,
   ]);
   const player = getCurrentPlayer();
   const { mapTile, unit: unitSizes, castle } = useSizes();
-
+  const { putCard, receiveDamage } = useGameObjectActions();
   const handleUnitClick = (unit: GameObjects.Unit) => {
     setSelectedCard(null);
-
     if (unit.team !== player?.team) return;
 
     if (selectedUnit?.id === unit.id) {
@@ -142,34 +138,28 @@ export const BattleMap: FC<BattleMap> = ({
   };
 
   const handleActionClick = (action: GameObjects.Action) => {
-    setActions([]);
-    setSelectedCard(null);
-    setSelectedUnit(null);
-
     if (selectedCard) {
-      const createdObject = selectedCard.move(action.coords, units);
-      turnAddRemovedObject(selectedCard);
-      updateCurrentPlayerResourcesBy({
-        coins: -selectedCard.price,
-        energy: -selectedCard.energy,
-      });
-      turnAddNewObject(createdObject);
+      putCard(selectedCard, action);
     }
-
     if (selectedUnit) {
       updateCurrentPlayerResourcesBy({
         energy: -selectedUnit.energy,
       });
       if (action.actionType === ActionType.MOVE) {
-        selectedUnit.move(action.coords);
+        units.find((unit) => unit.id === selectedUnit.id)?.move(action.coords);
         turnAddUpdatedObject(selectedUnit);
       } else {
         const actionTarget = [...units, ...buildings].find((target) => isCrossingObstacleCoordinates(target, action));
-        if (!actionTarget) return;
-        selectedUnit.attack(actionTarget, actionTarget.objectType === GameObjectType.BUILDING ? buildings : units) &&
-          turnAddRemovedObject(actionTarget);
+        actionTarget && actionTarget.objectType === GameObjectType.BUILDING
+          ? receiveDamage(actionTarget, buildings, selectedUnit)
+          : receiveDamage(actionTarget, units, selectedUnit);
+        // selectedUnit.attack(actionTarget, actionTarget.objectType === GameObjectType.BUILDING ? buildings : units);
+        // turnAddRemovedObject(actionTarget);
       }
     }
+    setActions([]);
+    setSelectedCard(null);
+    setSelectedUnit(null);
   };
 
   // const unitActions = {

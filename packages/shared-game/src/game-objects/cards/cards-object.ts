@@ -1,7 +1,7 @@
 import { GameObjects } from '..';
 import { GAME_FIELD } from '../../constants';
-import { GameObjectType, Coordinates, ActionType, GameObjectsList } from '../../interfaces';
-import { isCrossingObstacleCoordinates } from '../../utils';
+import { GameObjectType, Coordinates, ActionType, GameObjectsList, Team } from '../../interfaces';
+import { isCrossingObstacleCoordinates, movePatterns } from '../../utils';
 import { Action } from '../actions';
 import { BaseGameObject, BaseGameObjectProperties } from '../base/base-object';
 
@@ -21,12 +21,13 @@ export class Card<T extends keyof GameObjectsListOmitCard = any> extends BaseGam
   energy;
   objectToCreate;
 
-  constructor({ hp, source, team, price, energy, objectToCreate }: CardProperties<T>) {
+  constructor({ hp, source, team, price, energy, objectToCreate,id }: CardProperties<T>) {
     super({
       objectType: GameObjectType.CARD,
       hp: hp,
       source: source,
       team: team,
+      id
     });
     this.objectToCreate = objectToCreate;
     this.price = price;
@@ -35,32 +36,17 @@ export class Card<T extends keyof GameObjectsListOmitCard = any> extends BaseGam
 
   getPossibleCardActions<T extends BaseGameObject & ({ coords: Coordinates } | { coords: Coordinates[] })>(
     obstacles: T[],
-  ) {
-    const possibleMoves: Action[] = [];
-    for (let y = 0; y < GAME_FIELD.y; y++) {
-      for (let x = 0; x < Math.floor(GAME_FIELD.x / 2); x++) {
-        const action = new Action({
-          actionType: ActionType.MOVE,
-          source: 'resources/img/map/tiles/point.png',
-          coords: { x, y },
-        });
-        // TODO: do we really want to have coords as an array or a single object
-        obstacles.some((obstacle) => !isCrossingObstacleCoordinates(action, obstacle)) && possibleMoves.push(action);
-      }
-    }
-
-    return possibleMoves;
+    ) {
+      return movePatterns.halfField(obstacles,this.team===Team.GREEN?'left':'right')
   }
 
   move<T extends keyof GameObjectsListOmitCard>(
     coords: Coordinates,
-    objectsList: GameObjectsListOmitCard[T]['instance'][],
   ) {
-    const newObject = new GameObjects[this.objectToCreate.objectType]({
+    const newObject = new GameObjects[this.objectToCreate.objectType[0].toUpperCase() + this.objectToCreate.objectType.slice(1)]({
       ...this.objectToCreate,
       coords,
     }) as GameObjectsListOmitCard[T]['instance'];
-    objectsList.push(newObject);
     return newObject;
   }
 }

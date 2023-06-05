@@ -23,12 +23,13 @@ export class Unit extends BaseGameObject {
   energy;
   possibleMoves;
 
-  constructor({ source, hp, coords, damage, pattern, team, energy, possibleMoves, unitType }: UnitProperties) {
+  constructor({ source, hp, coords, damage, pattern, team, energy, possibleMoves, unitType,id }: UnitProperties) {
     super({
       hp: hp,
       source: source,
       team: team,
       objectType: GameObjectType.UNIT,
+      id
     });
     this.possibleMoves = possibleMoves;
     this.energy = energy;

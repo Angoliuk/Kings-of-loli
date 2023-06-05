@@ -5,7 +5,6 @@ import { EnergyBar } from '@web/components/hud/energy-bar/energy-bar';
 import { LeaveWindowPIXI } from '@web/components/hud/leave-window/leave-window';
 import { TimerBar } from '@web/components/hud/timer-bar/timer-bar';
 import { useModalContext } from '@web/hooks/use-modal';
-import { useSocket } from '@web/hooks/use-socket';
 import { type FC, type ReactNode, useCallback } from 'react';
 
 import { Cards } from './cards/cards';
@@ -29,11 +28,11 @@ export const BattleHud: FC<BattleHudProperties> = ({
   setSelectedCard,
   setSelectedUnit,
 }) => {
-  const getTurn = useTurnStore((state) => state.getTurn);
-  const { makeTurn } = useSocket();
-  const [{ card: cards, building: buildings, unit: units }, getCurrentPlayer] = useGameStore((state) => [
+  const makeTurn = useTurnStore((state) => state.makeTurn);
+  const [{ card: cards, building: buildings, unit: units }, getCurrentPlayer, players] = useGameStore((state) => [
     state.gameObjects,
     state.getCurrentPlayer,
+    state.players,
   ]);
   const currentPlayer = getCurrentPlayer();
   const {
@@ -67,7 +66,7 @@ export const BattleHud: FC<BattleHudProperties> = ({
     },
     [selectedCard],
   );
-
+  console.log(useGameStore.getState().gameObjects);
   return (
     <Stage width={windowSize.width} height={windowSize.height}>
       <Container
@@ -85,7 +84,7 @@ export const BattleHud: FC<BattleHudProperties> = ({
           <CoinBar coins={currentPlayer?.coins ?? 0} />
           <EnergyBar energy={currentPlayer?.energy ?? 0} />
           <TimerBar time={'42:13'} />
-          <Container>
+          {/* <Container>
             <Sprite
               interactive={true}
               pointerdown={() => handleOpenModal()}
@@ -102,7 +101,7 @@ export const BattleHud: FC<BattleHudProperties> = ({
               scale={surrenderButton.scale}
               image={`resources/img/map/hud/surrender.png`}
             />
-          </Container>
+          </Container> */}
         </Sprite>
       </Container>
       <Container>
@@ -126,7 +125,7 @@ export const BattleHud: FC<BattleHudProperties> = ({
             scale={moveButton.scale}
             interactive={true}
             click={() => {
-              makeTurn(getTurn());
+              makeTurn();
             }}
           />
         </Sprite>

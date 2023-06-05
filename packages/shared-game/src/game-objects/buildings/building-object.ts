@@ -11,12 +11,13 @@ export type BuildingProperties = BuildingOwnProperties & Omit<BaseGameObjectProp
 export class Building extends BaseGameObject {
   coords;
   buildingType;
-  constructor({ source, hp, coords, team, buildingType }: BuildingProperties) {
+  constructor({ source, hp, coords, team,buildingType,id }: BuildingProperties) {
     super({
       source: source,
       hp: hp,
       team: team,
       objectType: GameObjectType.BUILDING,
+      id
     });
     this.coords = coords;
     this.buildingType = buildingType;

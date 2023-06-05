@@ -7,12 +7,12 @@ import {
 } from '@kol/shared-game/interfaces';
 import { createEmptyGame, updateGameObjectsGroup } from '@kol/shared-game/utils';
 import { useAuthStore } from '@web/store/auth-store/auth-store';
-import { plainToInstance } from 'class-transformer';
+import {} from 'class-transformer';
 import { create } from 'zustand';
 import { combine } from 'zustand/middleware';
 
 import { bindObject } from './temporary';
-
+import { useTurnStore } from './turn-store';
 export const useGameStore = create(
   combine(createEmptyGame(), (set, get) =>
     bindObject({
@@ -20,20 +20,32 @@ export const useGameStore = create(
         set({
           ...game,
           gameObjects: {
-            building: plainToInstance(GameObjects.Building, game.gameObjects.building),
-            card: game.gameObjects.card.map((card) => plainToInstance(GameObjects.Card, card)),
-            unit: plainToInstance(GameObjects.Unit, game.gameObjects.unit),
+            building: game.gameObjects.building.map((building) => new GameObjects.Building(building)),
+            unit: game.gameObjects.unit.map((unit) => new GameObjects.Unit(unit)),
+            card: game.gameObjects.card.map((card) => new GameObjects.Card(card)),
           },
         });
-      },
-      parseTurn: (turn: TurnFromServer) => {
-        turn.newObjects.building = plainToInstance(GameObjects.Building, turn.newObjects.building);
-        turn.newObjects.card = plainToInstance(GameObjects.Card, turn.newObjects.card);
-        turn.newObjects.unit = plainToInstance(GameObjects.Unit, turn.newObjects.unit);
-        turn.updatedObjects.building = plainToInstance(GameObjects.Building, turn.updatedObjects.building);
-        turn.updatedObjects.card = plainToInstance(GameObjects.Card, turn.updatedObjects.card);
-        turn.updatedObjects.unit = plainToInstance(GameObjects.Unit, turn.updatedObjects.unit);
 
+        useTurnStore.getState().createNewTurnTemplate();
+      },
+
+      parseTurn: (turn: TurnFromServer) => {
+        // console.log((count2 += 1), 'count2??????????//'), ///причина в тому що функція визивається більше 1 разу (6)
+        //тут шукати проблему
+        turn.newObjects.building = turn.newObjects.building.map((building) => new GameObjects.Building(building));
+        // turn.newObjects.card = turn.newObjects.card.map((card) => new GameObjects.Card(card));
+        turn.newObjects.unit = turn.newObjects.unit.map(
+          (unit) =>
+            // new GameObjects.Unit(unit), console.log(turn.newObjects.unit.length, (count += 1), '??????????//') ///причина в тому що функція визивається більше 1 разу (6)
+            new GameObjects.Unit(unit),
+        );
+        turn.updatedObjects.building = turn.updatedObjects.building.map(
+          (building) => new GameObjects.Building(building),
+        );
+        turn.updatedObjects.card = turn.updatedObjects.card.map((card) => new GameObjects.Card(card));
+        turn.updatedObjects.unit = turn.updatedObjects.unit.map((unit) => new GameObjects.Unit(unit));
+
+        console.log(turn, 'turn in parseTurn');
         set({
           turnsCount: turn.game.turnsCount,
           gameObjects: {
@@ -64,7 +76,7 @@ export const useGameStore = create(
             ...get().gameObjects,
             // @ts-expect-error filter is stupid
             [removedObject.objectType]: get().gameObjects[removedObject.objectType].filter(
-              (gameObject: typeof removedObject) => gameObject.id === removedObject.id,
+              (gameObject: typeof removedObject) => gameObject.id !== removedObject.id,
             ) as (typeof removedObject)[],
           },
         });

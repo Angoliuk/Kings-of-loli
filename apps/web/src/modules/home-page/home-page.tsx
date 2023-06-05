@@ -1,10 +1,9 @@
-import { useSocket } from '@web/hooks/use-socket';
+import { startSearch } from '@web/utils';
 import { type FC } from 'react';
 
 import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
 import styles from './home-page.module.css';
 export const HomePage: FC = () => {
-  const { startSearch } = useSocket();
   return (
     <NavigationPageWrapper>
       <div className={styles.bg}>

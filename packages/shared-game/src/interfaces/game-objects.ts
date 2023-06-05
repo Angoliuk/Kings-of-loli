@@ -1,6 +1,4 @@
 import { GameObjects } from '../game-objects';
-import { classToPlain, serialize } from 'class-transformer';
-import { Card } from '../game-objects/cards';
 import { NonFunctionProperties } from './general';
 
 export enum UnitType {
