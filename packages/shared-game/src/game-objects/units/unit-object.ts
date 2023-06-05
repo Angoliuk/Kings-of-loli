@@ -39,9 +39,7 @@ export class Unit extends BaseGameObject {
     this.pattern = pattern ?? PatternTypes.STAR;
   }
 
-  getPossibleActions<T extends BaseGameObject & { team: Team } & ({ coords: Coordinates } | { coords: Coordinates[] })>(
-    obstacles: T[],
-  ) {
+  getPossibleActions<T extends { team: Team } & ({ coords: Coordinates } | { coords: Coordinates[] })>(obstacles: T[]) {
     if (this.possibleMoves === 0) return [];
 
     return movePatterns[this.pattern](this.coords)
