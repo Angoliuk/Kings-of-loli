@@ -18,8 +18,8 @@ import {
 import { createBaseGame, updateGameObjectsGroup } from '@kol/shared-game/utils';
 import { redisUtils, socketKeys } from '../services/redis';
 import { prisma } from '../database/prisma';
-import { DateTime } from 'luxon';
 import { GameObjects } from '@kol/shared-game/game-objects';
+import dayjs from 'dayjs';
 
 export const io = new Server<IoClientToServerEvents, IoServerToClientEvents, never, IoData>({
   transports: ['websocket'],
@@ -43,11 +43,9 @@ io.on(IoEvent.CONNECT, async (socket) => {
   if (userActiveGameId) {
     // await socket.join(userActiveGameId);
     await socket.join(socketKeys.gameRoom(userActiveGameId));
-
   }
 
   socket.on(IoEvent.TURN_TO_SERVER, async (turnToServer) => {
-     
     const playerActiveGame = await redisUtils.userActiveGame.get(turnToServer.player.userId);
 
     if (!playerActiveGame) return;
@@ -80,7 +78,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
       prisma.matchStats.create({
         data: {
-          duration: DateTime.fromISO(game.createdAt).diffNow().milliseconds,
+          duration: dayjs(game.createdAt).diff(dayjs(), 's'),
           id: game.id,
           playersStats: {
             createMany: {
@@ -107,7 +105,12 @@ io.on(IoEvent.CONNECT, async (socket) => {
       [GameObjectType.BUILDING]: updateGameObjectsGroup(game.gameObjects[GameObjectType.BUILDING], turnToServer),
       [GameObjectType.UNIT]: updateGameObjectsGroup(game.gameObjects[GameObjectType.UNIT], turnToServer),
       [GameObjectType.CARD]: updateGameObjectsGroup(game.gameObjects[GameObjectType.CARD], turnToServer),
-      sdada:console.log('//////////////////',game.gameObjects[GameObjectType.UNIT], turnToServer.newObjects.unit,'gameObjects in sockets'),
+      sdada: console.log(
+        '//////////////////',
+        game.gameObjects[GameObjectType.UNIT],
+        turnToServer.newObjects.unit,
+        'gameObjects in sockets',
+      ),
     };
 
     if (game.turnsCount % 3 === 0) {
@@ -158,7 +161,10 @@ io.on(IoEvent.CONNECT, async (socket) => {
     await redisUtils.gameRoom.set(turnToServer.game.id, game);
     // await redisUtils.gameRoom.get(turnToServer.game.id);
     // socket.to(socketKeys.gameRoom(turnToServer.game.id)).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
-    io.to(game.players.find(player=>player.userId!==userId).userId).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
+    io.to(game.players.find((player) => player.userId !== userId).userId).emit(
+      IoEvent.TURN_FROM_SERVER,
+      turnFromServer,
+    );
   });
 
   socket.on(IoEvent.SEARCH_GAME, async () => {
@@ -170,8 +176,6 @@ io.on(IoEvent.CONNECT, async (socket) => {
       // await redisUtils.gameRoom.del(a!.id);
       // await redisUtils.userActiveGame.del(a!.players[0].userId);
       // await redisUtils.userActiveGame.del(a!.players[1].userId);
-
-      
       // const activeGame = await redisUtils.gameRoom.get(userActiveGameId)
       // if(!activeGame)return
       // io.to(userId).emit(IoEvent.GAME_FOUND, activeGame);

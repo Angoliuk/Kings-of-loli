@@ -2,13 +2,13 @@ import { v4 as id } from 'uuid';
 import { type Game, Team, BuildingType, GameObjectType, GameWithObjects, UnitType, PatternTypes } from '../interfaces';
 import { Card } from '../game-objects/cards';
 import { Building } from '../game-objects/buildings';
-import { DateTime } from 'luxon';
 import { Unit } from '../game-objects/units';
+import dayjs from 'dayjs';
 
 export const createBaseGame = (playersIds: [string, string]): GameWithObjects => {
   return {
     id: id(),
-    createdAt: DateTime.now().toISO()!,
+    createdAt: dayjs().toISOString(),
     isFinished: false,
     turns: [],
     turnsCount: 0,
@@ -243,19 +243,18 @@ export const createBaseGame = (playersIds: [string, string]): GameWithObjects =>
           team: Team.GREEN,
           source: 'resources/img/cards/peasant-card.png',
         }),
-        
       ],
       unit: [
         new Unit({
-          coords:{x:4,y:2},
-          damage:1,
-          energy:2,
-          hp:4,
-          source:'resources/img/map/units/Worker_green.png',
-          team:Team.GREEN,
-          unitType:UnitType.WARRIOR,
-          possibleMoves:3
-        })
+          coords: { x: 4, y: 2 },
+          damage: 1,
+          energy: 2,
+          hp: 4,
+          source: 'resources/img/map/units/Worker_green.png',
+          team: Team.GREEN,
+          unitType: UnitType.WARRIOR,
+          possibleMoves: 3,
+        }),
       ],
       building: [
         new Building({
@@ -263,7 +262,7 @@ export const createBaseGame = (playersIds: [string, string]): GameWithObjects =>
             { x: 0, y: 1 },
             { x: 0, y: 2 },
           ],
-          hp:6,
+          hp: 6,
           source: 'resources/img/map/units/mill-hd.png',
           team: Team.BLUE,
           buildingType: BuildingType.CASTLE,
@@ -300,7 +299,7 @@ export const createBaseGame = (playersIds: [string, string]): GameWithObjects =>
 export const createEmptyGame = (): Game => {
   return {
     id: 'empty',
-    createdAt: DateTime.now().toISO()!,
+    createdAt: dayjs().toISOString(),
     isFinished: false,
     turns: [],
     turnsCount: 0,
