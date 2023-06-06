@@ -19,7 +19,6 @@ import { createBaseGame, updateGameObjectsGroup } from '@kol/shared-game/utils';
 import { redisUtils, socketKeys } from '../services/redis';
 import { prisma } from '../database/prisma';
 import { GameObjects } from '@kol/shared-game/game-objects';
-import dayjs from 'dayjs';
 
 export const io = new Server<IoClientToServerEvents, IoServerToClientEvents, never, IoData>({
   transports: ['websocket'],
@@ -78,7 +77,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
       prisma.matchStats.create({
         data: {
-          duration: dayjs(game.createdAt).diff(dayjs(), 's'),
+          duration: new Date(game.createdAt).getMilliseconds() - new Date().getMilliseconds(),
           id: game.id,
           playersStats: {
             createMany: {

@@ -3,12 +3,11 @@ import { type Game, Team, BuildingType, GameObjectType, GameWithObjects, UnitTyp
 import { Card } from '../game-objects/cards';
 import { Building } from '../game-objects/buildings';
 import { Unit } from '../game-objects/units';
-import dayjs from 'dayjs';
 
 export const createBaseGame = (playersIds: [string, string]): GameWithObjects => {
   return {
     id: id(),
-    createdAt: dayjs().toISOString(),
+    createdAt: new Date().toISOString(),
     isFinished: false,
     turns: [],
     turnsCount: 0,
@@ -299,7 +298,7 @@ export const createBaseGame = (playersIds: [string, string]): GameWithObjects =>
 export const createEmptyGame = (): Game => {
   return {
     id: 'empty',
-    createdAt: dayjs().toISOString(),
+    createdAt: new Date().toISOString(),
     isFinished: false,
     turns: [],
     turnsCount: 0,
