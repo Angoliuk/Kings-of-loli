@@ -97,19 +97,23 @@ io.on(IoEvent.CONNECT, async (socket) => {
           },
         },
       });
+
+      io.to(turnToServer.player.userId).emit(IoEvent.TURN_FROM_SERVER, {
+        game,
+        newObjects: { building: [], card: [], unit: [] },
+        removedObjects: { building: [], card: [], unit: [] },
+        updatedObjects: { building: [], card: [], unit: [] },
+        players: game.players,
+        turn: turnToServer.turn + 1,
+      });
     }
+
     game.turnsCount++;
 
     game.gameObjects = {
       [GameObjectType.BUILDING]: updateGameObjectsGroup(game.gameObjects[GameObjectType.BUILDING], turnToServer),
       [GameObjectType.UNIT]: updateGameObjectsGroup(game.gameObjects[GameObjectType.UNIT], turnToServer),
       [GameObjectType.CARD]: updateGameObjectsGroup(game.gameObjects[GameObjectType.CARD], turnToServer),
-      sdada: console.log(
-        '//////////////////',
-        game.gameObjects[GameObjectType.UNIT],
-        turnToServer.newObjects.unit,
-        'gameObjects in sockets',
-      ),
     };
 
     if (game.turnsCount % 3 === 0) {
@@ -157,6 +161,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
     };
 
     game.turns.push(turnFromServer);
+
     await redisUtils.gameRoom.set(turnToServer.game.id, game);
     // await redisUtils.gameRoom.get(turnToServer.game.id);
     // socket.to(socketKeys.gameRoom(turnToServer.game.id)).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
