@@ -12,7 +12,7 @@ export const useGameObjectActions = () => {
   );
   const putCard = (card: GameObjects.Card, action: GameObjects.Action) => {
     const newUnit = card.move(action.coords);
-    turnAddRemovedObject(card); //error is here
+    turnAddRemovedObject(card);
     updateCurrentPlayerResourcesBy({
       coins: -card.price,
       energy: -card.energy,

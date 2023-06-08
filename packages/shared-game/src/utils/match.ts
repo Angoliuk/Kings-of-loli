@@ -263,7 +263,7 @@ export const createBaseGame = (playersIds: [string, string]): GameWithObjects =>
           ],
           hp: 6,
           source: 'resources/img/map/units/mill-hd.png',
-          team: Team.BLUE,
+          team: Team.GREEN,
           buildingType: BuildingType.CASTLE,
         }),
         new Building({
@@ -273,7 +273,7 @@ export const createBaseGame = (playersIds: [string, string]): GameWithObjects =>
           ],
           hp: 6,
           source: 'resources/img/map/units/mill-hd.png',
-          team: Team.GREEN,
+          team: Team.BLUE,
           buildingType: BuildingType.CASTLE,
         }),
       ],

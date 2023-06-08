@@ -1,8 +1,10 @@
 import { Sprite, Stage, Text } from '@pixi/react';
 import { ModalLockWrapper } from '@web/components/lock-modal-wrapper/lock-modal-wrapper';
 import { useModalContext } from '@web/hooks/use-modal';
+import { AppRoutes } from '@web/routes/app-router-enum';
 import { TextStyle } from 'pixi.js';
 import { type FC } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import styles from './leave-window.module.css';
 
@@ -59,6 +61,7 @@ export const LeaveWindowPIXI: FC = () => {
 
 export const LeaveWindowReact = () => {
   const { closeModal } = useModalContext();
+  const navigate = useNavigate();
   return (
     <ModalLockWrapper>
       <div className={styles.leave}>
@@ -69,11 +72,14 @@ export const LeaveWindowReact = () => {
           </h1>
         </div>
         <div className={styles.buttons}>
-          <button onClick={() => closeModal()} className={styles.button}>
+          <button
+            onClick={() => {
+              navigate(AppRoutes.Home);
+              closeModal();
+            }}
+            className={styles.button}
+          >
             Ok
-          </button>
-          <button onClick={() => closeModal()} className={styles.button}>
-            Cancel
           </button>
         </div>
       </div>

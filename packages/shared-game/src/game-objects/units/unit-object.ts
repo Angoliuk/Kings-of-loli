@@ -74,6 +74,6 @@ export class Unit extends BaseGameObject {
 
   move(coords: Coordinates) {
     this.coords = coords;
-    this.possibleMoves -= 0;
+    this.possibleMoves -= 1;
   }
 }

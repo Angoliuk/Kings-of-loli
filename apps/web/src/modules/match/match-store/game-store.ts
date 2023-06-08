@@ -7,7 +7,6 @@ import {
 } from '@kol/shared-game/interfaces';
 import { createEmptyGame, updateGameObjectsGroup } from '@kol/shared-game/utils';
 import { useAuthStore } from '@web/store/auth-store/auth-store';
-import {} from 'class-transformer';
 import { create } from 'zustand';
 import { combine } from 'zustand/middleware';
 
@@ -30,15 +29,8 @@ export const useGameStore = create(
       },
 
       parseTurn: (turn: TurnFromServer) => {
-        // console.log((count2 += 1), 'count2??????????//'), ///причина в тому що функція визивається більше 1 разу (6)
-        //тут шукати проблему
         turn.newObjects.building = turn.newObjects.building.map((building) => new GameObjects.Building(building));
-        // turn.newObjects.card = turn.newObjects.card.map((card) => new GameObjects.Card(card));
-        turn.newObjects.unit = turn.newObjects.unit.map(
-          (unit) =>
-            // new GameObjects.Unit(unit), console.log(turn.newObjects.unit.length, (count += 1), '??????????//') ///причина в тому що функція визивається більше 1 разу (6)
-            new GameObjects.Unit(unit),
-        );
+        turn.newObjects.unit = turn.newObjects.unit.map((unit) => new GameObjects.Unit(unit));
         turn.updatedObjects.building = turn.updatedObjects.building.map(
           (building) => new GameObjects.Building(building),
         );
@@ -51,7 +43,10 @@ export const useGameStore = create(
           gameObjects: {
             building: updateGameObjectsGroup(get().gameObjects.building, turn),
             card: updateGameObjectsGroup(get().gameObjects.card, turn),
-            unit: updateGameObjectsGroup(get().gameObjects.unit, turn),
+            unit: updateGameObjectsGroup(get().gameObjects.unit, turn).map((unit) => {
+              unit.possibleMoves = 1;
+              return unit;
+            }),
           },
           id: turn.game.id,
           isFinished: turn.game.isFinished,

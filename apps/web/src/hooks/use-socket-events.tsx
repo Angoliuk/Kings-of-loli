@@ -1,16 +1,20 @@
 import { IoEvent } from '@kol/shared-game/interfaces';
+import { LeaveWindowReact } from '@web/components/hud/leave-window/leave-window';
 import { useGameStore } from '@web/modules/match/match-store/game-store';
 import { AppRoutes } from '@web/routes/app-router-enum';
 import { useAuthStore } from '@web/store/auth-store/auth-store';
 import { connectToSocket } from '@web/utils';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useModalContext } from './use-modal';
 export const useSocketEvents = () => {
-  let count = 0;
+  const count = 0;
 
   const { user } = useAuthStore();
   const navigate = useNavigate();
   const [setGame, parseTurn] = useGameStore((state) => [state.setGame, state.parseTurn]);
+  const { openModal } = useModalContext();
 
   useEffect(() => {
     if (!user) return;
@@ -24,13 +28,13 @@ export const useSocketEvents = () => {
     window.socketIO.on(IoEvent.GAME_FOUND, (game) => {
       setGame(game);
       navigate(`${AppRoutes.Battle}`);
+
       // TODO: gameLoaded needs to call on all sprites load
       window.socketIO?.emit(IoEvent.GAME_LOADED);
     });
     window.socketIO.on(IoEvent.TURN_FROM_SERVER, (turnFromServer) => {
-      count += 1;
-      console.log(count, 'count in useSocketEvents');
       parseTurn(turnFromServer);
+      turnFromServer.game.isFinished && openModal(<LeaveWindowReact />);
     });
     window.socketIO.on(IoEvent.DISCONNECT, () => console.log('disconnect'));
 

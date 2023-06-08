@@ -2,7 +2,7 @@ import { type GameObjects } from '@kol/shared-game/game-objects';
 import { Container, Sprite, Stage } from '@pixi/react';
 import { CoinBar } from '@web/components/hud/coin-bar/coin-bar';
 import { EnergyBar } from '@web/components/hud/energy-bar/energy-bar';
-import { LeaveWindowPIXI } from '@web/components/hud/leave-window/leave-window';
+import { LeaveWindowReact } from '@web/components/hud/leave-window/leave-window';
 import { TimerBar } from '@web/components/hud/timer-bar/timer-bar';
 import { useModalContext } from '@web/hooks/use-modal';
 import { type FC, type ReactNode, useCallback } from 'react';
@@ -50,7 +50,7 @@ export const BattleHud: FC<BattleHudProperties> = ({
   const { openModal } = useModalContext();
 
   const handleOpenModal = () => {
-    openModal(<LeaveWindowPIXI />);
+    openModal(<LeaveWindowReact />);
   };
 
   const handleCardClick = useCallback(
