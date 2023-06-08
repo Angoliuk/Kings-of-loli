@@ -6,9 +6,5 @@ type FormErrorMessageProperties = {
 };
 
 export const FormErrorMessage: FC<FormErrorMessageProperties> = ({ message }) => {
-  return (
-    <h4>
-      <span className={styles.message}>{message}</span>
-    </h4>
-  );
+  return <span className={styles.message}>{message}</span>;
 };

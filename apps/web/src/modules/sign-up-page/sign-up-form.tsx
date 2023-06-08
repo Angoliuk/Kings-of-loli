@@ -29,6 +29,7 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   return (
     <>
       <div className={styles.signUpBlock}>
+        <span>Sign Up</span>
         <form onSubmit={handleFormSubmit(handleSubmit)} className={styles.signUpForm}>
           <FormInput
             register={register}
