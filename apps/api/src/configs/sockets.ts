@@ -222,28 +222,6 @@ io.on(IoEvent.CONNECT, async (socket) => {
     scan.on('end', async () => {
       await redisUtils.gameSearch.set(userId, { userId });
     });
-
-    // const scan21 = redisClient.scanStream({
-    //   match: 'game-search:*',
-    //   count: 100,
-    // });
-
-    // const scan22 = redisClient.scanStream({
-    //   match: 'game-room:*',
-    //   count: 100,
-    // });
-
-    // scan21.on('data', (gameSearch: string[]) => {
-    //   console.log('search:', gameSearch);
-    //   gameSearch.map(async (search) => console.log(await redisClient.get(search)));
-    //   // gameSearch.map(async (search) => await redisClient.del(search));
-    // });
-
-    // scan22.on('data', async (gameSearch: string[]) => {
-    //   console.log('room:', gameSearch);
-    //   gameSearch.map(async (search) => console.log(await redisClient.get(search)));
-    //   // gameSearch.map(async (search) => await redisClient.del(search));
-    // });
   });
 
   socket.on(IoEvent.GAME_LOADED, async () => {
