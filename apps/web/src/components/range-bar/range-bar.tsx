@@ -1,3 +1,4 @@
+import { useAuthStore } from '@web/store/auth-store/auth-store';
 import { type FC, useRef, useState } from 'react';
 
 import styles from './range-bar.module.css';
@@ -12,8 +13,10 @@ const SLIDER_MAX_VALUE = 100 as const;
 const SLIDER_STEP_VALUE = 10 as const;
 
 export const RangeBar: FC<RangeBarProperties> = ({ value = SLIDER_MAX_VALUE, tabIndex }) => {
+  const user = useAuthStore((state) => state.user);
   const [progress, setProgress] = useState(value);
   const [clicked, setClicked] = useState(false);
+  user.sound = progress;
 
   const RangeReference = useRef<HTMLInputElement>(null);
   const moveThumb = (event: MouseEvent) => {
