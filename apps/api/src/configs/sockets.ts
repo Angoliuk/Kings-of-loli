@@ -97,19 +97,23 @@ io.on(IoEvent.CONNECT, async (socket) => {
           },
         },
       });
+
+      io.to(turnToServer.player.userId).emit(IoEvent.TURN_FROM_SERVER, {
+        game,
+        newObjects: { building: [], card: [], unit: [] },
+        removedObjects: { building: [], card: [], unit: [] },
+        updatedObjects: { building: [], card: [], unit: [] },
+        players: game.players,
+        turn: turnToServer.turn + 1,
+      });
     }
+
     game.turnsCount++;
 
     game.gameObjects = {
       [GameObjectType.BUILDING]: updateGameObjectsGroup(game.gameObjects[GameObjectType.BUILDING], turnToServer),
       [GameObjectType.UNIT]: updateGameObjectsGroup(game.gameObjects[GameObjectType.UNIT], turnToServer),
       [GameObjectType.CARD]: updateGameObjectsGroup(game.gameObjects[GameObjectType.CARD], turnToServer),
-      sdada: console.log(
-        '//////////////////',
-        game.gameObjects[GameObjectType.UNIT],
-        turnToServer.newObjects.unit,
-        'gameObjects in sockets',
-      ),
     };
 
     if (game.turnsCount % 3 === 0) {
@@ -157,6 +161,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
     };
 
     game.turns.push(turnFromServer);
+
     await redisUtils.gameRoom.set(turnToServer.game.id, game);
     // await redisUtils.gameRoom.get(turnToServer.game.id);
     // socket.to(socketKeys.gameRoom(turnToServer.game.id)).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
@@ -217,28 +222,6 @@ io.on(IoEvent.CONNECT, async (socket) => {
     scan.on('end', async () => {
       await redisUtils.gameSearch.set(userId, { userId });
     });
-
-    // const scan21 = redisClient.scanStream({
-    //   match: 'game-search:*',
-    //   count: 100,
-    // });
-
-    // const scan22 = redisClient.scanStream({
-    //   match: 'game-room:*',
-    //   count: 100,
-    // });
-
-    // scan21.on('data', (gameSearch: string[]) => {
-    //   console.log('search:', gameSearch);
-    //   gameSearch.map(async (search) => console.log(await redisClient.get(search)));
-    //   // gameSearch.map(async (search) => await redisClient.del(search));
-    // });
-
-    // scan22.on('data', async (gameSearch: string[]) => {
-    //   console.log('room:', gameSearch);
-    //   gameSearch.map(async (search) => console.log(await redisClient.get(search)));
-    //   // gameSearch.map(async (search) => await redisClient.del(search));
-    // });
   });
 
   socket.on(IoEvent.GAME_LOADED, async () => {
