@@ -1,33 +1,22 @@
+import { type IoServerToClientEvents } from '@kol/shared-game/interfaces';
+import { bindObject } from '@web/modules/match/match-store/temporary';
 import { type RouterOutputs } from '@web/trpc';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
-type State = {
-  user?: RouterOutputs['auth']['me'];
-};
-
-type Actions = {
-  signIn: (user?: RouterOutputs['auth']['me']) => void;
-  logout: () => void;
-};
+import { combine } from 'zustand/middleware';
 
 export const useAuthStore = create(
-  persist<State & Actions>(
-    (set) => ({
-      user: undefined,
-      signIn: (user) => {
-        set(() => ({
-          user,
-        }));
+  combine({} as { user?: RouterOutputs['auth']['me'] }, (set, get) =>
+    bindObject({
+      signIn: (user: RouterOutputs['auth']['me']) => {
+        set({ user });
+      },
+      update: (user: Parameters<IoServerToClientEvents['user-update']>[0]) => {
+        const previousUser = get().user;
+        previousUser && set({ user: { ...previousUser, ...user } });
       },
       logout: () => {
-        set(() => ({
-          user: undefined,
-        }));
+        set({ user: undefined });
       },
     }),
-    {
-      name: 'auth',
-    },
   ),
 );
