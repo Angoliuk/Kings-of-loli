@@ -40,7 +40,6 @@ io.on(IoEvent.CONNECT, async (socket) => {
   const userActiveGameId = await redisUtils.userActiveGame.get(userId);
 
   if (userActiveGameId) {
-    // await socket.join(userActiveGameId);
     await socket.join(socketKeys.gameRoom(userActiveGameId));
   }
 
