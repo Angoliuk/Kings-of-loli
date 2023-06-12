@@ -68,7 +68,7 @@ export const useSizes = () => {
   );
 
   const topPanelHeightWithoutCorner = topPanel.desiredSize.height / 1.67;
-  const bottomPanelHeightWithoutCorner = bottomPanel.desiredSize.height / 1.3;
+  const bottomPanelHeightWithoutCorner = bottomPanel.desiredSize.height / 1.25;
   const topPanelHeightCornerWidth = topPanel.desiredSize.width / 33.6;
 
   const sidePanelRight = new SpriteSizes(
@@ -182,8 +182,8 @@ export const useSizes = () => {
       height: 174,
     },
     {
-      width: bottomPanel.desiredSize.width / 10,
-      height: bottomPanelHeightWithoutCorner,
+      width: bottomPanel.desiredSize.width >= 1300 ? bottomPanel.desiredSize.width / 10 : 120,
+      height: bottomPanelHeightWithoutCorner - 15,
     },
   );
   const timerBar = new SpriteSizes({
