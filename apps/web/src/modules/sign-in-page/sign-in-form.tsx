@@ -22,20 +22,19 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onError }) => {
   });
   const {
     signIn: { mutate: signIn, isLoading },
-  } = useAuth();
+  } = useAuth({ onAuthError: onError });
 
   const handleSubmit: SubmitHandler<SignInSchema> = (data) => {
     signIn({ name: data.nickname, password: data.password });
     reset();
   };
-  const handleError = () => onError();
 
   return (
     <>
       {isLoading && Loader()}
       <div className={styles.signInFormBlock}>
         <span>Sign In</span>
-        <form onSubmit={handleFormSubmit(handleSubmit, handleError)} className={styles.signInForm}>
+        <form onSubmit={handleFormSubmit(handleSubmit)} className={styles.signInForm}>
           <FormInput
             register={register}
             name={SignInFormFields.NICKNAME_TYPE}
