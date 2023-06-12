@@ -45,12 +45,12 @@ io.on(IoEvent.CONNECT, async (socket) => {
   }
 
   socket.on(IoEvent.TURN_TO_SERVER, async (turnToServer) => {
-    const playerActiveGame = await redisUtils.userActiveGame.get(turnToServer.player.userId);
+    const playerActiveGameId = await redisUtils.userActiveGame.get(turnToServer.player.userId);
 
-    if (!playerActiveGame) return;
+    if (!playerActiveGameId) return;
 
-    const game = await redisUtils.gameRoom.get(playerActiveGame);
-console.log(game,playerActiveGame)
+    const game = await redisUtils.gameRoom.get(playerActiveGameId);
+
     if (
       !game ||
       game.isFinished ||
@@ -144,10 +144,10 @@ console.log(game,playerActiveGame)
 
     game.players[game.players.findIndex((player) => player.userId === turnToServer.player.userId)] = {
       ...turnToServer.player,
-      //// TODO: Magic numbers to const && jerk off 
+      //// TODO: Magic numbers to const && jerk off
       // energy: turnToServer.player.energy<=10?turnToServer.player.energy + 2:turnToServer.player.energy,
-      energy:12,
-      coins: turnToServer.player.coins<=10?turnToServer.player.coins + 2:turnToServer.player.coins,
+      energy: 12,
+      coins: turnToServer.player.coins <= 10 ? turnToServer.player.coins + 2 : turnToServer.player.coins,
     };
 
     const turnFromServer: TurnFromServer = {
@@ -163,14 +163,11 @@ console.log(game,playerActiveGame)
 
     game.turns.push(turnFromServer);
 
-    await redisUtils.gameRoom.set(playerActiveGame, game);
+    await redisUtils.gameRoom.set(playerActiveGameId, game);
     //// turnToServer.game.id!==gameRoom(redis)
     // await redisUtils.gameRoom.get(turnToServer.game.id);
     // socket.to(socketKeys.gameRoom(turnToServer.game.id)).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
-    io.to(game.players.find((player) => player.userId !== userId).userId).emit(
-      IoEvent.TURN_FROM_SERVER,
-      turnFromServer,
-    );
+    io.to(socketKeys.gameRoom(playerActiveGameId)).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
   });
 
   socket.on(IoEvent.SEARCH_GAME, async () => {
@@ -205,12 +202,11 @@ console.log(game,playerActiveGame)
         }
 
         const gameSearchData = JSON.parse(gameSearchDataStringified) as { userId: string };
-        const gameId = randomUUID();
-
         const createdGame = createBaseGame([userId, gameSearchData.userId]);
-        await redisUtils.gameRoom.set(gameId, createdGame);
-        await redisUtils.userActiveGame.set(userId, gameId);
-        await redisUtils.userActiveGame.set(gameSearchData.userId, gameId);
+
+        await redisUtils.gameRoom.set(createdGame.id, createdGame);
+        await redisUtils.userActiveGame.set(userId, createdGame.id);
+        await redisUtils.userActiveGame.set(gameSearchData.userId, createdGame.id);
         await redisUtils.gameSearch.del(gameSearch);
 
         io.to(userId).to(gameSearchData.userId).emit(IoEvent.GAME_FOUND, createdGame);
@@ -225,10 +221,14 @@ console.log(game,playerActiveGame)
     });
   });
 
-  socket.on(IoEvent.GAME_LOADED, async () => {
-    const userActiveGame = await redisUtils.userActiveGame.get(userId);
+  socket.on(IoEvent.CANCEL_SEARCH_GAME, async () => {
+    await redisUtils.gameSearch.del(userId);
+  });
 
-    if (!userActiveGame) return;
-    await socket.join(socketKeys.gameRoom(userActiveGame));
+  socket.on(IoEvent.GAME_LOADED, async () => {
+    const userActiveGameId = await redisUtils.userActiveGame.get(userId);
+
+    if (!userActiveGameId) return;
+    await socket.join(socketKeys.gameRoom(userActiveGameId));
   });
 });
