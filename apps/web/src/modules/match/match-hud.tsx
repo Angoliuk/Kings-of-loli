@@ -30,11 +30,9 @@ export const BattleHud: FC<BattleHudProperties> = ({
   setSelectedUnit,
 }) => {
   const makeTurn = useTurnStore((state) => state.makeTurn);
-  const [{ card: cards, building: buildings, unit: units }, getCurrentPlayer, players] = useGameStore((state) => [
-    state.gameObjects,
-    state.getCurrentPlayer,
-    state.players,
-  ]);
+  const [{ card: cards, building: buildings, unit: units }, getCurrentPlayer, players, turnsCount] = useGameStore(
+    (state) => [state.gameObjects, state.getCurrentPlayer, state.players, state.turnsCount],
+  );
   const currentPlayer = getCurrentPlayer();
   const {
     bottomPanel,
@@ -129,7 +127,7 @@ export const BattleHud: FC<BattleHudProperties> = ({
             y={bottomPanel.desiredSize.height - bottomPanelHeightWithoutCorner}
             {...moveButton.desiredSize}
             scale={moveButton.scale}
-            interactive={true}
+            interactive={players[Number(turnsCount % 2 === 0)].userId === currentPlayer?.userId ? true : false}
             click={() => {
               makeTurn();
             }}

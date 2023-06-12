@@ -6,7 +6,7 @@ const sendTurn = (turn: TurnToServer) => {
 };
 
 const startSearch = () => {
-  // window.socketIO?.emit(IoEvent.SEARCH_GAME);
+  window.socketIO?.emit(IoEvent.SEARCH_GAME);
   findedGame = false;
   findedGame ?? Loader();
 };

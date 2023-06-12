@@ -119,23 +119,26 @@ export const BattleMap: FC<BattleMap> = ({
   const [{ building: buildings, unit: units }, getCurrentPlayer] = useGameStore((state) => [
     state.gameObjects,
     state.getCurrentPlayer,
+    state.turnsCount,
+    state.players,
   ]);
   const player = getCurrentPlayer();
   const { mapTile, unit: unitSizes, castle } = useSizes();
-  const { putCard, receiveDamage } = useGameObjectActions();
-  const handleUnitClick = (unit: GameObjects.Unit) => {
-    setSelectedCard(null);
-    if (unit.team !== player?.team) return;
+  const { putCard, receiveDamage, clickUnit } = useGameObjectActions();
 
-    if (selectedUnit?.id === unit.id) {
-      setSelectedUnit(null);
-      setActions([]);
-      return;
-    }
+  // const handleUnitClick = (unit: GameObjects.Unit) => {
+  // setSelectedCard(null);
+  // if (unit.team !== player?.team) return;
 
-    setSelectedUnit(unit);
-    setActions(unit.getPossibleActions([...units, ...buildings]));
-  };
+  // if (selectedUnit?.id === unit.id) {
+  //   setSelectedUnit(null);
+  //   setActions([]);
+  //   return;
+  // }
+
+  // setSelectedUnit(unit);
+  // setActions(unit.getPossibleActions([...units, ...buildings]));
+  // };
 
   const handleActionClick = (action: GameObjects.Action) => {
     if (selectedCard) {
@@ -248,7 +251,7 @@ export const BattleMap: FC<BattleMap> = ({
 
       {units.map((unit) => (
         <CreateUnit
-          handleClick={() => handleUnitClick(unit)}
+          handleClick={() => clickUnit(unit, selectedUnit, setSelectedUnit, setActions, setSelectedCard)}
           scale={unitSizes.scale}
           key={`${unit.coords.x}-${unit.coords.y}-unit`}
           x={unit.coords.x * mapTile.desiredSize.width + mapTile.desiredSize.width * 0.2}
