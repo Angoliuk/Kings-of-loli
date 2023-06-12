@@ -1,12 +1,12 @@
 .leave {
   display: flex;
   flex-direction: column;
-  gap: 2%;
   align-items: center;
   justify-content: center;
 
   width: 50%;
   height: 100%;
+  padding: 1rem;
 
   background-image: url('../../../../resources/img/map/hud/window.png');
   background-repeat: no-repeat;
@@ -17,19 +17,17 @@
 
 .context {
   display: flex;
+  align-items: center;
   justify-content: center;
 
-  width: 50%;
+  width: 60%;
   height: 50%;
 
   font-size: 2rem;
   text-align: center;
 
-  background-image: url('../../../../resources/img/map/hud/main-stone.png');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-
-  image-rendering: crisp-edges;
+  background: #6b789c90;
+  border: 5px solid black;
 }
 
 .buttons {
@@ -48,10 +46,6 @@
   font-size: 3rem;
   text-align: center;
 
-  background-image: url('../../../../resources/img/map/hud/button.png');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  border: none;
-
-  image-rendering: crisp-edges;
+  background: #6b789c;
+  border: 5px solid black;
 }

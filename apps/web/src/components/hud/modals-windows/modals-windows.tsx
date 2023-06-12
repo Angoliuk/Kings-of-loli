@@ -1,12 +1,13 @@
+import { type Team } from '@kol/shared-game/interfaces';
 import { Sprite, Stage, Text } from '@pixi/react';
 import { ModalLockWrapper } from '@web/components/lock-modal-wrapper/lock-modal-wrapper';
 import { useModalContext } from '@web/hooks/use-modal';
 import { AppRoutes } from '@web/routes/app-router-enum';
 import { TextStyle } from 'pixi.js';
 import { type FC } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import styles from './leave-window.module.css';
+import styles from './modals-windows.module.css';
 
 export const LeaveWindowPIXI: FC = () => {
   const { closeModal } = useModalContext();
@@ -80,6 +81,30 @@ export const LeaveWindowReact = () => {
             className={styles.button}
           >
             Ok
+          </button>
+        </div>
+      </div>
+    </ModalLockWrapper>
+  );
+};
+export const CommandWarningReact = ({ team }: { team: Team }) => {
+  const { closeModal } = useModalContext();
+  const navigate = useNavigate();
+  return (
+    <ModalLockWrapper>
+      <div className={styles.leave}>
+        <div className={styles.context}>
+          <h1>You play for the , {team} team be careful</h1>
+        </div>
+        <div className={styles.buttons}>
+          <button
+            onClick={() => {
+              navigate(AppRoutes.Battle);
+              closeModal();
+            }}
+            className={styles.button}
+          >
+            got it
           </button>
         </div>
       </div>

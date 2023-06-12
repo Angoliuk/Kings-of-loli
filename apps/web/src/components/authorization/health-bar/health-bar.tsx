@@ -42,7 +42,8 @@ export const HealthBar: FC<HealthBarProperties> = ({ health }) => {
 
 export const useHealthBarHandler = () => {
   const [health, setHealth] = useState(INITIAL_USER_HEALTH);
-  const OnDamageReceived = () =>
+  const onDamageReceived = () => {
     setHealth((previous) => (previous === MINIMAL_USER_HEALTH ? INITIAL_USER_HEALTH : previous - DAMAGE_USER_HEALTH));
-  return { health, OnDamageReceived };
+  };
+  return { health, onDamageReceived };
 };

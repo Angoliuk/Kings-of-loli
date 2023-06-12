@@ -54,6 +54,8 @@ export const useGameStore = create(
           turns: [...get().turns, turn],
           winnedUserId: turn.game.winnedUserId,
         });
+        console.log(get(), 'game Store in useGameStore ');
+        useTurnStore.getState().createNewTurnTemplate();
       },
       getCurrentPlayer: () => {
         return get().players.find((player) => player.userId === useAuthStore.getState().user?.id);

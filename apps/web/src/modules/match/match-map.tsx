@@ -141,7 +141,8 @@ export const BattleMap: FC<BattleMap> = ({
     if (selectedCard) {
       putCard(selectedCard, action);
     }
-    if (selectedUnit) {
+    if (player && selectedUnit && player.energy >= selectedUnit.energy) {
+      console.log(selectedUnit.energy, 'selectedUnirAnarge');
       updateCurrentPlayerResourcesBy({
         energy: -selectedUnit.energy,
       });

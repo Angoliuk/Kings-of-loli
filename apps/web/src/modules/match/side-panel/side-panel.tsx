@@ -6,8 +6,10 @@ import { useSizes } from '../utils/sprite-sizes';
 
 export type SidePanelProperties = {
   side: 'Right' | 'Left';
+  hp?: number;
+  maxHp?: number;
 };
-export const SidePanel: FC<SidePanelProperties> = memo(({ side }) => {
+export const SidePanel: FC<SidePanelProperties> = memo(({ side, hp, maxHp }) => {
   const { topPanel, windowSize, ...sizes } = useSizes();
   const sidePanel = sizes[`sidePanel${side}`];
   return (
@@ -19,7 +21,7 @@ export const SidePanel: FC<SidePanelProperties> = memo(({ side }) => {
       {...sidePanel.desiredSize}
     >
       <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/healthbar-empty-hd.png`}>
-        {HudHealthBar({ hp: 100 })}
+        {HudHealthBar({ hp: hp, maxHp: maxHp })}
         <Sprite anchor={[0, -0.35]} image={`resources/img/map/hud/healthbar-empty-flask-hd.png`} />
       </Sprite>
     </Sprite>

@@ -107,7 +107,14 @@ const authRouter = router({
         password: await argon.hash(password),
       },
     });
-    return newUser;
+    const { access_token, refresh_token } = await signTokens(newUser);
+    ctx.res.cookie('access_token', access_token, accessTokenCookieOptions);
+    ctx.res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
+    ctx.res.cookie('logged_in', true, {
+      ...accessTokenCookieOptions,
+      httpOnly: false,
+    });
+    return { user: exclude(newUser, ['password']),access_token};
   }),
 });
 

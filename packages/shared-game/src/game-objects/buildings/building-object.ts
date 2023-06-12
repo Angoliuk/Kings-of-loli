@@ -4,6 +4,7 @@ import { BaseGameObject, BaseGameObjectProperties } from '../base/base-object';
 export type BuildingOwnProperties = {
   coords: Coordinates[];
   buildingType: BuildingType;
+  maxHp:number
 };
 
 export type BuildingProperties = BuildingOwnProperties & Omit<BaseGameObjectProperties, 'objectType'>;
@@ -11,7 +12,8 @@ export type BuildingProperties = BuildingOwnProperties & Omit<BaseGameObjectProp
 export class Building extends BaseGameObject {
   coords;
   buildingType;
-  constructor({ source, hp, coords, team,buildingType,id }: BuildingProperties) {
+  maxHp
+  constructor({ source, hp, coords, team,buildingType,id ,maxHp}: BuildingProperties) {
     super({
       source: source,
       hp: hp,
@@ -19,6 +21,7 @@ export class Building extends BaseGameObject {
       objectType: GameObjectType.BUILDING,
       id
     });
+    this.maxHp = maxHp;
     this.coords = coords;
     this.buildingType = buildingType;
   }

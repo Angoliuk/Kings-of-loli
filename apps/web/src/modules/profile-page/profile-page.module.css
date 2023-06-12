@@ -3,12 +3,10 @@
 .bg {
   display: flex;
   flex-direction: column;
-  gap: 400px;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 
   width: 100%;
-  height: 100%;
 
   background-image: url('.././../../resources/img/bg/bg.png');
   background-size: 100% 100%;
@@ -19,60 +17,70 @@
 .content {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 
-  width: 70%;
-  height: 70%;
-  padding: 100px;
+  min-width: 75vw;
+  height: fit-content;
+  padding: 6rem 0;
 
-  background-image: url('.././../../resources/img/bg/window.png');
-  background-size: 100% 100%;
+  /* background-image: url('.././../../resources/img/bg/window.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain; */
 
   image-rendering: pixelated;
 }
 
 .userContainer {
+  z-index: 1;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  width: 18vw;
-  height: 20vw;
-  padding-top: 10px;
+  width: fit-content;
+  padding: 1rem;
 
-  background-image: url('.././../../resources/img/bg/main-stone.png');
-  background-size: 100% 100%;
+  background: #8f8888;
+  border: 2px solid black;
+
+  /* background-image: url('.././../../resources/img/bg/main-stone.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain; */
 
   image-rendering: pixelated;
 }
 
 .profiles {
-  position: relative;
-  width: 80%;
-  height: 70%;
-}
-
-.userProfile {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   width: 100%;
   height: 100%;
+}
+
+.userProfile {
+  width: min(20vh, 30vw);
+  height: min(20vh, 30vw);
 
   background-image: url('.././../../resources/img/profile/avatar.png');
-  background-size: 100% 100%;
-  border-radius: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 
   image-rendering: pixelated;
 }
 
 .userProfileActive {
-  position: absolute;
-  top: 0;
+  position: fixed;
 
-  width: 100%;
-  height: 100%;
+  width: min(20vh, 30vw);
+  height: min(20vh, 30vw);
 
   opacity: 0;
   background-image: url('.././../../resources/img/profile/avatar-select.png');
@@ -87,18 +95,29 @@
 
 .buttons {
   position: relative;
-  width: 20%;
-  height: 10%;
+}
+
+.username {
+  width: min(20vh, 30vw);
+  height: 100%;
+
+  text-align: center;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: normal;
 }
 
 .logoutButton {
+  overflow: hidden;
   display: flex;
-  width: 100%;
-  height: 100%;
   align-items: center;
   justify-content: center;
 
+  padding: 1rem;
+
   font-size: 2rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   background-image: url('.././../../resources/img/profile/button.png');
   background-size: 100% 100%;
@@ -111,6 +130,7 @@
   position: absolute;
   z-index: 0;
   top: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,9 +142,9 @@
 
   opacity: 0;
   background: none;
-  border: none;
   background-image: url('.././../../resources/img/profile/button-select.png');
   background-size: 100% 100%;
+  border: none;
 
   image-rendering: pixelated;
 }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { FormInput } from '@web/components/form-input/form-input';
+import { Loader } from '@web/components/loader/loader';
 import { SignInFormFields } from '@web/constants/authorization/authorization';
 import { useAuth } from '@web/hooks/use-auth';
 import { useHookForm } from '@web/hooks/use-form';
@@ -10,7 +11,7 @@ import { type SubmitHandler } from 'react-hook-form';
 import styles from './sign-in-form.module.css';
 import { signInFormSchema, type SignInSchema } from './validation';
 
-export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
+export const SignInForm: FC<AuthorizationFormProperties> = ({ onError }) => {
   const {
     register,
     formState: { errors, isValid },
@@ -19,18 +20,22 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   } = useHookForm<SignInSchema>({
     schema: signInFormSchema,
   });
-  const { signIn } = useAuth();
+  const {
+    signIn: { mutate: signIn, isLoading },
+  } = useAuth();
 
   const handleSubmit: SubmitHandler<SignInSchema> = (data) => {
     signIn({ name: data.nickname, password: data.password });
-    onSubmit();
     reset();
   };
+  const handleError = () => onError();
+
   return (
     <>
+      {isLoading && Loader()}
       <div className={styles.signInFormBlock}>
         <span>Sign In</span>
-        <form onSubmit={handleFormSubmit(handleSubmit)} className={styles.signInForm}>
+        <form onSubmit={handleFormSubmit(handleSubmit, handleError)} className={styles.signInForm}>
           <FormInput
             register={register}
             name={SignInFormFields.NICKNAME_TYPE}
