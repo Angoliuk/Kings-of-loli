@@ -3,6 +3,8 @@ import { exclude } from '@api/services';
 import { protectedProcedure, publicProcedure, router } from '@api/trpc';
 import { Prisma } from '@prisma/client';
 import { z } from 'zod';
+import { io } from '../../configs/sockets';
+import { IoEvent } from '@kol/shared-game/interfaces';
 
 const updateUserInput = z.object({
   userId: z.string().min(1),
@@ -44,6 +46,7 @@ const userRouter = router({
           name: name?.trim(),
         },
       });
+      io.to(userId).emit(IoEvent.USER_UPDATE, { name, sound });
       return exclude(updatedUser, ['password']);
     },
   ),
@@ -53,6 +56,7 @@ const userRouter = router({
         id: userId,
       },
     });
+    io.to(userId).emit(IoEvent.USER_DELETE, { deletedUserId: userId });
     return deletedUser.id;
   }),
   getUserById: publicProcedure.input(getUserById).query(async ({ input, ctx }) => {
