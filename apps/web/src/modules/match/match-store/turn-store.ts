@@ -80,11 +80,8 @@ export const useTurnStore = create(
         addUpdatedObject: <T extends GameObjectsList[keyof GameObjectsList]['instance']>(updatedObject: T) => {
           const previousUpdatedObjects = get().updatedObjects[updatedObject.objectType];
           let isUpdatedObjectDuplicate = false;
-          console.log(get().updatedObjects, updatedObject.object, 'previousUpdatedObjects use turn store');
-          console.log(isUpdatedObjectDuplicate, 'isUpdatedObjectDuplicate use turn store');
           // TODO: update recently added unit
           previousUpdatedObjects.map((previousUpdatedObject) => {
-            console.log(previousUpdatedObject, 'previousUpdatedObject use turn store');
             if (previousUpdatedObject.id === updatedObject.id) {
               isUpdatedObjectDuplicate = true;
               return updatedObject;
@@ -126,7 +123,6 @@ export const useTurnStore = create(
         },
         makeTurn() {
           sendTurn(get());
-          console.log(get(), 'pizdec');
           set({
             game: { id: useGameStore.getState().id, turnsCount: useGameStore.getState().turnsCount + 1 },
             player: useGameStore.getState().getCurrentPlayer(),
