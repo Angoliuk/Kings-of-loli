@@ -85,9 +85,6 @@ export const BattleHud: FC<BattleHudProperties> = ({
       <SidePanel side="Right" hp={blueCastle?.hp} maxHp={blueCastle?.maxHp} />
       <Container>
         <Sprite image={`resources/img/map/hud/top-panel.png`} scale={topPanel.scale} {...topPanel.desiredSize}>
-          <CoinBar coins={currentPlayer?.coins ?? 0} />
-          <EnergyBar energy={currentPlayer?.energy ?? 0} />
-          <TimerBar time={'42:13'} />
           {/* <Container>
             <Sprite
               interactive={true}
@@ -107,6 +104,9 @@ export const BattleHud: FC<BattleHudProperties> = ({
             />
           </Container> */}
         </Sprite>
+        <CoinBar coins={currentPlayer?.coins ?? 0} />
+        <EnergyBar energy={currentPlayer?.energy ?? 0} />
+        <TimerBar />
       </Container>
       <Container>
         <Sprite

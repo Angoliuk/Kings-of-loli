@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-export const useCountDown = () => {
+export const useCountDown = (onCountDownEnd?: () => void) => {
   const [countDown, setCountDown] = useState(0);
-  const [isStopped, setIsStopped] = useState(false);
+  const [isStopped, setIsStopped] = useState(true);
 
   const stopCountDown = () => {
     setIsStopped(true);
@@ -22,7 +22,8 @@ export const useCountDown = () => {
   };
 
   useEffect(() => {
-    if (isStopped && countDown > 0) return;
+    countDown <= 0 || onCountDownEnd?.();
+    if (isStopped || countDown <= 0) return;
     const interval = setInterval(() => {
       setCountDown(countDown - 1);
     }, 1000);

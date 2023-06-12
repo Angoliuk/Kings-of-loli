@@ -144,7 +144,7 @@ export const useSizes = () => {
       width: 191,
       height: 86,
     },
-    { height: topPanelHeightWithoutCorner, width: topPanel.desiredSize.width / 10 },
+    { height: topPanelHeightWithoutCorner, width: 160 },
   );
 
   const coin = new SpriteSizes(
@@ -186,10 +186,13 @@ export const useSizes = () => {
       height: bottomPanelHeightWithoutCorner - 15,
     },
   );
-  const timerBar = new SpriteSizes({
-    width: 313,
-    height: 86,
-  });
+  const timerBar = new SpriteSizes(
+    {
+      width: 313,
+      height: 86,
+    },
+    { height: topPanelHeightWithoutCorner, width: 300 },
+  );
 
   return {
     hpBarContainer,

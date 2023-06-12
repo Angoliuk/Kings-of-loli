@@ -99,7 +99,7 @@ export const useTurnStore = create(
           });
           useGameStore.getState().updateGameObject(updatedObject);
         },
-        createNewTurnTemplate() {
+        createNewTurnTemplate: () => {
           set({
             game: { id: useGameStore.getState().id, turnsCount: useGameStore.getState().turnsCount + 1 },
             player: useGameStore.getState().getCurrentPlayer(),
@@ -121,7 +121,7 @@ export const useTurnStore = create(
             },
           });
         },
-        makeTurn() {
+        makeTurn: () => {
           sendTurn(get());
           set({
             game: { id: useGameStore.getState().id, turnsCount: useGameStore.getState().turnsCount + 1 },
