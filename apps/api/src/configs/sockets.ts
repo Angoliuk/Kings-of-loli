@@ -216,7 +216,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
     });
 
     scan.on('end', async () => {
-      await redisUtils.gameSearch.set(userId, { userId });
+      await redisUtils.gameSearch.set(userId, { userId, timestamp: Date.now() });
     });
   });
 

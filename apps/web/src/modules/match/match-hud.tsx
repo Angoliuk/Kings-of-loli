@@ -70,7 +70,6 @@ export const BattleHud: FC<BattleHudProperties> = ({
   );
   const blueCastle = buildings.find((build) => build.buildingType === BuildingType.CASTLE && build.team === Team.BLUE);
 
-  console.log(useGameStore.getState().gameObjects);
   return (
     <Stage width={windowSize.width} height={windowSize.height}>
       <Container

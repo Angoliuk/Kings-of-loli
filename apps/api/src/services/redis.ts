@@ -13,7 +13,9 @@ export const redisUtilsGenerator = <T, K>(keyExtractor: (key: K) => string) => (
 
 export const redisUtils = {
   gameRoom: redisUtilsGenerator<GameWithObjects, string>((roomId) => `game-room:${roomId}`),
-  gameSearch: redisUtilsGenerator<{ userId: string }, string>((searchId) => `game-search:${searchId}`),
+  gameSearch: redisUtilsGenerator<{ userId: string; timestamp: number }, string>(
+    (searchId) => `game-search:${searchId}`,
+  ),
   userActiveGame: redisUtilsGenerator<string, string>((userId) => `${userId}-active-game`),
 };
 

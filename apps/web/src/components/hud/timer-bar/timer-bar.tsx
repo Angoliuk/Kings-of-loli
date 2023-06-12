@@ -3,18 +3,9 @@ import { useCountDown } from '@web/hooks/use-count-down';
 import { useGameStore } from '@web/modules/match/match-store/game-store';
 import { useTurnStore } from '@web/modules/match/match-store/turn-store';
 import { useSizes } from '@web/modules/match/utils/sprite-sizes';
+import { getTimeFormat } from '@web/utils';
 import { TextStyle } from 'pixi.js';
 import { type FC, useEffect } from 'react';
-
-const getCountDownTime = (time: number) => {
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-  return (
-    (minutes > 9 ? minutes.toString() : '0' + minutes.toString()) +
-    ':' +
-    (seconds > 9 ? seconds.toString() : '0' + seconds.toString()).toString()
-  );
-};
 
 export const TimerBar: FC = () => {
   const { timerBar, topPanel } = useSizes();
@@ -44,7 +35,7 @@ export const TimerBar: FC = () => {
     >
       <Text
         x={timerBar.desiredSize.width / 4.2}
-        text={getCountDownTime(countDown)}
+        text={getTimeFormat(countDown)}
         style={new TextStyle({ fontSize: 69, fill: 'black' })}
       />
     </Sprite>
