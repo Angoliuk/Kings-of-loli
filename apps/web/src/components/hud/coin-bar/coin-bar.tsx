@@ -14,21 +14,21 @@ export const CoinBar = ({ coins }: { coins: number }) => {
         scale={coinBar.scale}
         image={`resources/img/map/hud/money-bg-hd.png`}
       >
-        <Sprite
-          x={coins > 9 ? coinBar.desiredSize.width / 2 + coin.desiredSize.width / 2 : coin.desiredSize.width}
-          y={coinBar.desiredSize.height * 0.15}
-          {...coin.desiredSize}
-          scale={coin.scale}
-          image={`resources/img/map/hud/coin-hd.png`}
-        />
-
         <Text
           text={coins.toString()}
           x={coins > 9 ? 30 : 50}
+          y={5}
           style={new TextStyle({ fontSize: 69, fill: 'black' })}
           resolution={1.5}
         />
       </Sprite>
+      <Sprite
+        x={topPanel.desiredSize.width / 5.5}
+        y={coinBar.desiredSize.height * 0.1}
+        {...coin.desiredSize}
+        scale={coin.scale}
+        image={`resources/img/map/hud/coin-hd.png`}
+      />
     </>
   );
 };

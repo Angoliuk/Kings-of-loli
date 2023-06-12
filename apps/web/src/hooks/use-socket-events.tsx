@@ -24,7 +24,7 @@ export const useSocketEvents = () => {
     window.socketIO.on(IoEvent.CONNECT, () => console.log('connect'));
     window.socketIO.on(IoEvent.GAME_FOUND, (game) => {
       setGame(game);
-      openModal(<CommandWarningReact team={game.players.find((player) => player.id === user.userId)?.team} />),
+      openModal(<CommandWarningReact team={game.players.find((player) => player.userId === user?.id)?.team} />),
         // TODO: gameLoaded needs to call on all sprites load
         window.socketIO?.emit(IoEvent.GAME_LOADED);
     });

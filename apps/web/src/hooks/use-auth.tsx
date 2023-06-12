@@ -50,7 +50,7 @@ export const useAuth = ({ onAuthError }: useAuthProperties = {}) => {
     },
     onError: (error) => {
       new Error(error.message);
-      onAuthError();
+      onAuthError?.();
     },
   });
   const signIn = trpc.auth.login.useMutation({
@@ -60,7 +60,7 @@ export const useAuth = ({ onAuthError }: useAuthProperties = {}) => {
     },
     onError: (error) => {
       new Error(error.message);
-      onAuthError();
+      onAuthError?.();
     },
   });
   return { logout, signUp, signIn };
