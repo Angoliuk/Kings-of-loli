@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useModalContext } from './use-modal';
 export const useSocketEvents = () => {
-  const { user } = useAuthStore();
+  const { user, update } = useAuthStore();
   const [setGame, parseTurn] = useGameStore((state) => [state.setGame, state.parseTurn]);
   const { openModal } = useModalContext();
 
@@ -28,9 +28,9 @@ export const useSocketEvents = () => {
         // TODO: gameLoaded needs to call on all sprites load
         window.socketIO?.emit(IoEvent.GAME_LOADED);
     });
-    window.socketIO.on(IoEvent.USER_UPDATE,(data)=>{
-      useAuthStore((state) => state.user)? 
-    })
+    window.socketIO.on(IoEvent.USER_UPDATE, (data) => {
+      update(data);
+    });
     window.socketIO.on(IoEvent.TURN_FROM_SERVER, (turnFromServer) => {
       parseTurn(turnFromServer);
       turnFromServer.game.isFinished && openModal(<LeaveWindowReact />);
@@ -43,6 +43,7 @@ export const useSocketEvents = () => {
       window.socketIO.removeAllListeners(IoEvent.GAME_FOUND);
       window.socketIO.removeAllListeners(IoEvent.TURN_FROM_SERVER);
       window.socketIO.removeAllListeners(IoEvent.DISCONNECT);
+      window.socketIO.removeAllListeners(IoEvent.USER_UPDATE);
     };
   }, [window.socketIO]);
 };
