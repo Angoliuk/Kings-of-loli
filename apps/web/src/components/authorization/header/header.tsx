@@ -6,7 +6,7 @@ export const AuthorizationHeader: FC = () => {
   return (
     <div className={styles.header}>
       <h1 className={styles.gameName}>
-        <span>Game Name</span>
+        <span>Kings of Loli</span>
       </h1>
     </div>
   );

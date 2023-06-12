@@ -1,4 +1,5 @@
 import { useAuthStore } from '@web/store/auth-store/auth-store';
+import { trpc } from '@web/trpc';
 import { type FC, useRef, useState } from 'react';
 
 import styles from './range-bar.module.css';
@@ -14,9 +15,9 @@ const SLIDER_STEP_VALUE = 10 as const;
 
 export const RangeBar: FC<RangeBarProperties> = ({ value = SLIDER_MAX_VALUE, tabIndex }) => {
   const user = useAuthStore((state) => state.user);
+  const { mutate } = trpc.users.updateUser.useMutation();
   const [progress, setProgress] = useState(value);
   const [clicked, setClicked] = useState(false);
-  user.sound = progress;
 
   const RangeReference = useRef<HTMLInputElement>(null);
   const moveThumb = (event: MouseEvent) => {
@@ -44,6 +45,12 @@ export const RangeBar: FC<RangeBarProperties> = ({ value = SLIDER_MAX_VALUE, tab
     window.addEventListener('mousemove', moveThumb);
     window.addEventListener('mouseup', () => {
       setClicked(false);
+      if (user) {
+        mutate({
+          userId: user.id,
+          values: { sound: progress },
+        });
+      }
       window.removeEventListener('mousemove', moveThumb);
     });
   }

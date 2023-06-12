@@ -8,13 +8,13 @@ import { SignUpForm } from './sign-up-form';
 import styles from './sign-up-page.module.css';
 
 export const SignUp: FC = () => {
-  const { health, OnDamageReceived } = useHealthBarHandler();
+  const { health, onDamageReceived } = useHealthBarHandler();
   return (
     <AuthorizationWrapper health={health}>
       <div className={styles.signUp}>
         <div className={styles.form}>
           <AuthorizationHeader />
-          <SignUpForm onSubmit={OnDamageReceived} />
+          <SignUpForm onError={onDamageReceived} />
         </div>
         <div className={styles.signUpButtons}>
           <AuthorizationButton />

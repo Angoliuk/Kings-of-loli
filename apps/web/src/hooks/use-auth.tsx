@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../routes/app-router-enum';
 import { useAuthStore } from '../store/auth-store/auth-store';
 import { trpc } from '../trpc';
-
-export const useAuth = () => {
+type useAuthProperties = {
+  onAuthError?: () => void;
+};
+export const useAuth = ({ onAuthError }: useAuthProperties = {}) => {
   const userLogout = useAuthStore((state) => state.logout);
   const signInStore = useAuthStore((state) => state.signIn);
 
@@ -41,16 +43,25 @@ export const useAuth = () => {
     },
   });
 
-  const { mutate: signUp } = trpc.auth.register.useMutation({
-    onSuccess: () => navigate(`${AppRoutes.SignIn}`),
-    onError: (error) => new Error(error.message),
-  });
-  const { mutate: signIn } = trpc.auth.login.useMutation({
+  const signUp = trpc.auth.register.useMutation({
     onSuccess: ({ user }) => {
       signInStore(user);
-      return navigate(`${AppRoutes.Home}`);
+      return navigate(AppRoutes.Home);
     },
-    onError: (error) => new Error(error.message),
+    onError: (error) => {
+      new Error(error.message);
+      onAuthError();
+    },
+  });
+  const signIn = trpc.auth.login.useMutation({
+    onSuccess: ({ user }) => {
+      signInStore(user);
+      return navigate(AppRoutes.Home);
+    },
+    onError: (error) => {
+      new Error(error.message);
+      onAuthError();
+    },
   });
   return { logout, signUp, signIn };
 };

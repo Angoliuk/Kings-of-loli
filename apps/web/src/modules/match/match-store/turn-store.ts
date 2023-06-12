@@ -11,8 +11,7 @@ import { bindObject } from './temporary';
 export const useTurnStore = create(
   combine(
     {
-      game: { id: '666' },
-      turn: 1,
+      game: { id: '666', turnsCount: 1 },
       player: { coins: 1, energy: 0, team: Team.BLUE, userId: 'lox' },
       updatedObjects: {
         building: [],
@@ -35,10 +34,16 @@ export const useTurnStore = create(
         updateCurrentPlayerResourcesBy: ({ coins, energy }: { coins?: number; energy?: number }) => {
           const player = get().player;
           if (!player) return;
+          const updatedPlayer = {
+            ...player,
+            coins: player.coins + (coins ?? 0),
+            energy: player.energy + (energy ?? 0),
+          };
+          //// here error with energy
           set({
-            player: { ...player, coins: player.coins + (coins ?? 0), energy: player.energy + (energy ?? 0) },
+            player: updatedPlayer,
           });
-          useGameStore.getState().setPlayer(get().player);
+          useGameStore.getState().setPlayer(updatedPlayer);
         },
         addRemovedObject: <T extends GameObjectsList[keyof GameObjectsList]['instance']>(removedObject: T) => {
           set({
@@ -99,8 +104,7 @@ export const useTurnStore = create(
         },
         createNewTurnTemplate() {
           set({
-            game: { id: useGameStore.getState().id },
-            turn: useGameStore.getState().turnsCount + 1,
+            game: { id: useGameStore.getState().id, turnsCount: useGameStore.getState().turnsCount + 1 },
             player: useGameStore.getState().getCurrentPlayer(),
 
             updatedObjects: {
@@ -124,8 +128,7 @@ export const useTurnStore = create(
           sendTurn(get());
           console.log(get(), 'pizdec');
           set({
-            game: { id: useGameStore.getState().id },
-            turn: useGameStore.getState().turnsCount + 1,
+            game: { id: useGameStore.getState().id, turnsCount: useGameStore.getState().turnsCount + 1 },
             player: useGameStore.getState().getCurrentPlayer(),
 
             updatedObjects: {

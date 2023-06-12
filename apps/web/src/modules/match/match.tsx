@@ -1,5 +1,5 @@
 import { type GameObjects } from '@kol/shared-game/game-objects';
-import { LeaveWindowReact } from '@web/components/hud/leave-window/leave-window';
+import { LeaveWindowReact } from '@web/components/hud/modals-windows/modals-windows';
 import { useModalContext } from '@web/hooks/use-modal';
 import { useState } from 'react';
 

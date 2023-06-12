@@ -3,6 +3,7 @@ import { type FC } from 'react';
 
 import { NavigationPageWrapper } from '../../components/navigation-page-wrapper/navigation-page-wrapper';
 import styles from './home-page.module.css';
+
 export const HomePage: FC = () => {
   return (
     <NavigationPageWrapper>

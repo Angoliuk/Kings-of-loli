@@ -168,7 +168,7 @@ export const useSizes = () => {
       width: 40,
       height: 32,
     },
-    { width: innerWidth / 37.7, height: innerHeight / 32 },
+    { width: energyBar.desiredSize.width / 14, height: energyBar.desiredSize.height / 3 },
   );
 
   const castle = new SpriteSizes(
@@ -186,6 +186,10 @@ export const useSizes = () => {
       height: bottomPanelHeightWithoutCorner,
     },
   );
+  const timerBar = new SpriteSizes({
+    width: 313,
+    height: 86,
+  });
 
   return {
     hpBarContainer,
@@ -210,5 +214,6 @@ export const useSizes = () => {
     energySize,
     castle,
     moveButton,
+    timerBar,
   };
 };

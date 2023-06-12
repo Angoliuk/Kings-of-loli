@@ -1,11 +1,12 @@
 import { Sprite } from '@pixi/react';
 
-export const HudHealthBar = ({ hp }: { hp: number }) => {
-  const maxHp = 100;
+export const HudHealthBar = ({ hp = 6, maxHp = 6 }: { hp?: number; maxHp?: number }) => {
+  if (hp > maxHp) hp = maxHp;
+  if (hp <= 0) hp = 0;
   const height = -60;
   const hpHeight = (hp / maxHp) * height;
-  const heightTop = 210;
-  const hpHeightTop = hpHeight + heightTop;
+
+  const hpHeightTop = 155 + ((500 - 150) * (maxHp - hp)) / maxHp;
   return (
     <>
       <Sprite

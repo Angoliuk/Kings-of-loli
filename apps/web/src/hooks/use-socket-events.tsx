@@ -1,5 +1,5 @@
 import { IoEvent } from '@kol/shared-game/interfaces';
-import { LeaveWindowReact } from '@web/components/hud/leave-window/leave-window';
+import { CommandWarningReact, LeaveWindowReact } from '@web/components/hud/modals-windows/modals-windows';
 import { useGameStore } from '@web/modules/match/match-store/game-store';
 import { AppRoutes } from '@web/routes/app-router-enum';
 import { useAuthStore } from '@web/store/auth-store/auth-store';
@@ -27,10 +27,9 @@ export const useSocketEvents = () => {
     window.socketIO.on(IoEvent.CONNECT, () => console.log('connect'));
     window.socketIO.on(IoEvent.GAME_FOUND, (game) => {
       setGame(game);
-      navigate(`${AppRoutes.Battle}`);
-
-      // TODO: gameLoaded needs to call on all sprites load
-      window.socketIO?.emit(IoEvent.GAME_LOADED);
+      openModal(<CommandWarningReact team={game.players.find((player) => player.id === user.userId)?.team} />),
+        // TODO: gameLoaded needs to call on all sprites load
+        window.socketIO?.emit(IoEvent.GAME_LOADED);
     });
     window.socketIO.on(IoEvent.TURN_FROM_SERVER, (turnFromServer) => {
       parseTurn(turnFromServer);

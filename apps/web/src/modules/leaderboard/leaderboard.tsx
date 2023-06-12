@@ -24,6 +24,7 @@ export const Leaderboard: FC<LeaderboardProperties> = ({ users, isError, isLoadi
       </div>
     );
   }
+
   return (
     <NavigationPageWrapper>
       <div className={styles.container}>
@@ -38,7 +39,7 @@ export const Leaderboard: FC<LeaderboardProperties> = ({ users, isError, isLoadi
               </div>
 
               <div className={styles.aroundUser}>
-                {users?.splice(3)?.map((user, index) => (
+                {users?.splice(3).map((user, index) => (
                   <LeaderboardItem key={user.id} user={user} place={index} />
                 ))}
               </div>

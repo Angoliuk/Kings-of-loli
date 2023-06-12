@@ -50,7 +50,7 @@ io.on(IoEvent.CONNECT, async (socket) => {
     if (!playerActiveGame) return;
 
     const game = await redisUtils.gameRoom.get(playerActiveGame);
-
+console.log(game,playerActiveGame)
     if (
       !game ||
       game.isFinished ||
@@ -104,7 +104,6 @@ io.on(IoEvent.CONNECT, async (socket) => {
         removedObjects: { building: [], card: [], unit: [] },
         updatedObjects: { building: [], card: [], unit: [] },
         players: game.players,
-        turn: turnToServer.turn + 1,
       });
     }
 
@@ -145,8 +144,10 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
     game.players[game.players.findIndex((player) => player.userId === turnToServer.player.userId)] = {
       ...turnToServer.player,
-      energy: turnToServer.player.energy + 2,
-      coins: turnToServer.player.coins + 2,
+      //// TODO: Magic numbers to const && jerk off 
+      // energy: turnToServer.player.energy<=10?turnToServer.player.energy + 2:turnToServer.player.energy,
+      energy:12,
+      coins: turnToServer.player.coins<=10?turnToServer.player.coins + 2:turnToServer.player.coins,
     };
 
     const turnFromServer: TurnFromServer = {
@@ -162,7 +163,8 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
     game.turns.push(turnFromServer);
 
-    await redisUtils.gameRoom.set(turnToServer.game.id, game);
+    await redisUtils.gameRoom.set(playerActiveGame, game);
+    //// turnToServer.game.id!==gameRoom(redis)
     // await redisUtils.gameRoom.get(turnToServer.game.id);
     // socket.to(socketKeys.gameRoom(turnToServer.game.id)).emit(IoEvent.TURN_FROM_SERVER, turnFromServer);
     io.to(game.players.find((player) => player.userId !== userId).userId).emit(
@@ -173,7 +175,6 @@ io.on(IoEvent.CONNECT, async (socket) => {
 
   socket.on(IoEvent.SEARCH_GAME, async () => {
     const isUserHaveSearchRequest = await redisUtils.gameSearch.get(userId);
-
     if (userActiveGameId) {
       // REPLACE AFTER TESTS
       // const a = await redisUtils.gameRoom.get(userActiveGameId);

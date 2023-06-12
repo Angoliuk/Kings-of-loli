@@ -4,6 +4,7 @@ import { getFetch, httpBatchLink } from '@trpc/client';
 import { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { Loader } from './components/loader/loader';
 import { ModalProvider } from './components/modal-context/modal-context';
 import { AppRouter } from './routes/app-router';
 import { trpc } from './trpc';
@@ -11,6 +12,7 @@ import { trpc } from './trpc';
 
 export function App() {
   const [queryClient] = useState(() => new QueryClient());
+  const [isLoading, setIsLoading] = useState(false);
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [

@@ -50,12 +50,11 @@ export type GameCompactFromServer = {
 };
 
 export type GameCompactToServer = {
-  id: string;
+  id: string
+  turnsCount:number;
 };
 
 export type TurnBase = {
-  turn: number;
-
   newObjects: GameObjectsListsObjects;
   updatedObjects: GameObjectsListsObjects;
   removedObjects: {

@@ -14,7 +14,7 @@ export const SignIn: FC = () => {
       <div className={styles.signIn}>
         <div className={styles.form}>
           <AuthorizationHeader />
-          <SignInForm onSubmit={OnDamageReceived} />
+          <SignInForm onError={OnDamageReceived} />
         </div>
         <div className={styles.signInButtons}>
           <AuthorizationButton />

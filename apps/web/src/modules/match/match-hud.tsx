@@ -1,8 +1,9 @@
 import { type GameObjects } from '@kol/shared-game/game-objects';
+import { BuildingType, Team } from '@kol/shared-game/interfaces';
 import { Container, Sprite, Stage } from '@pixi/react';
 import { CoinBar } from '@web/components/hud/coin-bar/coin-bar';
 import { EnergyBar } from '@web/components/hud/energy-bar/energy-bar';
-import { LeaveWindowReact } from '@web/components/hud/leave-window/leave-window';
+import { LeaveWindowReact } from '@web/components/hud/modals-windows/modals-windows';
 import { TimerBar } from '@web/components/hud/timer-bar/timer-bar';
 import { useModalContext } from '@web/hooks/use-modal';
 import { type FC, type ReactNode, useCallback } from 'react';
@@ -66,6 +67,11 @@ export const BattleHud: FC<BattleHudProperties> = ({
     },
     [selectedCard],
   );
+  const greenCastle = buildings.find(
+    (build) => build.buildingType === BuildingType.CASTLE && build.team === Team.GREEN,
+  );
+  const blueCastle = buildings.find((build) => build.buildingType === BuildingType.CASTLE && build.team === Team.BLUE);
+
   console.log(useGameStore.getState().gameObjects);
   return (
     <Stage width={windowSize.width} height={windowSize.height}>
@@ -77,8 +83,8 @@ export const BattleHud: FC<BattleHudProperties> = ({
       >
         {children}
       </Container>
-      <SidePanel side="Left" />
-      <SidePanel side="Right" />
+      <SidePanel side="Left" hp={greenCastle?.hp} maxHp={greenCastle?.maxHp} />
+      <SidePanel side="Right" hp={blueCastle?.hp} maxHp={blueCastle?.maxHp} />
       <Container>
         <Sprite image={`resources/img/map/hud/top-panel.png`} scale={topPanel.scale} {...topPanel.desiredSize}>
           <CoinBar coins={currentPlayer?.coins ?? 0} />
@@ -119,7 +125,7 @@ export const BattleHud: FC<BattleHudProperties> = ({
           />
           <Sprite
             image={'resources/img/map/hud/play-button-hd.png'}
-            x={bottomPanel.desiredSize.width - moveButton.desiredSize.width / 2}
+            x={bottomPanel.desiredSize.width - moveButton.desiredSize.width * 2}
             y={bottomPanel.desiredSize.height - bottomPanelHeightWithoutCorner}
             {...moveButton.desiredSize}
             scale={moveButton.scale}

@@ -4,7 +4,8 @@ import { useSizes } from '@web/modules/match/utils/sprite-sizes';
 export const EnergyBar = ({ energy }: { energy: number }) => {
   const { energySize, energyBar, topPanel } = useSizes();
   if (energy > 13) energy = 12;
-
+  const a = (energyBar.desiredSize.width - energySize.desiredSize.width * 12) / 13 / 2;
+  const gap = a + a / 12;
   return (
     <>
       <Sprite
@@ -17,8 +18,12 @@ export const EnergyBar = ({ energy }: { energy: number }) => {
         <Sprite
           key={index}
           image={'resources/img/map/hud/energy-hd.png'}
-          x={energyBar.desiredSize.width + energySize.desiredSize.width * index}
-          y={39}
+          x={
+            energyBar.desiredSize.width -
+            energySize.desiredSize.width * 1.5 +
+            (energySize.desiredSize.width + gap) * index
+          }
+          y={35}
           {...energySize.desiredSize}
           scale={energySize.scale}
         />

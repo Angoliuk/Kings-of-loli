@@ -1,4 +1,3 @@
-import { ModalProvider } from '@web/components/modal-context/modal-context';
 import { useSocketEvents } from '@web/hooks/use-socket-events';
 import { HomePage } from '@web/modules/home-page/home-page';
 import { LeaderboardContainer } from '@web/modules/leaderboard/leaderboard-container';
@@ -18,7 +17,6 @@ import { GuardedRoute } from './guarded-route';
 export const AppRouter: FC = () => {
   const currentUserId = useAuthStore((state) => state.user?.id);
   useSocketEvents();
-  console.log(2);
   return (
     <div className={styles.app}>
       <Routes>
