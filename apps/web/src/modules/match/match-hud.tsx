@@ -121,18 +121,18 @@ export const BattleHud: FC<BattleHudProperties> = ({
             cards={cards.filter((card) => card.team === currentPlayer?.team)}
             onClick={handleCardClick}
           />
-          <Sprite
-            image={'resources/img/map/hud/play-button-hd.png'}
-            x={bottomPanel.desiredSize.width - moveButton.desiredSize.width * 2}
-            y={bottomPanel.desiredSize.height - bottomPanelHeightWithoutCorner}
-            {...moveButton.desiredSize}
-            scale={moveButton.scale}
-            interactive={players[Number(turnsCount % 2 === 0)].userId === currentPlayer?.userId ? true : false}
-            click={() => {
-              makeTurn();
-            }}
-          />
         </Sprite>
+        <Sprite
+          image={'resources/img/map/hud/play-button-hd.png'}
+          x={bottomPanel.desiredSize.width - moveButton.desiredSize.width - 80}
+          y={windowSize.height - bottomPanelHeightWithoutCorner}
+          {...moveButton.desiredSize}
+          scale={moveButton.scale}
+          interactive={players[Number(turnsCount % 2 === 0)].userId === currentPlayer?.userId ? true : false}
+          click={() => {
+            makeTurn();
+          }}
+        />
       </Container>
     </Stage>
   );

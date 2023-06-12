@@ -16,6 +16,7 @@ export const ProfilePage: FC = () => {
         <div className={styles.content}>
           <img
             src=".././../../resources/img/bg/window.png"
+            alt="bg"
             style={{ width: `80vw`, height: `80vh`, position: `fixed`, zIndex: 0, imageRendering: 'pixelated' }}
           />
           <div className={styles.userContainer}>

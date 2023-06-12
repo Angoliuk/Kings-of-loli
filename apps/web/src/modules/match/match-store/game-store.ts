@@ -37,7 +37,6 @@ export const useGameStore = create(
         turn.updatedObjects.card = turn.updatedObjects.card.map((card) => new GameObjects.Card(card));
         turn.updatedObjects.unit = turn.updatedObjects.unit.map((unit) => new GameObjects.Unit(unit));
 
-        console.log(turn, 'turn in parseTurn');
         set({
           turnsCount: turn.game.turnsCount,
           gameObjects: {
@@ -54,7 +53,6 @@ export const useGameStore = create(
           turns: [...get().turns, turn],
           winnedUserId: turn.game.winnedUserId,
         });
-        console.log(get(), 'game Store in useGameStore ');
         useTurnStore.getState().createNewTurnTemplate();
       },
       getCurrentPlayer: () => {
