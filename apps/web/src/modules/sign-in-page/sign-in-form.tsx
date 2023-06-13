@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { FormInput } from '@web/components/form-input/form-input';
+import { Loader } from '@web/components/loader/loader';
+import { SignInFormFields } from '@web/constants/authorization/authorization';
+import { useAuth } from '@web/hooks/use-auth';
+import { useHookForm } from '@web/hooks/use-form';
+import { type AuthorizationFormProperties } from '@web/interfaces/authorization-form/authorization-form-properties';
 import { type FC } from 'react';
 import { type SubmitHandler } from 'react-hook-form';
 
-import { FormInput } from '../../components/form-input/form-input';
-import { SignInFormFields } from '../../constants/authorization/authorization';
-import { useAuth } from '../../hooks/use-auth';
-import { useHookForm } from '../../hooks/use-form';
-import { type AuthorizationFormProperties } from '../../interfaces/authorization-form/authorization-form-properties';
 import styles from './sign-in-form.module.css';
 import { signInFormSchema, type SignInSchema } from './validation';
 
-export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
+export const SignInForm: FC<AuthorizationFormProperties> = ({ onError }) => {
   const {
     register,
     formState: { errors, isValid },
@@ -19,16 +20,20 @@ export const SignInForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   } = useHookForm<SignInSchema>({
     schema: signInFormSchema,
   });
-  const { signIn } = useAuth();
+  const {
+    signIn: { mutate: signIn, isLoading },
+  } = useAuth({ onAuthError: onError });
 
   const handleSubmit: SubmitHandler<SignInSchema> = (data) => {
     signIn({ name: data.nickname, password: data.password });
-    onSubmit();
     reset();
   };
+
   return (
     <>
+      {isLoading && Loader()}
       <div className={styles.signInFormBlock}>
+        <span>Sign In</span>
         <form onSubmit={handleFormSubmit(handleSubmit)} className={styles.signInForm}>
           <FormInput
             register={register}

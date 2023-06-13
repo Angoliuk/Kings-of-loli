@@ -1,5 +1,5 @@
 {
-  "name": "companion",
+  "name": "@kol/companion",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -27,6 +27,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
+    "eslint-config-base": "workspace:*",
     "superjson": "1.12.2",
     "zod": "^3.21.4"
   },

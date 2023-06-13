@@ -2,7 +2,6 @@ import React, { type FC, useState } from 'react';
 
 import { ThemePicker } from '../../../resources/svg/theme-icon-svg/theme-picker';
 import styles from './background-picker.module.css';
-import { imgInput } from './photo-list';
 
 type BackgroundTextEventTarget = EventTarget & {
   name: string;
@@ -15,9 +14,30 @@ type BackgroundMouseEvent = React.MouseEvent<HTMLButtonElement> & {
 type PropertiesImg = {
   imgBackground: string;
 };
-export const BackgroundPicker: FC<PropertiesImg> = ({ imgBackground }) => {
-  const photoList = imgInput();
 
+const photoList = [
+  {
+    name: 'large_1',
+    src: 'resources/img/leaderboard-background/small_1.jpg',
+    id: 1,
+  },
+  {
+    name: 'large_2',
+    src: 'resources/img/leaderboard-background/small_2.jpg',
+    id: 2,
+  },
+  {
+    name: 'large_3',
+    src: 'resources/img/leaderboard-background/small_3.jpg',
+    id: 3,
+  },
+  {
+    name: 'large_4',
+    src: 'resources/img/leaderboard-background/small_4.jpg',
+    id: 4,
+  },
+];
+export const BackgroundPicker: FC<PropertiesImg> = ({ imgBackground }) => {
   const [isActive, setActive] = useState(false);
   const [sourceImg, setImage] = useState(imgBackground || 'resources/img/leaderboard-background/large_1.jpg');
   const showThemeList = () => {

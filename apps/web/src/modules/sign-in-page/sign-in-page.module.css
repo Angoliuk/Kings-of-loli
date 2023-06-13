@@ -17,7 +17,7 @@
   background-repeat: no-repeat;
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .signInButtons {

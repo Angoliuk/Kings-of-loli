@@ -1,0 +1,44 @@
+# Expo
+.expo/*
+
+# Production
+web-build/
+dist/
+
+# Dependencies
+node_modules/**/*
+
+# Google services
+google-services.json
+GoogleService-Info.plist
+GoogleService-info.plist
+
+# Secrets
+.env
+
+# Debug
+npm-debug.*
+yarn-error.log
+
+# Misc
+.DS_Store
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+yarn.lock
+
+# Idea
+idea
+.idea
+
+# IDEs
+.vscode
+
+# Jest test coverage reports
+coverage
+
+# History
+.history

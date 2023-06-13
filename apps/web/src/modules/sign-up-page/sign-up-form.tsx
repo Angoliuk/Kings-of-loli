@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { FormInput } from '@web/components/form-input/form-input';
+import { Loader } from '@web/components/loader/loader';
+import { SignUpFormFields } from '@web/constants/authorization/authorization';
+import { useAuth } from '@web/hooks/use-auth';
+import { useHookForm } from '@web/hooks/use-form';
+import { type AuthorizationFormProperties } from '@web/interfaces/authorization-form/authorization-form-properties';
 import { type FC } from 'react';
 import { type SubmitHandler } from 'react-hook-form';
 
-import { FormInput } from '../../components/form-input/form-input';
-import { SignUpFormFields } from '../../constants/authorization/authorization';
-import { useAuth } from '../../hooks/use-auth';
-import { useHookForm } from '../../hooks/use-form';
-import { type AuthorizationFormProperties } from '../../interfaces/authorization-form/authorization-form-properties';
 import styles from './sign-up-form.module.css';
 import { SignUpFormSchema, type SignUpSchema } from './validation';
 
-export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
+export const SignUpForm: FC<AuthorizationFormProperties> = ({ onError }) => {
   const {
     register,
     formState: { errors, isValid },
@@ -19,16 +20,21 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
   } = useHookForm<SignUpSchema>({
     schema: SignUpFormSchema,
   });
-  const { signUp } = useAuth();
+  const {
+    signUp: { mutate: signUp, isLoading },
+  } = useAuth({ onAuthError: onError });
 
   const handleSubmit: SubmitHandler<SignUpSchema> = (data) => {
+    console.log(13_121_231);
     signUp({ name: data.nickname, password: data.password });
-    onSubmit();
     reset();
   };
+
   return (
     <>
+      {isLoading && Loader()}
       <div className={styles.signUpBlock}>
+        <span>Sign Up</span>
         <form onSubmit={handleFormSubmit(handleSubmit)} className={styles.signUpForm}>
           <FormInput
             register={register}
@@ -47,7 +53,7 @@ export const SignUpForm: FC<AuthorizationFormProperties> = ({ onSubmit }) => {
             type={SignUpFormFields.PASSWORD_TYPE}
             error={errors[SignUpFormFields.PASSWORD_TYPE]?.message}
           />
-          <button type="submit" disabled={!isValid} className={styles.submit} />
+          <button type="submit" disabled={!isValid || isLoading} className={styles.submit} />
         </form>
       </div>
     </>

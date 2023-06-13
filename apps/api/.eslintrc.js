@@ -1,21 +1,35 @@
-/* eslint-disable unicorn/prefer-module */
-module.exports = {
-  parser: '@typescript-eslint/parser',
-  extends: [
-    'eslint-config-base/base.js',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'plugin:@typescript-eslint/strict',
+/* eslint-disable */
+const path = require('node:path');
+
+/** @type {import("eslint").Linter.Config} */
+const config = {
+  overrides: [
+    {
+      extends: ['plugin:@typescript-eslint/recommended-requiring-type-checking'],
+      files: ['*.ts', '*.tsx'],
+      parserOptions: {
+        project: path.join(__dirname, 'tsconfig.json'),
+      },
+    },
   ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    tsconfigRootDir: __dirname,
-    project: 'tsconfig.json',
-    sourceType: 'module',
+    project: path.join(__dirname, 'tsconfig.json'),
   },
+  plugins: ['@typescript-eslint'],
+  extends: ['plugin:@typescript-eslint/recommended'],
   rules: {
+    '@typescript-eslint/consistent-type-imports': [
+      'warn',
+      {
+        prefer: 'type-imports',
+        fixStyle: 'inline-type-imports',
+      },
+    ],
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    'unicorn/prevent-abbreviations': 'off',
     'unicorn/no-null': 'off',
-    '@typescript-eslint/no-unsafe-assignment': 'off',
-    '@typescript-eslint/consistent-type-definitions': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
   },
 };
+
+module.exports = config;

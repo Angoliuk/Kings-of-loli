@@ -1,6 +1,6 @@
+import { trpc } from '@web/trpc';
 import { type FC } from 'react';
 
-import { trpc } from '../../trpc';
 import { Leaderboard } from './leaderboard';
 
 export const LeaderboardContainer: FC = () => {

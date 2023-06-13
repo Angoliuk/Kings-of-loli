@@ -12,6 +12,8 @@ const loginInput = z.object({
   name: z.string().min(1).max(256),
 });
 
+const emptyInput = z.undefined();
+
 const registerInput = z.object({
   password: z.string().min(6).max(256),
   name: z.string().min(1).max(256),
@@ -43,7 +45,7 @@ const authRouter = router({
       access_token,
     };
   }),
-  logout: protectedProcedure.mutation(async ({ ctx }) => {
+  logout: protectedProcedure.input(emptyInput).mutation(async ({ ctx }) => {
     const user = ctx.user;
     if (!user?.id) return false;
     await redisClient.del(user.id);
@@ -54,7 +56,7 @@ const authRouter = router({
     });
     return true;
   }),
-  refreshToken: publicProcedure.mutation(async ({ ctx }) => {
+  refreshToken: publicProcedure.input(emptyInput).mutation(async ({ ctx }) => {
     const { refresh_token: oldRefreshToken } = ctx.req.cookies as { refresh_token?: string };
 
     const message = 'Could not refresh access token';
@@ -107,7 +109,14 @@ const authRouter = router({
         password: await argon.hash(password),
       },
     });
-    return newUser;
+    const { access_token, refresh_token } = await signTokens(newUser);
+    ctx.res.cookie('access_token', access_token, accessTokenCookieOptions);
+    ctx.res.cookie('refresh_token', refresh_token, refreshTokenCookieOptions);
+    ctx.res.cookie('logged_in', true, {
+      ...accessTokenCookieOptions,
+      httpOnly: false,
+    });
+    return { user: exclude(newUser, ['password']), access_token };
   }),
 });
 
