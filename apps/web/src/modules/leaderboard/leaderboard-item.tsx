@@ -1,6 +1,6 @@
+import { type RouterOutputs } from '@web/trpc';
 import { type FC } from 'react';
 
-import { type RouterOutputs } from '../../trpc';
 import styles from './leaderboard.module.css';
 
 type LeaderboardItemProperties = {

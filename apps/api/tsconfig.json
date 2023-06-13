@@ -5,7 +5,7 @@
     "target": "ES2022",
     "rootDir": "./",
     "allowJs": true,
-    "module": "Node16",
+    "moduleResolution": "bundler",
     "strict": true,
     "paths": {
       "@api/middlewares": ["./src/middlewares"],

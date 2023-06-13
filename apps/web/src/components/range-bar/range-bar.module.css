@@ -11,7 +11,7 @@
   background-image: url('../../../resources/img/progress-bar/progress-bar.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .rangeProgress {
@@ -27,7 +27,7 @@
   background-position: center;
   background-size: cover;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .currentProgres {

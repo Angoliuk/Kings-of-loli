@@ -13,27 +13,21 @@
 }
 
 .content {
+  position: relative;
+  top: 12.5%;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  min-width: 79%;
-  min-height: 82%;
+  min-width: 76%;
+  min-height: 74%;
 
+  opacity: 0.9;
   background-image: url('../../../resources/img/leaderboard-page/signs.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
-}
-
-.projectName {
-  width: 14vw;
-  height: 8vh;
-
-  font-size: 4rem;
-  line-height: 2;
-
-  background-color: var(--brown);
+  image-rendering: pixelated;
 }
 
 .loaderText {
@@ -57,44 +51,52 @@
   background-image: url('../../../resources/img/leaderboard-page/window.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .gridContainer {
-  display: grid;
-  grid-gap: 2vh;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(6, 7vh);
+  position: relative;
+  bottom: 1.5%;
+  left: 0.2%;
+
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
 
-  width: 58vw;
-  height: 60vh;
-  margin: 0 auto;
+  width: 86%;
+  height: 83%;
 
-  font-size: 2.5rem;
+  image-rendering: pixelated;
+}
+
+.topUsers {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: flex-start;
+
+  width: 100%;
+  height: 41%;
+}
+
+.aroundUser {
+  display: flex;
+  flex-direction: column;
+  gap: 15%;
+  justify-content: flex-start;
+
+  width: 100%;
+  height: 43%;
 }
 
 .statsWrapper {
-  position: relative;
-
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 
-  width: 101%;
-  height: 90%;
-}
+  width: 100%;
+  height: 24%;
 
-.statsWrapper:nth-child(4) {
-  margin-top: 5.5vh;
-}
-
-.statsWrapper:nth-child(5) {
-  margin-top: 6.3vh;
-}
-
-.statsWrapper:nth-child(6) {
-  margin-top: 7vh;
+  image-rendering: pixelated;
 }
 
 .userName {
@@ -102,30 +104,33 @@
   align-items: center;
   justify-content: center;
 
-  width: 40%;
+  width: 41%;
   height: 100%;
+
+  font-size: 1.5rem;
+
+  image-rendering: pixelated;
 }
 
 .userPlace {
-  position: absolute;
-  left: 0.4vw;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 17.6%;
+  width: 17.5%;
   height: 100%;
+
+  font-size: 2rem;
+  text-overflow: ellipsis;
 }
 
 .userScore {
-  position: absolute;
-  right: 0.5vw;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
   width: 17.6%;
   height: 100%;
+
+  font-size: 2rem;
 }

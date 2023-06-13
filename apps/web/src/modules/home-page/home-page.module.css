@@ -13,20 +13,37 @@
   background-image: url('../../../resources/img/bg/bg.png');
   background-size: 100% 100%;
 
-  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 .playButton {
-  width: 20%;
-  height: 10%;
+  width: 24rem;
+  height: 8rem;
   padding: 10px;
 
   font-size: 2rem;
+  border-radius: 30px;
 
-  background: var(--light-green);
+  background-image: url('../../../../resources/img/authorization/buttons/active.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   border: none;
+
+  image-rendering: pixelated;
 }
 
 .projectName {
   font-size: 3rem;
+}
+
+.playButtonText {
+  font-size: 55px;
+  color: #fff;
+  margin: 0;
+}
+
+.playButtonTextSearching {
+  font-size: 40px;
+  color: #fff;
+  margin: 0;
 }

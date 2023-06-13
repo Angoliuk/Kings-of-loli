@@ -1,4 +1,9 @@
+import './configs/environment';
 import './database/redis';
+
+// import { a } from '@kol/shared-game';
+// console.log(a);
+import http from 'node:http';
 
 import type { PrismaClient, User } from '@prisma/client';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
@@ -6,6 +11,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Request, type Response } from 'express';
 
+import { io } from './configs';
 import { appRouter } from './modules/routes';
 import { createTRPCContext } from './trpc';
 
@@ -28,4 +34,10 @@ app.use(
     createContext: createTRPCContext,
   }),
 );
-app.listen(process.env.API_PORT, () => console.log(`Server started on port ${process.env.API_PORT}`));
+
+const server = http.createServer(app);
+io.attach(server);
+
+server.listen(process.env.API_PORT, () => {
+  console.log(`Server started on port ${process.env.API_PORT}`);
+});

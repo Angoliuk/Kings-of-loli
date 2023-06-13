@@ -1,0 +1,57 @@
+{
+  "name": "@kol/shared-game",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "exports": {
+    "./interfaces": {
+      "default": "./dist/interfaces/index.js",
+      "types": "./src/interfaces/index.ts"
+    },
+    "./utils": {
+      "default": "./dist/utils/index.js",
+      "types": "./src/utils/index.ts"
+    },
+    "./constants": {
+      "default": "./dist/constants/index.js",
+      "types": "./src/constants/index.ts"
+    },
+    "./game-objects": {
+      "default": "./dist/game-objects/index.js",
+      "types": "./src/game-objects/index.ts"
+    }
+  },
+  "tsup": {
+    "entry": [
+      "src"
+    ],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true,
+    "format": [
+      "esm"
+    ]
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "build:verify": "tsc --noEmit",
+    "lint": "concurrently \"eslint --max-warnings=0 --ext 'ts,tsx' .\" \"prettier --check './{src,test}/**/*.{ts,tsx}'\"",
+    "lint:fix": "prettier --write './{src,test}/**/*.{ts,tsx}' && eslint --quiet --ext 'ts,tsx' . --fix",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "dependencies": {
+    "eslint-config-base": "workspace:^",
+    "tsconfig": "workspace:^",
+    "uuid": "^9.0.0",
+    "zustand": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.1",
+    "eslint": "^8.35.0",
+    "tsup": "^6.6.3",
+    "typescript": "^5.0.4"
+  },
+  "private": true
+}

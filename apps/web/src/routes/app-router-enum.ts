@@ -6,4 +6,5 @@ export enum AppRoutes {
   Profile = '/about',
   Stats = '/stats',
   Settings = '/settings',
+  Battle = '/battle',
 }

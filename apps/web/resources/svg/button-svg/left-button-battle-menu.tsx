@@ -1,11 +1,6 @@
 export const LeftBattleMenu = () => {
   return (
-    <svg
-      version="1.1"
-      viewBox="0 0 22 22"
-      xmlns="http://www.w3.org/2000/svg"
-      shapeRendering="crispEdges"
-    >
+    <svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" shapeRendering="crispEdges">
       <rect x="8" y="0" width="1" height="1" fill="#000000" />
       <rect x="9" y="0" width="1" height="1" fill="#000000" />
       <rect x="10" y="0" width="1" height="1" fill="#000000" />

@@ -17,12 +17,12 @@ const SIGN_IN_FORM_TRANSLATIONS = {
 enum SignUpFormFields {
   NICKNAME_TYPE = 'nickname',
   NICKNAME_PLACEHOLDER = 'Your nickname',
-  PASSWORD_PLACEHOLDER = 'qwerty',
+  PASSWORD_PLACEHOLDER = 'password',
   PASSWORD_TYPE = 'password',
 }
 enum SignInFormFields {
   NICKNAME_TYPE = 'nickname',
-  NICKNAME_PLACEHOLDER = 'Your nickname',
+  NICKNAME_PLACEHOLDER = 'Bebrich',
   PASSWORD_PLACEHOLDER = 'qwerty',
   PASSWORD_TYPE = 'password',
 }

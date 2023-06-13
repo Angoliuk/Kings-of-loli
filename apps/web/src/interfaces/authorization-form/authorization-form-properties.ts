@@ -1,3 +1,4 @@
 export type AuthorizationFormProperties = {
-  onSubmit: () => void;
+  onSubmit?: () => void;
+  onError: () => void;
 };

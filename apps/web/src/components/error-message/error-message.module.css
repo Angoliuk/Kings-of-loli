@@ -1,5 +1,6 @@
 @import url('../../css/colors.module.css');
 
 .message {
+  font-size: 1rem;
   color: var(--red);
 }
